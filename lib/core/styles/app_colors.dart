@@ -54,6 +54,9 @@ class AppColors {
   static const Color errorRed = Color(0xffFC5555);
   static const Color delayRed = Color(0xffCD461A);
 
+  static const Color darkOrange = Color(0xffff8c00);
+
+
   static const Color green900 = Color(0xff47B674);
   static const Color green300 = Color(0xffC1E7D0);
 

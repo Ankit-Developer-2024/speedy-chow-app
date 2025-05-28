@@ -4,6 +4,7 @@ class AppDimensions {
   static const double radius_8 = 8;
   static const double radius_12 = 12;
   static const double radius_16 = 16;
+  static const double radius_50 = 50;
   static const double radius_100 = 100;
 
   static const double marginNormal = 16;

@@ -1,5 +1,7 @@
 
 
+import 'package:flutter/foundation.dart';
+
 String getLocalJpeg(String imgName){
   return "assets/jpeg_and_jpg/$imgName.jpeg";
 }
@@ -15,4 +17,8 @@ String getLocalPng(String imgName){
 
 String getLocalSvg(String imgName){
   return "assets/svg/$imgName.svg";
+}
+
+void appLog(dynamic text){
+  if(kDebugMode) debugPrint(text?.toString());
 }
