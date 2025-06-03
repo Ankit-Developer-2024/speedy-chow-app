@@ -7,7 +7,9 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
 import 'package:speedy_chow/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:speedy_chow/init_dependencies.dart';
 
 class OneTimeUi extends StatelessWidget {
   const OneTimeUi({super.key});
@@ -15,7 +17,7 @@ class OneTimeUi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SplashBloc(),
+      create: (_) => SplashBloc(configBloc: getIt<ConfigBloc>()),
       child: Builder(
         builder: (context) {
           return Scaffold(
@@ -73,6 +75,7 @@ class OneTimeUi extends StatelessWidget {
                                     return BlocConsumer<SplashBloc, SplashState>(
                                       listenWhen: (pre,curr)=> curr is SplashOneTimeUiCompleteState ,
                                       listener: (context,state){
+                                          context.read<ConfigBloc>().add(SetIsAppInstallEvent(true));
                                            context.goNamed('login') ;
                                       },
                                       builder: (context, state) {
@@ -119,7 +122,11 @@ class OneTimeUi extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  context.read<SplashBloc>().add(
+                                    SplashOneTimeUiSkipEvent(),
+                                  );
+                                },
                                 child: Text(
                                   AppLocal.skip.getString(context),
                                   style: AppTextStyles.semiBold14P(

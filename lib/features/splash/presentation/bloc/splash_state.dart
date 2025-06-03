@@ -8,7 +8,12 @@ final class SplashInitial extends SplashState {
   List<Object?> get props => [];
 }
 
-final class SplashViewCompleteState extends SplashState{
+final class ShowLoginViewState extends SplashState{
+  @override
+  List<Object?> get props => [];
+}
+
+final class ShowOneTimeUiState extends SplashState{
   @override
   List<Object?> get props => [];
 }

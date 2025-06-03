@@ -4,10 +4,11 @@ import 'package:hive/hive.dart';
 class AppPreferences{
   late final Box box ;
 
-  static final AppPreferences instance=AppPreferences._();
-  AppPreferences._(){
+  AppPreferences._privateConstructor(){
     box=Hive.box('speedyChow');
   }
+
+  static final AppPreferences instance=AppPreferences._privateConstructor();
 
   Future putValue(String key,dynamic value){
     return box.put(key, value);

@@ -8,7 +8,9 @@ import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
 import 'package:speedy_chow/features/splash/presentation/bloc/splash_bloc.dart';
+import 'package:speedy_chow/init_dependencies.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -23,8 +25,8 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    _splashBloc = SplashBloc();
-    _splashBloc.add(SplashViewCompleteEvent());
+    _splashBloc = SplashBloc(configBloc: getIt<ConfigBloc>());
+     _splashBloc.add(SplashViewCompleteEvent());
   }
 
   @override
@@ -35,26 +37,30 @@ class _SplashViewState extends State<SplashView> {
 
   @override
   Widget build(BuildContext context) {
-    print("object");
-    return BlocListener<SplashBloc, SplashState>(
-      listener: (context, state) {
+    return BlocProvider(
+      create: (context) => _splashBloc,
+      child: BlocListener<SplashBloc, SplashState>(
+        listener: (context, state) {
+          if (state is ShowOneTimeUiState) {
+            context.goNamed('one-time');
+          } else if (state is ShowLoginViewState) {
+            context.goNamed('login');
+          }
+        },
+        child: Scaffold(
+          backgroundColor: AppColors.darkOrange,
+          body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(getLocalSvg("speedychow_logo")),
+                  Text(AppLocal.speedChow.getString(context),
+                    style: AppTextStyles.semiBold27P(color: AppColors.white),),
 
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.darkOrange,
-        body: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SvgPicture.asset(getLocalSvg("speedychow_logo")),
-                Text(AppLocal.speedChow.getString(context),
-                  style: AppTextStyles.semiBold27P(color: AppColors.white),),
-                OutlinedButton(onPressed: () {
-                  context.goNamed("one-time");
-                }, child: Text(AppLocal.speedChow.getString(context)))
-              ],
-            )
+                ],
+              )
+          ),
         ),
       ),
     );

@@ -14,3 +14,5 @@ final class SplashOneTimeUiEvent extends SplashEvent{
   List<Object?> get props => [];
 }
 
+final class SplashOneTimeUiSkipEvent extends SplashEvent{}
+
