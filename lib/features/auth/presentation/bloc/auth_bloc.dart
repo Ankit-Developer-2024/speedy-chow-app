@@ -9,6 +9,7 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   bool isAgree =false;
+  String email ='';
 
   AuthBloc() : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
@@ -17,6 +18,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthOpenLoginViewEvent>(_openLoginView);
     on<AuthRegisterEvent>(_registerUser);
     on<AuthPolicyEvent>(_isPolicy);
+    on<AuthForgotPasswordEvent>(_forgotPasswordView);
+    on<AuthEmailForgotPasswordEvent>(_emailForgotPasswordState);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -44,7 +47,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _registerUser(AuthRegisterEvent event ,Emitter<AuthState> emit) async{
 
-     print("0000000000000000$isAgree");
     emit(AuthRegisterState(isLoading: true ,isSuccess: false, isAgree: isAgree));
     await Future.delayed(Duration(seconds: 3));
     //call api register user
@@ -52,7 +54,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if(event.userName!='' && event.email!='' && event.password!='' && isAgree){
 
       emit(AuthRegisterState(isAgree: isAgree, isSuccess: true, isLoading: false));
-      print("---------------------=$isAgree");
       //here if api resp is like failed then
      // emit(AuthRegisterState(isAgree: isAgree, isSuccess: false, isLoading: false));
     }else if(!isAgree){
@@ -63,6 +64,25 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _isPolicy(AuthPolicyEvent event , Emitter<AuthState> emit){
     isAgree=!isAgree;
     emit(AuthPolicyState(isAgree: isAgree));
+  }
+
+  void _forgotPasswordView(AuthForgotPasswordEvent event,Emitter<AuthState> emit){
+    emit(AuthInitial());
+    emit(AuthForgotPasswordState());
+  }
+
+  void _emailForgotPasswordState(AuthEmailForgotPasswordEvent event,Emitter<AuthState> emit)async{
+
+    emit(AuthEmailForgotPasswordState(isLoading: true ,isSuccess: false));
+    await Future.delayed(Duration(seconds: 3));
+    //call api here
+    if(event.email =="demo@gmail.com"){
+      email=event.email;
+      emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: true,));
+    }else{
+      emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false ));
+    }
+
   }
 
 }

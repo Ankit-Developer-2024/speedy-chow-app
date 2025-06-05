@@ -11,11 +11,13 @@ class Button extends StatelessWidget {
     this.borderRadius,
     this.padding,
     this.width,
+    this.height,
   });
   final VoidCallback onTap;
   final Widget child;
   final double? borderRadius;
   final double? width;
+  final double? height;
   final Color? color;
   final EdgeInsetsGeometry? padding;
 
@@ -36,6 +38,7 @@ class Button extends StatelessWidget {
           ),
           child: Container(
             width: width ?? double.maxFinite ,
+            height: height ,
             padding: padding ?? EdgeInsets.symmetric(vertical:  AppDimensions.spacing_16),
 
             child: child,

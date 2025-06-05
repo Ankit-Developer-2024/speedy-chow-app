@@ -79,3 +79,27 @@ final class AuthPolicyState extends AuthState{
   @override
   List<Object?> get props => [isAgree];
 }
+
+final class AuthForgotPasswordState extends AuthState{
+  final DateTime timestamp;
+  AuthForgotPasswordState() : timestamp = DateTime.now();
+  @override
+  List<Object?> get props =>[timestamp];
+}
+
+final class AuthEmailForgotPasswordState extends AuthState {
+  final bool isLoading;
+  final bool isSuccess;
+
+  AuthEmailForgotPasswordState({required this.isLoading,required this.isSuccess});
+
+  AuthEmailForgotPasswordState copyWith({bool? isLoading, bool? isSuccess}) {
+    return AuthEmailForgotPasswordState(
+        isLoading: isLoading ?? this.isLoading,
+        isSuccess: isSuccess ?? this.isSuccess
+    );
+  }
+
+  @override
+  List<Object?> get props => [isLoading, isSuccess];
+}

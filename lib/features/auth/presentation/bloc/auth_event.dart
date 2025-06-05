@@ -56,3 +56,19 @@ final class AuthPolicyEvent extends AuthEvent{
   List<Object?> get props =>[isAgree];
 
 }
+
+final class AuthForgotPasswordEvent extends AuthEvent{
+  @override
+  List<Object?> get props =>[];
+}
+
+final class AuthEmailForgotPasswordEvent extends AuthEvent{
+
+  final String email;
+
+  AuthEmailForgotPasswordEvent({required this.email});
+
+  @override
+  List<Object?> get props => [email];
+
+}

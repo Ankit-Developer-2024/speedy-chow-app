@@ -126,20 +126,28 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.end,
               spacing: AppDimensions.spacing_10,
               children: [
-                TextButton(
-                  onPressed: () {},
-                  style: ButtonStyle(
-                    minimumSize: WidgetStateProperty.all(Size.zero),
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    padding: WidgetStateProperty.all(
-                      EdgeInsets.all(AppDimensions.spacing_2),
+                BlocListener<AuthBloc, AuthState>(
+                  listenWhen: (prev,curr) => curr is AuthForgotPasswordState,
+                  listener: (context, state) {
+                    context.pushNamed(AppRoutes.forgotPassword);
+                  },
+                  child: TextButton(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(AuthForgotPasswordEvent());
+                    },
+                    style: ButtonStyle(
+                      minimumSize: WidgetStateProperty.all(Size.zero),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      padding: WidgetStateProperty.all(
+                        EdgeInsets.all(AppDimensions.spacing_2),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    AppLocal.forgotPassword.getString(context),
-                    textAlign: TextAlign.end,
-                    style: AppTextStyles.medium14P(
-                      color: AppColors.darkOrange,
+                    child: Text(
+                      AppLocal.forgotPassword.getString(context),
+                      textAlign: TextAlign.end,
+                      style: AppTextStyles.medium14P(
+                        color: AppColors.darkOrange,
+                      ),
                     ),
                   ),
                 ),
@@ -162,6 +170,7 @@ class _LoginViewState extends State<LoginView> {
                       }
                     }
                   },
+                  buildWhen: (prev, curr) => curr is AuthLoginState,
                   builder: (context, state) {
                     if (state is AuthLoginState) {
                       return Button(
@@ -180,19 +189,18 @@ class _LoginViewState extends State<LoginView> {
                         child: state.isLoading
                             ? Center(child: Loader())
                             : Text(
-                                AppLocal.login.getString(context),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.medium20P(
-                                  color: AppColors.white,
-                                ),
-                              ),
+                          AppLocal.login.getString(context),
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.medium20P(
+                            color: AppColors.white,
+                          ),
+                        ),
                       );
                     } else {
                       return Button(
                         onTap: () {
                           if (_formKey.currentState != null &&
                               _formKey.currentState!.validate()) {
-
                             FocusScope.of(context).unfocus();
                             context.read<AuthBloc>().add(
                               AuthLoginEvent(
@@ -214,9 +222,9 @@ class _LoginViewState extends State<LoginView> {
                   },
                 ),
                 BlocListener<AuthBloc, AuthState>(
-                  listenWhen: (prev,curr)=> curr is AuthOpenRegisterViewState,
+                  listenWhen: (prev, curr) => curr is AuthOpenRegisterViewState,
                   listener: (context, state) {
-                     context.goNamed(AppRoutes.register);
+                    context.goNamed(AppRoutes.register);
                   },
                   child: RichText(
                     text: TextSpan(
@@ -230,9 +238,11 @@ class _LoginViewState extends State<LoginView> {
                         ),
                         TextSpan(
                           style: TextStyle(color: AppColors.darkOrange),
-                          recognizer: TapGestureRecognizer()..onTap = () {
-                            context.read<AuthBloc>().add(AuthOpenRegisterViewEvent());
-                          },
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              context.read<AuthBloc>().add(
+                                  AuthOpenRegisterViewEvent());
+                            },
                           text: AppLocal.register.getString(context),
                         ),
                       ],
