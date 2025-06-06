@@ -72,3 +72,28 @@ final class AuthEmailForgotPasswordEvent extends AuthEvent{
   List<Object?> get props => [email];
 
 }
+
+final class AuthIsOtpValidEvent extends AuthEvent {
+
+  final String otp;
+
+  AuthIsOtpValidEvent({required this.otp});
+
+  @override
+  List<Object?> get props => [otp];
+
+}
+
+final class AuthStartOtpTimerEvent extends AuthEvent{
+  @override
+  List<Object?> get props => [];
+
+}
+
+class AuthTickOtpTimerEvent extends AuthEvent {
+  final int secondsLeft;
+  AuthTickOtpTimerEvent(this.secondsLeft);
+
+  @override
+  List<Object?> get props => [secondsLeft];
+}

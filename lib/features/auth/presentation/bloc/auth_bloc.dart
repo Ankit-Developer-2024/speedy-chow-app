@@ -1,7 +1,7 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:meta/meta.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -10,6 +10,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   bool isAgree =false;
   String email ='';
+  Timer? _otpTimer;
 
   AuthBloc() : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
@@ -20,6 +21,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthPolicyEvent>(_isPolicy);
     on<AuthForgotPasswordEvent>(_forgotPasswordView);
     on<AuthEmailForgotPasswordEvent>(_emailForgotPasswordState);
+    on<AuthIsOtpValidEvent>(_isOtpValid);
+    on<AuthStartOtpTimerEvent>(_startOtpTimer);
+    on<AuthTickOtpTimerEvent>(_tickOtpTimer);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -84,5 +88,53 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
 
   }
+
+  void _isOtpValid(AuthIsOtpValidEvent event ,Emitter<AuthState> emit) async{
+   String otp= event.otp;
+   if(otp.length==4){
+     emit(AuthIsOtpValidState(isLoading: true, isSuccess: false));
+     await Future.delayed(Duration(seconds: 3));
+     //check with api otp is valid or not
+     emit(AuthIsOtpValidState(isLoading: false, isSuccess: true));
+     //emit(AuthIsOtpValidState(isLoading: false, isSuccess: false));
+   }else{
+     emit(AuthIsOtpValidState(isLoading: false, isSuccess: false));
+   }
+
+  }
+
+ void _startOtpTimer(AuthStartOtpTimerEvent event,Emitter<AuthState> emit){
+    _otpTimer?.cancel();
+
+    int totalSeconds=30;
+    emit(AuthTickOtpTimerState(canResendOtp: false,otpSecondsRemaining: totalSeconds));
+    _otpTimer=Timer.periodic(Duration(seconds: 1), (timer){
+      int secondsLeft=totalSeconds-timer.tick;
+      if(secondsLeft<=0){
+        _otpTimer?.cancel();
+        add(AuthTickOtpTimerEvent(0));
+      }else{
+        add(AuthTickOtpTimerEvent(secondsLeft));
+      }
+    });
+
+ }
+
+  void _tickOtpTimer(AuthTickOtpTimerEvent event, Emitter<AuthState> emit) {
+    if (event.secondsLeft == 0) {
+      emit(AuthTickOtpTimerState(otpSecondsRemaining: 0, canResendOtp: true));
+    } else {
+      emit(AuthTickOtpTimerState(otpSecondsRemaining: event.secondsLeft,canResendOtp: false));
+    }
+  }
+
+
+
+    @override
+  Future<void> close() {
+      _otpTimer?.cancel();
+    return super.close();
+  }
+
 
 }

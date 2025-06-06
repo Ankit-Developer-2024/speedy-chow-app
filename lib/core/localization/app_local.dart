@@ -46,6 +46,7 @@ mixin AppLocal{
   static const String registerSuccess = 'registerSuccess';
   static const String swtwr = 'swtwr';
   static const String acceptPolicy = 'acceptPolicy';
+  static const String inValidOtp = 'inValidOtp';
 
   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
@@ -76,6 +77,7 @@ mixin AppLocal{
     doNotReceive: "Didn't receive code?",
     resend: "Resend",
     otp: "OTP",
+    inValidOtp: "OTP is invalid",
     resetPassword: "Reset Password",
     resetPasswordSubTitle: "Your new password must be different from the previously used password",
     newPassword: "New Password",

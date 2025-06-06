@@ -103,3 +103,45 @@ final class AuthEmailForgotPasswordState extends AuthState {
   @override
   List<Object?> get props => [isLoading, isSuccess];
 }
+
+final class AuthIsOtpValidState extends AuthState{
+
+  final bool isLoading;
+  final bool isSuccess;
+
+  AuthIsOtpValidState({required this.isLoading,required this.isSuccess});
+
+  AuthIsOtpValidState copyWith({bool? isLoading, bool? isSuccess}) {
+    return AuthIsOtpValidState(
+        isLoading: isLoading ?? this.isLoading,
+        isSuccess: isSuccess ?? this.isSuccess
+    );
+  }
+
+  @override
+  List<Object?> get props =>[isSuccess,isLoading];
+
+}
+
+class AuthTickOtpTimerState extends AuthState {
+  final int otpSecondsRemaining;
+  final bool canResendOtp;
+
+  AuthTickOtpTimerState({
+    this.otpSecondsRemaining = 0,
+    this.canResendOtp = true,
+  });
+
+  AuthState copyWith({
+    int? otpSecondsRemaining,
+    bool? canResendOtp,
+  }) {
+    return AuthTickOtpTimerState(
+      otpSecondsRemaining: otpSecondsRemaining ?? this.otpSecondsRemaining,
+      canResendOtp: canResendOtp ?? this.canResendOtp,
+    );
+  }
+
+  @override
+  List<Object?> get props => [otpSecondsRemaining, canResendOtp];
+}
