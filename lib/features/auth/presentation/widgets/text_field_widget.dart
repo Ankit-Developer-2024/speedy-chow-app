@@ -8,7 +8,8 @@ class TextFieldWidget extends StatelessWidget {
     this.isObscureText,
     this.onTap,
     this.icon,
-    this.onValidate
+    this.onValidate,
+    this.onChange,
   });
   final TextEditingController controller;
   final String label;
@@ -16,6 +17,7 @@ class TextFieldWidget extends StatelessWidget {
   final IconData? icon;
   final bool? isObscureText;
   final FormFieldValidator<String>?  onValidate;
+  final Function(String)? onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +34,7 @@ class TextFieldWidget extends StatelessWidget {
             : null,
       ),
       validator: onValidate,
+      onChanged: onChange,
     );
   }
 }

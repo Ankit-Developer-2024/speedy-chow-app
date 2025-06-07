@@ -8,12 +8,13 @@ Future<dynamic> otpBottomSheet(BuildContext context,AuthBloc authBloc) {
   return showModalBottomSheet(
     context: context,
     enableDrag: false,
+    isDismissible: false,
     isScrollControlled: true,
     backgroundColor: AppColors.transparent,
-    builder: (bottomSheetContext) {
+    builder: (context) {
       return BlocProvider.value(
         value: authBloc,
-        child: OtpSheet(snackBarContext: context,),
+        child: OtpSheet(),
       );
     },
   );

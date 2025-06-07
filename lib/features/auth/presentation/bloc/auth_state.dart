@@ -145,3 +145,37 @@ class AuthTickOtpTimerState extends AuthState {
   @override
   List<Object?> get props => [otpSecondsRemaining, canResendOtp];
 }
+
+final class AuthResetPasswordMatchState extends AuthState{
+  final bool isMatch;
+
+  AuthResetPasswordMatchState({required this.isMatch});
+
+  AuthResetPasswordMatchState copyWith({bool? isMatch}) {
+    return AuthResetPasswordMatchState(
+      isMatch: isMatch ?? this.isMatch,
+    );
+  }
+
+  @override
+  List<Object?> get props =>[isMatch];
+}
+
+final class AuthResetPasswordState extends AuthState{
+
+  final bool isLoading;
+  final bool isSuccess;
+
+  AuthResetPasswordState({required this.isLoading,required this.isSuccess});
+
+  AuthResetPasswordState copyWith({bool? isLoading, bool? isSuccess}) {
+    return AuthResetPasswordState(
+        isLoading: isLoading ?? this.isLoading,
+        isSuccess: isSuccess ?? this.isSuccess
+    );
+  }
+
+  @override
+  List<Object?> get props =>[isSuccess,isLoading];
+
+}

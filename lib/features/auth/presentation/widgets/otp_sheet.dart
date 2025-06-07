@@ -14,8 +14,7 @@ import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 
 class OtpSheet extends StatefulWidget {
-  const OtpSheet({super.key, required this.snackBarContext});
-  final BuildContext snackBarContext;
+  const OtpSheet({super.key});
 
   @override
   State<OtpSheet> createState() => _OtpSheetState();
@@ -51,7 +50,6 @@ class _OtpSheetState extends State<OtpSheet> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<AuthBloc>().add(AuthStartOtpTimerEvent());
   }

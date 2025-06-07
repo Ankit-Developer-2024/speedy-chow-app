@@ -97,3 +97,16 @@ class AuthTickOtpTimerEvent extends AuthEvent {
   @override
   List<Object?> get props => [secondsLeft];
 }
+
+
+final class AuthResetPasswordEvent extends AuthEvent{
+
+  final String newPassword;
+  final String newConfirmPassword;
+
+  AuthResetPasswordEvent({required this.newPassword,required this.newConfirmPassword});
+
+  @override
+  List<Object?> get props => [newPassword,newConfirmPassword];
+
+}

@@ -1,7 +1,8 @@
 import 'dart:async';
 
-import 'package:bloc/bloc.dart';
+
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -24,6 +25,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthIsOtpValidEvent>(_isOtpValid);
     on<AuthStartOtpTimerEvent>(_startOtpTimer);
     on<AuthTickOtpTimerEvent>(_tickOtpTimer);
+    on<AuthResetPasswordEvent>(_resetPassword);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -126,6 +128,23 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     } else {
       emit(AuthTickOtpTimerState(otpSecondsRemaining: event.secondsLeft,canResendOtp: false));
     }
+  }
+
+
+  void _resetPassword(AuthResetPasswordEvent event ,Emitter<AuthState> emit) async{
+
+    if(event.newPassword == event.newConfirmPassword){
+      emit(AuthResetPasswordMatchState(isMatch: true));
+      emit(AuthResetPasswordState(isLoading: true, isSuccess: false));
+      //create new password api
+      //no error api
+      emit(AuthResetPasswordState(isLoading: false, isSuccess: true));
+      //error api
+    //  emit(AuthResetPasswordState(isLoading: false, isSuccess: false));
+    }else{
+      emit(AuthResetPasswordMatchState(isMatch: false));
+    }
+
   }
 
 

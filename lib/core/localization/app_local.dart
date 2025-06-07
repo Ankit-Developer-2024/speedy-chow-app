@@ -47,6 +47,7 @@ mixin AppLocal{
   static const String swtwr = 'swtwr';
   static const String acceptPolicy = 'acceptPolicy';
   static const String inValidOtp = 'inValidOtp';
+  static const String passwordMatch='passwordMatch';
 
   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
@@ -95,6 +96,7 @@ mixin AppLocal{
     registerSuccess: "Account Register Successfully!",
     swtwr: "Something went wrong!",
     acceptPolicy: "Private Policy is required",
+    passwordMatch: "Both password must match",
 
   };
 }
