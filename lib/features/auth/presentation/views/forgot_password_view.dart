@@ -38,7 +38,9 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
     return Scaffold(
       appBar: AppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(AppDimensions.spacing_24),
+        padding: const EdgeInsets.only(left: AppDimensions.spacing_24,
+            right: AppDimensions.spacing_24,
+            bottom: AppDimensions.spacing_24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,

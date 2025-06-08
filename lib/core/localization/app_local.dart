@@ -48,6 +48,13 @@ mixin AppLocal{
   static const String acceptPolicy = 'acceptPolicy';
   static const String inValidOtp = 'inValidOtp';
   static const String passwordMatch='passwordMatch';
+  static const String findByCategory='findByCategory';
+  static const String seeAll='seeAll';
+  static const String home='home';
+  static const String cart='cart';
+  static const String profile='profile';
+  static const String yourLocation='yourLocation';
+  static const String provideBestFood='provideBestFood';
 
   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
@@ -97,6 +104,13 @@ mixin AppLocal{
     swtwr: "Something went wrong!",
     acceptPolicy: "Private Policy is required",
     passwordMatch: "Both password must match",
+    findByCategory: "Find by Category",
+    seeAll: "See All",
+    home: "Home",
+    cart: "Cart",
+    profile: "Profile",
+    yourLocation: "Your Location",
+    provideBestFood: "Provide the best food for you",
 
   };
 }

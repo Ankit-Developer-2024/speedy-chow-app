@@ -6,6 +6,7 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
 import 'package:speedy_chow/features/config/data/repository/config_repo_impl.dart';
+import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 
 final getIt = GetIt.instance;
 
@@ -23,6 +24,10 @@ Future<void> initDependencies() async{
 
    //auth bloc
    _initAuthBloc();
+
+   //gome bloc
+   _initHomeBloc();
+
 }
 
 void _initConfig(){
@@ -30,9 +35,11 @@ void _initConfig(){
 }
 
 void _initAuthBloc(){
-  print("object");
   getIt.registerFactory<AuthBloc>(()=>AuthBloc());
-  print(getIt<AuthBloc>());
+}
+
+void _initHomeBloc(){
+  getIt.registerFactory<HomeBloc>(()=>HomeBloc());
 }
 
 void initFlutterLocalization() {

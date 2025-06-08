@@ -6,6 +6,8 @@ import 'package:speedy_chow/features/auth/presentation/views/forgot_password_vie
 import 'package:speedy_chow/features/auth/presentation/views/login_view.dart';
 import 'package:speedy_chow/features/auth/presentation/views/register_view.dart';
 import 'package:speedy_chow/features/auth/presentation/views/reset_password_view.dart';
+import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
+import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/splash/presentation/view/one_time_ui.dart';
 import 'package:speedy_chow/features/splash/presentation/view/splash_view.dart';
 import 'package:speedy_chow/init_dependencies.dart';
@@ -57,6 +59,15 @@ class AppPages {
             BlocProvider(
               create: (context) =>getIt<AuthBloc>(),
               child: ResetPasswordView(),
+            ),
+      ),
+      GoRoute(
+        name: AppRoutes.home,
+        path: '/${AppRoutes.home}',
+        builder: (context, state) =>
+            BlocProvider(
+              create: (context) =>getIt<HomeBloc>(),
+              child: HomeView(),
             ),
       ),
     ],
