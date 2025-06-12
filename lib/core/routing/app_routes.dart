@@ -4,5 +4,8 @@ class AppRoutes {
   static const register = 'register';
   static const forgotPassword = 'forgot-password';
   static const resetPassword = 'reset-password';
+  static const homeMainNavigation = 'homeMainNavigation';
   static const home = 'home';
+  static const cart = 'cart';
+  static const profile = 'profile';
 }

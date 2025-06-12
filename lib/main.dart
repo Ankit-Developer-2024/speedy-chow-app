@@ -6,6 +6,7 @@ import 'package:flutter_localization/flutter_localization.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:speedy_chow/app.dart';
+import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/enum/enums.dart';
 import 'package:speedy_chow/core/util/config/app_secret_config.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
@@ -28,7 +29,14 @@ Future<void> main() async {
   runApp(MultiBlocProvider(providers: [
     BlocProvider<ConfigBloc>(
         lazy: false,
-        create: (_)=> getIt<ConfigBloc>()..add(LoadConfigEvent()))
+        create: (_)=> getIt<ConfigBloc>()..add(LoadConfigEvent())
+    ),
+ BlocProvider<NavigationBloc>(
+        lazy: false,
+        create: (_)=> getIt<NavigationBloc>()
+    ),
+
+
   ], child: const MyApp()));
 }
 

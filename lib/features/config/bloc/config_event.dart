@@ -15,7 +15,5 @@ final class SetIsAppInstallEvent extends ConfigEvent{
 
   @override
   List<Object?> get props => [val];
-
 }
-
 

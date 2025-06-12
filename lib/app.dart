@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
      // routeInformationProvider: AppPages.router.routeInformationProvider,
       routerConfig: AppPages.router,
+
       
     );
   }
