@@ -35,7 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _login(AuthLoginEvent event, Emitter<AuthState> emit) async{
 
     emit(AuthLoginState(isLoading: true ,isSuccess: false));
-    await Future.delayed(Duration(seconds: 3));
+    await Future.delayed(Duration(seconds: 1));
     //call api here
     if(event.email =="demo@gmail.com" && event.password =="demo001"){
       emit(AuthLoginState(isLoading: false,isSuccess: true,));

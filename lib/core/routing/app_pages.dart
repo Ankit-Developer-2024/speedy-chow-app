@@ -10,6 +10,7 @@ import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_main_navigation_view.dart';
+import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/view/profile_view.dart';
@@ -78,7 +79,7 @@ class AppPages {
 
 
       ShellRoute(
-          builder: (context,state,child){
+          builder: (context, state, child) {
             return HomeMainNavigationView(child: child,);
           },
           routes: [
@@ -109,8 +110,19 @@ class AppPages {
                     child: ProfileView(),
                   ),
             ),
-      ]
-      )
+
+          ]
+      ),
+      GoRoute(
+        name: AppRoutes.productDetails,
+        path: '/${AppRoutes.productDetails}',
+        builder: (context, state) =>
+            BlocProvider.value(
+              value: state.extra as HomeBloc,
+              child: HomeProductDetailView(),
+            ),
+
+      ),
 
     ],
     errorBuilder: (context, state) => LoginView(),

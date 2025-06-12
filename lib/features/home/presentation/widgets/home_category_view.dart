@@ -9,6 +9,7 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/home/presentation/widgets/category_bottomSheet.dart';
 
 class HomeCategoryView extends StatelessWidget {
   const HomeCategoryView({super.key});
@@ -24,7 +25,9 @@ class HomeCategoryView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(AppLocal.findByCategory.getString(context),style: AppTextStyles.semiBold18P(),),
-              TextButton(onPressed: (){}, child: Text(AppLocal.seeAll.getString(context),style: AppTextStyles.medium16P(color: AppColors.darkOrange),))
+              TextButton(onPressed: (){
+                 categoryBottomSheet(context);
+              }, child: Text(AppLocal.seeAll.getString(context),style: AppTextStyles.medium16P(color: AppColors.darkOrange),))
             ],
           ),
 
