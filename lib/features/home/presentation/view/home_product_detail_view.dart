@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
@@ -92,7 +94,7 @@ class HomeProductDetailView extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Text("Description",style: AppTextStyles.semiBold24P()),
+                      Text(AppLocal.description.getString(context),style: AppTextStyles.semiBold24P()),
                       Text(
                         """
                   freestar
@@ -112,7 +114,7 @@ class HomeProductDetailView extends StatelessWidget {
 
             Align(
               alignment: Alignment(-1, 1),
-              child: Container(
+              child: Container( 
                 color: AppColors.white,
                 padding: EdgeInsets.symmetric(horizontal: AppDimensions.spacing_24,vertical: AppDimensions.spacing_2),
                 child: Column(
@@ -134,7 +136,7 @@ class HomeProductDetailView extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(Icons.shopping_cart,color: AppColors.white,),
-                        Text("Add to Cart",style: AppTextStyles.semiBold14P(color: AppColors.white),)
+                        Text(AppLocal.addToCart.getString(context),style: AppTextStyles.semiBold14P(color: AppColors.white),)
                       ],))
                   ],
                 ),
