@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
+import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -16,17 +20,29 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(onPressed: (){
-      context.goNamed(AppRoutes.home);
-    }, icon: Icon(Icons.arrow_back_ios_new_sharp,size: AppDimensions.size_18,)),
-    title: Text(AppLocal.profileSettings.getString(context),style: AppTextStyles.semibold18P(),),
-    centerTitle: true,
-    ),
+        leading: IconButton(
+          onPressed: () {
+            context.read<NavigationBloc>().add(
+              NavigationTabChangedEvent(index: 0),
+            );
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new_sharp,
+            size: AppDimensions.size_18,
+          ),
+        ),
+        title: Text(
+          AppLocal.profileSettings.getString(context),
+          style: AppTextStyles.semibold18P(),
+        ),
+        centerTitle: true,
+      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: AppDimensions.spacing_20,
           children: [
             Align(
               alignment: Alignment.center,
@@ -37,21 +53,80 @@ class ProfileView extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     maxRadius: 70,
-                    child: SvgPicture.asset(getLocalSvg("speedychow_logo"),fit: BoxFit.fill,),
+                    child: SvgPicture.asset(
+                      getLocalSvg("speedychow_logo"),
+                      fit: BoxFit.fill,
+                    ),
                   ),
-                  Text("Ankit",style: AppTextStyles.semiBold18P(),),
-                  Text("demo001@gmail.com",style: AppTextStyles.semiBold18P(color: AppColors.grey60),),
+                  Text("Ankit", style: AppTextStyles.semiBold18P()),
+                  Text(
+                    "demo001@gmail.com",
+                    style: AppTextStyles.semiBold18P(color: AppColors.grey60),
+                  ),
                   Container(
                     height: AppDimensions.size_4,
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(AppDimensions.radius_100),
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radius_100,
+                      ),
                       color: AppColors.grey50,
                     ),
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
+            Text(
+              AppLocal.profile.getString(context),
+              style: AppTextStyles.medium20P(color: AppColors.grey60),
+            ),
+            ProfileItem(
+              onTap: () {
+                context.pushNamed(AppRoutes.personalData);
+              },
+              icon: Icons.person_2_outlined,
+              text: AppLocal.personalData.getString(context),
+            ),
+            ProfileItem(
+              onTap: () {},
+              icon: Icons.settings,
+              text: AppLocal.settings.getString(context),
+            ),
+            Text(
+              AppLocal.support.getString(context),
+              style: AppTextStyles.medium20P(color: AppColors.grey60),
+            ),
+            ProfileItem(
+              onTap: () {},
+              icon: Icons.help_center_outlined,
+              text: AppLocal.helpCenter.getString(context),
+            ),
+            ProfileItem(
+              onTap: () {},
+              icon: Icons.delete_outline_rounded,
+              text: AppLocal.requestAccountDeletion.getString(context),
+            ),
+            Spacer(),
+            Button(
+              onTap: () {},
+              color: AppColors.transparent,
+              border: Border.all(color: AppColors.errorRed),
+              overlayColor: WidgetStateProperty.all(
+                AppColors.errorRed.withAlpha(50),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: AppDimensions.spacing_10,
+                children: [
+                  Icon(Icons.logout_sharp, color: AppColors.errorRed),
+                  Text(
+                    AppLocal.signOut.getString(context),
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.medium16P(color: AppColors.errorRed),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),

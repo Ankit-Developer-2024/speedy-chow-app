@@ -63,6 +63,17 @@ mixin AppLocal{
   static const String notOrderedAnyFood='notOrderedAnyFood';
   static const String findFood='findFood';
   static const String profileSettings='profileSettings';
+  static const String personalData='personalData';
+  static const String settings='settings';
+  static const String support='support';
+  static const String helpCenter='helpCenter';
+  static const String requestAccountDeletion='requestAccountDeletion';
+  static const String signOut='signOut';
+  static const String fullName='fullName';
+  static const String dateOfBirth='dateOfBirth';
+  static const String gender='gender';
+  static const String phone='phone';
+  static const String save='save';
 
   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
@@ -127,6 +138,17 @@ mixin AppLocal{
     notOrderedAnyFood: "Seems like you have not ordered any food yet",
     findFood: "Find Foods",
     profileSettings: "Profile Settings",
+    personalData: "Personal Data",
+    support: "Support",
+    settings: "Settings",
+    helpCenter: "Help Center",
+    requestAccountDeletion: "Request Account Deletion",
+    signOut: "Sign Out",
+    fullName: "Full Name",
+    dateOfBirth: "Date of birth",
+    gender: "Gender",
+    phone: "Phone",
+    save: "Save",
 
   };
 }

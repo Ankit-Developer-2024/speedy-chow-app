@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
@@ -17,7 +19,7 @@ class CartView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(onPressed: (){
-          context.goNamed(AppRoutes.home);
+          context.read<NavigationBloc>().add(NavigationTabChangedEvent(index: 0));
         }, icon: Icon(Icons.arrow_back_ios_new_sharp,size: AppDimensions.size_18,)),
         title: Text(AppLocal.myCart.getString(context),style: AppTextStyles.semibold18P(),),
         centerTitle: true,

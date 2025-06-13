@@ -9,4 +9,5 @@ class AppRoutes {
   static const cart = 'cart';
   static const profile = 'profile';
   static const productDetails = 'product-details';
+  static const personalData = 'personalData';
 }
