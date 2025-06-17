@@ -13,7 +13,7 @@ import 'package:speedy_chow/features/home/presentation/view/home_main_navigation
 import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
-import 'package:speedy_chow/features/profile/presentation/view/personal_data.dart';
+import 'package:speedy_chow/features/profile/presentation/view/personal_data_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/profile_view.dart';
 import 'package:speedy_chow/features/splash/presentation/view/one_time_ui.dart';
 import 'package:speedy_chow/features/splash/presentation/view/splash_view.dart';
@@ -120,7 +120,7 @@ class AppPages {
         path: '/${AppRoutes.personalData}',
         builder: (context, state) => BlocProvider.value(
           value: state.extra as ProfileBloc,
-          child: PersonalData(),
+          child: PersonalDataView(),
         ),
       ),
     ],

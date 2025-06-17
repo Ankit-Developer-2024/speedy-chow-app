@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/loader.dart';
@@ -11,14 +8,14 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/text_field_widget.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
 
-class PersonalData extends StatelessWidget {
-  PersonalData({super.key});
+class PersonalDataView extends StatelessWidget {
+  PersonalDataView({super.key});
 
   final TextEditingController nameController = TextEditingController();
   final TextEditingController dobController = TextEditingController();
@@ -30,26 +27,7 @@ class PersonalData extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: ()async{
-            FocusScope.of(context).unfocus();
-            await Future.delayed(Duration(milliseconds: 200));
-           context.pop();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_new_sharp,
-            size: AppDimensions.size_18,
-          ),
-        ),
-        title: Text(
-          AppLocal.personalData.getString(context),
-          style: AppTextStyles.semibold18P(),
-        ),
-        centerTitle: true,
-        systemOverlayStyle: SystemUiOverlayStyle(  statusBarColor: AppColors.black,
-          statusBarIconBrightness: Brightness.light,),
-      ),
+      appBar:ProfileItemAppBar(title: AppLocal.personalData.getString(context),) as PreferredSizeWidget,
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
