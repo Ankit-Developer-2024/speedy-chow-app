@@ -19,6 +19,7 @@ mixin AppLocal{
   static const String userName = 'userName';
   static const String agreeWithTAndS = 'agreeWithTAndS';
   static const String termsAndService = 'termsAndService';
+  static const String termsAndConditions = 'termsAndConditions';
   static const String and = 'and';
   static const String privacyPolicy = 'privacyPolicy';
   static const String alreadyAccount = 'alreadyAccount';
@@ -76,6 +77,8 @@ mixin AppLocal{
   static const String gender='gender';
   static const String phone='phone';
   static const String save='save';
+  static const String location='location';
+  static const String language='language';
 
   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
@@ -96,6 +99,7 @@ mixin AppLocal{
     registerSubTitle: 'Create an account to start looking for the food you like',
     agreeWithTAndS: 'I Agree with',
     termsAndService: 'Terms of Service',
+    termsAndConditions: 'Terms and Conditions',
     and: 'and',
     continueText: 'Continue',
     privacyPolicy: 'Privacy Policy',
@@ -153,6 +157,8 @@ mixin AppLocal{
     gender: "Gender",
     phone: "Phone",
     save: "Save",
+    location: "Location",
+    language: "Language",
 
   };
 }

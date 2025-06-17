@@ -10,7 +10,6 @@ import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
@@ -84,7 +83,9 @@ class ProfileView extends StatelessWidget {
               text: AppLocal.personalData.getString(context),
             ),
             ProfileItem(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(AppRoutes.settings,extra: context.read<ProfileBloc>());
+              },
               icon: Icons.settings,
               text: AppLocal.settings.getString(context),
             ),
@@ -93,7 +94,9 @@ class ProfileView extends StatelessWidget {
               style: AppTextStyles.medium20P(color: AppColors.grey60),
             ),
             ProfileItem(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(AppRoutes.helpCenter,extra: context.read<ProfileBloc>());
+              },
               icon: Icons.help_center_outlined,
               text: AppLocal.helpCenter.getString(context),
             ),

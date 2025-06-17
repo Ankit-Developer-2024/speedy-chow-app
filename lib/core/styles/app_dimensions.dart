@@ -50,6 +50,7 @@ class AppDimensions {
   static const double size_32 = 32;
   static const double size_36 = 36;
   static const double size_40 = 40;
+  static const double size_55 = 55;
   static const double size_64 = 64;
   static const double size_68 = 68;
   static const double size_72 = 72;

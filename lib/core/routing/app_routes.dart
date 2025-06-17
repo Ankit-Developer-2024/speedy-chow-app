@@ -10,4 +10,6 @@ class AppRoutes {
   static const profile = 'profile';
   static const productDetails = 'product-details';
   static const personalData = 'personalData';
+  static const settings = 'settings';
+  static const helpCenter = 'helpCenter';
 }

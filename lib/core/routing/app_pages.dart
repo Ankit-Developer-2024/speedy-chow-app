@@ -13,8 +13,10 @@ import 'package:speedy_chow/features/home/presentation/view/home_main_navigation
 import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:speedy_chow/features/profile/presentation/view/help_center_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/personal_data_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/profile_view.dart';
+import 'package:speedy_chow/features/profile/presentation/view/settings_view.dart';
 import 'package:speedy_chow/features/splash/presentation/view/one_time_ui.dart';
 import 'package:speedy_chow/features/splash/presentation/view/splash_view.dart';
 import 'package:speedy_chow/init_dependencies.dart';
@@ -121,6 +123,23 @@ class AppPages {
         builder: (context, state) => BlocProvider.value(
           value: state.extra as ProfileBloc,
           child: PersonalDataView(),
+        ),
+      ),
+
+      GoRoute(
+        name: AppRoutes.settings,
+        path: '/${AppRoutes.settings}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as ProfileBloc,
+          child: SettingsView(),
+        ),
+      ),
+      GoRoute(
+        name: AppRoutes.helpCenter,
+        path: '/${AppRoutes.helpCenter}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as ProfileBloc,
+          child: HelpCenterView(),
         ),
       ),
     ],
