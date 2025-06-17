@@ -11,7 +11,9 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
 
 class ProfileView extends StatelessWidget {
   const ProfileView({super.key});
@@ -51,13 +53,7 @@ class ProfileView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 spacing: AppDimensions.spacing_8,
                 children: [
-                  CircleAvatar(
-                    maxRadius: 70,
-                    child: SvgPicture.asset(
-                      getLocalSvg("speedychow_logo"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+                  UserImageView(),
                   Text("Ankit", style: AppTextStyles.semiBold18P()),
                   Text(
                     "demo001@gmail.com",
@@ -82,7 +78,7 @@ class ProfileView extends StatelessWidget {
             ),
             ProfileItem(
               onTap: () {
-                context.pushNamed(AppRoutes.personalData);
+                context.pushNamed(AppRoutes.personalData,extra: context.read<ProfileBloc>());
               },
               icon: Icons.person_2_outlined,
               text: AppLocal.personalData.getString(context),

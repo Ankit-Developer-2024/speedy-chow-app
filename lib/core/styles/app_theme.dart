@@ -30,6 +30,10 @@ class AppTheme{
           borderRadius: BorderRadius.circular(AppDimensions.spacing_8),
           borderSide: BorderSide(color: AppColors.errorRed)
       ),
+      border:  OutlineInputBorder(borderRadius: BorderRadius.circular(AppDimensions.spacing_8)),
+      disabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(AppDimensions.spacing_8),
+          borderSide: BorderSide(color: AppColors.black)
+      ) ,
       errorStyle: TextStyle(color: AppColors.errorRed),
       floatingLabelStyle:const TextStyle(color: AppColors.darkOrange),
       labelStyle: const TextStyle(color: AppColors.grey500),

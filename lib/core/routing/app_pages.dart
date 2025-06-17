@@ -27,7 +27,8 @@ class AppPages {
         name: 'splash',
         path: '/',
         builder: (context, state) => SplashView(),
-      ), GoRoute(
+      ),
+      GoRoute(
         name: AppRoutes.oneTime,
         path: '/one-time',
         builder: (context, state) => OneTimeUi(),
@@ -35,39 +36,36 @@ class AppPages {
       GoRoute(
         name: AppRoutes.login,
         path: '/login',
-        builder: (context, state) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: LoginView(),
-            ),
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthBloc>(),
+          child: LoginView(),
+        ),
       ),
       GoRoute(
         name: AppRoutes.register,
         path: '/register',
-        builder: (context, state) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: RegisterView(),
-            ),
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthBloc>(),
+          child: RegisterView(),
+        ),
       ),
       GoRoute(
         name: AppRoutes.forgotPassword,
         path: '/${AppRoutes.forgotPassword}',
-        builder: (context, state) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: ForgotPasswordView(),
-            ),
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthBloc>(),
+          child: ForgotPasswordView(),
+        ),
       ),
       GoRoute(
         name: AppRoutes.resetPassword,
         path: '/${AppRoutes.resetPassword}',
-        builder: (context, state) =>
-            BlocProvider(
-              create: (context) => getIt<AuthBloc>(),
-              child: ResetPasswordView(),
-            ),
+        builder: (context, state) => BlocProvider(
+          create: (context) => getIt<AuthBloc>(),
+          child: ResetPasswordView(),
+        ),
       ),
+
       // GoRoute(
       //   name: AppRoutes.homeMainNavigation,
       //   path: '/${AppRoutes.homeMainNavigation}',
@@ -77,62 +75,54 @@ class AppPages {
       //         child: HomeMainNavigationView(),
       //       ),
       // ),
-
-
       ShellRoute(
-          builder: (context, state, child) {
-            return HomeMainNavigationView(child: child,);
-          },
-          routes: [
-            GoRoute(
-              name: AppRoutes.home,
-              path: '/${AppRoutes.home}',
-              builder: (context, state) =>
-                  BlocProvider(
-                    create: (context) => getIt<HomeBloc>(),
-                    child: HomeView(),
-                  ),
+        builder: (context, state, child) {
+          return HomeMainNavigationView(child: child);
+        },
+        routes: [
+          GoRoute(
+            name: AppRoutes.home,
+            path: '/${AppRoutes.home}',
+            builder: (context, state) => BlocProvider(
+              create: (context) => getIt<HomeBloc>(),
+              child: HomeView(),
             ),
-            GoRoute(
-              name: AppRoutes.cart,
-              path: '/${AppRoutes.cart}',
-              builder: (context, state) =>
-                  BlocProvider(
-                    create: (context) => getIt<CartBloc>(),
-                    child: CartView(),
-                  ),
+          ),
+          GoRoute(
+            name: AppRoutes.cart,
+            path: '/${AppRoutes.cart}',
+            builder: (context, state) => BlocProvider(
+              create: (context) => getIt<CartBloc>(),
+              child: CartView(),
             ),
-            GoRoute(
-              name: AppRoutes.profile,
-              path: '/${AppRoutes.profile}',
-              builder: (context, state) =>
-                  BlocProvider(
-                    create: (context) => getIt<ProfileBloc>(),
-                    child: ProfileView(),
-                  ),
+          ),
+          GoRoute(
+            name: AppRoutes.profile,
+            path: '/${AppRoutes.profile}',
+            builder: (context, state) => BlocProvider(
+              create: (context) => getIt<ProfileBloc>(),
+              child: ProfileView(),
             ),
-
-          ]
+          ),
+        ],
       ),
       GoRoute(
         name: AppRoutes.productDetails,
         path: '/${AppRoutes.productDetails}',
-        builder: (context, state) =>
-            BlocProvider.value(
-              value: state.extra as HomeBloc,
-              child: HomeProductDetailView(),
-            ),
-
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as HomeBloc,
+          child: HomeProductDetailView(),
+        ),
       ),
 
       GoRoute(
         name: AppRoutes.personalData,
         path: '/${AppRoutes.personalData}',
-        builder: (context, state) =>
-            PersonalData(),
-
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as ProfileBloc,
+          child: PersonalData(),
+        ),
       ),
-
     ],
     errorBuilder: (context, state) => LoginView(),
   );

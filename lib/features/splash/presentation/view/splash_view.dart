@@ -42,9 +42,9 @@ class _SplashViewState extends State<SplashView> {
       child: BlocListener<SplashBloc, SplashState>(
         listener: (context, state) {
           if (state is ShowOneTimeUiState) {
-            context.goNamed('one-time');
+            context.goNamed(AppRoutes.oneTime);
           } else if (state is ShowLoginViewState) {
-            context.goNamed('login');
+            context.goNamed(AppRoutes.home);
           }
         },
         child: Scaffold(

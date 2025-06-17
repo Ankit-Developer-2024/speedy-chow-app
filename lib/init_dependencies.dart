@@ -60,6 +60,7 @@ void _initAuthBloc(){
 
 void _initHomeBloc(){
   getIt.registerFactory<HomeBloc>(()=>HomeBloc());
+
 }
 
 void _initCartBloc(){

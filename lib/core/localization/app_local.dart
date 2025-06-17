@@ -37,6 +37,8 @@ mixin AppLocal{
   static const String passwordChanged = 'passwordChanged';
   static const String passwordChangedSucc = 'passwordChangedSucc';
   static const String validEmail = 'validEmail';
+  static const String validPhoneNumber = 'validPhoneNumber';
+  static const String phoneNumberRequired = 'phoneNumberRequired';
   static const String validPassword = 'validPassword';
   static const String loginFailed = 'loginFailed';
   static const String loginSuccess = 'loginSuccess';
@@ -112,6 +114,8 @@ mixin AppLocal{
     verifyAccount: "Verify Account",
     passwordChanged: "Password Changed",
     validEmail: "Enter a valid Email Address.",
+    validPhoneNumber: "Enter a valid Phone Number.",
+    phoneNumberRequired: "Phone Number is required.",
     userNameRequired: "User Name is required.",
     emailRequired: "Email Address is required.",
     passwordRequired: "Password is required.",
@@ -145,7 +149,7 @@ mixin AppLocal{
     requestAccountDeletion: "Request Account Deletion",
     signOut: "Sign Out",
     fullName: "Full Name",
-    dateOfBirth: "Date of birth",
+    dateOfBirth: "Date of Birth",
     gender: "Gender",
     phone: "Phone",
     save: "Save",
