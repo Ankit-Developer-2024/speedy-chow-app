@@ -28,3 +28,23 @@ final class ProfilePersonalDataSaveState extends ProfileState {
   List<Object?> get props => [isLoading,isSuccess];
 }
 
+final class ProfileAccountDeletionCheckBoxState extends ProfileState{
+  final DateTime timestamp = DateTime.now();
+
+  @override
+  List<Object?> get props => [timestamp];
+}
+
+final class ProfileAccountDeletionConfirmState extends ProfileState{
+  final bool isLoading;
+  final bool isSuccess;
+
+  ProfileAccountDeletionConfirmState({
+    required this.isLoading,
+    required this.isSuccess,
+  });
+
+  @override
+  List<Object?> get props => [isLoading,isSuccess];
+}
+

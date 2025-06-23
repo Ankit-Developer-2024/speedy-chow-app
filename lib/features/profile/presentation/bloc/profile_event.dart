@@ -28,3 +28,21 @@ final class ProfilePersonalDataSaveEvent extends ProfileEvent {
   @override
   List<Object?> get props => [fullName,dob,gender,phone,email];
 }
+
+final class ProfileAccountDeletionCheckBoxEvent extends ProfileEvent{
+
+  final bool isCheck;
+  final String title;
+
+  ProfileAccountDeletionCheckBoxEvent({required this.title , required this.isCheck});
+
+  @override
+  List<Object?> get props => [isCheck,title];
+}
+
+final class ProfileAccountDeletionConfirmEvent extends ProfileEvent{
+
+  @override
+  List<Object?> get props => [];
+}
+

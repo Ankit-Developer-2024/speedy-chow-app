@@ -13,6 +13,7 @@ import 'package:speedy_chow/features/home/presentation/view/home_main_navigation
 import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:speedy_chow/features/profile/presentation/view/account_deletion_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/help_center_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/personal_data_view.dart';
 import 'package:speedy_chow/features/profile/presentation/view/profile_view.dart';
@@ -140,6 +141,14 @@ class AppPages {
         builder: (context, state) => BlocProvider.value(
           value: state.extra as ProfileBloc,
           child: HelpCenterView(),
+        ),
+      ),
+      GoRoute(
+        name: AppRoutes.requestAccountDeletion,
+        path: '/${AppRoutes.requestAccountDeletion}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as ProfileBloc,
+          child: AccountDeletionView(),
         ),
       ),
     ],

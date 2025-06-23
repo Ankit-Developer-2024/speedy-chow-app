@@ -12,4 +12,5 @@ class AppRoutes {
   static const personalData = 'personalData';
   static const settings = 'settings';
   static const helpCenter = 'helpCenter';
+  static const requestAccountDeletion = 'requestAccountDeletion';
 }

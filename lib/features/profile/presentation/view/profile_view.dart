@@ -101,7 +101,9 @@ class ProfileView extends StatelessWidget {
               text: AppLocal.helpCenter.getString(context),
             ),
             ProfileItem(
-              onTap: () {},
+              onTap: () {
+                context.pushNamed(AppRoutes.requestAccountDeletion,extra: context.read<ProfileBloc>());
+              },
               icon: Icons.delete_outline_rounded,
               text: AppLocal.requestAccountDeletion.getString(context),
             ),

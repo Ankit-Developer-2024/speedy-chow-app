@@ -79,8 +79,30 @@ mixin AppLocal{
   static const String save='save';
   static const String location='location';
   static const String language='language';
+  static const String whyDeleteAccount='whyDeleteAccount';
+  static const String dontFindUseful='dontFindUseful';
+  static const String concernedAboutPrivacy='concernedAboutPrivacy';
+  static const String  foundAlternative='foundAlternative';
+  static const String  tooManyNotifications='tooManyNotifications';
+  static const String  badExperience='badExperience';
+  static const String  dontUseOften='dontUseOften';
+  static const String  createdDuplicateAccount='createdDuplicateAccount';
+  static const String  serviceSlow='serviceSlow';
+  static const String  wantBreak='wantBreak';
+  static const String  other='other';
+  static const String  cancel='cancel';
+  static const String  delete='delete';
+  static const String  confirmDelete='confirmDelete';
+  static const String  deleteAccount='deleteAccount';
+  static const String  confirmDeleteSubTitle='confirmDeleteSubTitle';
+  static const String  confirmDeleteCheckBoxTitle='confirmDeleteCheckBoxTitle';
+  static const String  confirmDeleteCheckBoxSubTitle="confirmDeleteCheckBoxSubTitle";
+  static const String  accountDeletionProcessStart="accountDeletionProcessStart";
+  static const String  accountDeletionProcessStartSuccessfully="accountDeletionProcessStartSuccessfully";
 
-  static const Map<String, dynamic> EN = {
+
+
+   static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
     whatWeServe: 'We serve incomparable delicacies',
     whatWeServeDesc: 'All the best restaurants with their top menu waiting for you, they cant’t wait for your order!!',
@@ -159,6 +181,26 @@ mixin AppLocal{
     save: "Save",
     location: "Location",
     language: "Language",
+    whyDeleteAccount: "Why are you deleting your account?",
+    dontFindUseful: " I don’t find it useful anymore.",
+    concernedAboutPrivacy: "I’m concerned about my privacy.",
+    foundAlternative: " I found a better alternative",
+    tooManyNotifications: "I receive too many emails/notifications",
+    badExperience: "I had a bad experience",
+    dontUseOften: "I don’t use it often",
+    createdDuplicateAccount: "I created a duplicate account",
+    serviceSlow: "App/service is too slow or buggy",
+    wantBreak: "I want to take a break",
+    other: "Other",
+    cancel: "Cancel",
+    confirmDelete: "Confirm Delete",
+    delete: "Delete",
+    deleteAccount: "Delete Account",
+    confirmDeleteSubTitle: "Are you sure you want to delete your account?",
+    confirmDeleteCheckBoxTitle: "Pick one option",
+    confirmDeleteCheckBoxSubTitle:"Please choose the reason that best describes why you're leaving.",
+    accountDeletionProcessStart: "Account Deletion Process start...",
+    accountDeletionProcessStartSuccessfully: "Account deletion has been initiated. Your account will be permanently deleted if you don’t log in within 7 days.",
 
-  };
+};
 }
