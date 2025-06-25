@@ -22,6 +22,70 @@ class AccountDeletionView extends StatelessWidget {
       appBar: ProfileItemAppBar(
         title: AppLocal.requestAccountDeletion.getString(context),
       ),
+      floatingActionButton:  BlocListener<ProfileBloc, ProfileState>(
+        listenWhen: (prev, curr) =>
+        curr is ProfileAccountDeletionConfirmState,
+        listener: (context, state) {
+          if (state is ProfileAccountDeletionConfirmState) {
+            if (state.isLoading) {
+              customLoaderDialog(
+                context: context,
+                title: AppLocal.accountDeletionProcessStart.getString(context),
+              );
+            } else if (state.isSuccess) {
+              context.pop();
+              context.pop();
+              customSnackBar(context,seconds:4 ,AppLocal.accountDeletionProcessStartSuccessfully.getString(context));
+            } else if (!state.isSuccess && !state.isLoading) {
+              context.pop();
+              context.pop();
+              customSnackBar(context, "Error");
+            }
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
+          child: Button(
+            height: AppDimensions.size_64,
+            onTap: () {
+              context.read<ProfileBloc>().selectedAccountDeletionReason !=
+                  null
+                  ? customConfirmationDialogBox(
+                context: context,
+                title: AppLocal.confirmDelete.getString(context),
+                msg: AppLocal.confirmDeleteSubTitle.getString(
+                  context,
+                ),
+                rightButtonTitle: AppLocal.delete.getString(context),
+                onPress: () {
+                  context.read<ProfileBloc>().add(ProfileAccountDeletionConfirmEvent());
+                },
+              )
+                  : customConfirmationDialogBox(
+                context: context,
+                title: AppLocal.confirmDeleteCheckBoxTitle.getString(
+                  context,
+                ),
+                msg: AppLocal.confirmDeleteCheckBoxSubTitle.getString(
+                  context,
+                ),
+                isLeftButtonRequired: false,
+                rightButtonTitle: AppLocal.cancel.getString(context),
+                onPress: () {
+                  context.pop();
+                },
+              );
+            },
+            child: Center(
+              child: Text(
+                AppLocal.deleteAccount.getString(context),
+                style: AppTextStyles.medium16P(color: AppColors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       body: Padding(
         padding: const EdgeInsets.only(
           left: AppDimensions.spacing_24,
@@ -81,66 +145,7 @@ class AccountDeletionView extends StatelessWidget {
                 );
               },
             ),
-            Spacer(),
-            BlocListener<ProfileBloc, ProfileState>(
-              listenWhen: (prev, curr) =>
-                  curr is ProfileAccountDeletionConfirmState,
-              listener: (context, state) {
-                if (state is ProfileAccountDeletionConfirmState) {
-                  if (state.isLoading) {
-                    customLoaderDialog(
-                      context: context,
-                      title: AppLocal.accountDeletionProcessStart.getString(context),
-                    );
-                  } else if (state.isSuccess) {
-                    context.pop();
-                    context.pop();
-                    customSnackBar(context,seconds:4 ,AppLocal.accountDeletionProcessStartSuccessfully.getString(context));
-                  } else if (!state.isSuccess && !state.isLoading) {
-                    context.pop();
-                    context.pop();
-                    customSnackBar(context, "Error");
-                  }
-                }
-              },
-              child: Button(
-                onTap: () {
-                  context.read<ProfileBloc>().selectedAccountDeletionReason !=
-                          null
-                      ? customConfirmationDialogBox(
-                          context: context,
-                          title: AppLocal.confirmDelete.getString(context),
-                          msg: AppLocal.confirmDeleteSubTitle.getString(
-                            context,
-                          ),
-                          rightButtonTitle: AppLocal.delete.getString(context),
-                          onPress: () {
-                            context.read<ProfileBloc>().add(ProfileAccountDeletionConfirmEvent());
-                          },
-                        )
-                      : customConfirmationDialogBox(
-                          context: context,
-                          title: AppLocal.confirmDeleteCheckBoxTitle.getString(
-                            context,
-                          ),
-                          msg: AppLocal.confirmDeleteCheckBoxSubTitle.getString(
-                            context,
-                          ),
-                          isLeftButtonRequired: false,
-                          rightButtonTitle: AppLocal.cancel.getString(context),
-                          onPress: () {
-                            context.pop();
-                          },
-                        );
-                },
-                child: Center(
-                  child: Text(
-                    AppLocal.deleteAccount.getString(context),
-                    style: AppTextStyles.medium16P(color: AppColors.white),
-                  ),
-                ),
-              ),
-            ),
+
           ],
         ),
       ),

@@ -48,3 +48,16 @@ final class ProfileAccountDeletionConfirmState extends ProfileState{
   List<Object?> get props => [isLoading,isSuccess];
 }
 
+final class ProfileSignOutConfirmState extends ProfileState{
+  final bool isLoading;
+  final bool isSuccess;
+
+  ProfileSignOutConfirmState({
+    required this.isLoading,
+    required this.isSuccess,
+  });
+
+  @override
+  List<Object?> get props => [isLoading,isSuccess];
+}
+

@@ -17,11 +17,12 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> customSnackBar(
       content: Text(title,style: AppTextStyles.bold14P(color: textColor ?? AppColors.white),),
       duration: Duration(seconds: seconds ?? 2),
       padding: padding ??EdgeInsets.all(AppDimensions.spacing_16),
-      margin:  margin ?? EdgeInsets.all(AppDimensions.spacing_24),
+      margin:  margin,
       behavior: SnackBarBehavior.floating,
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusSmall)),
       backgroundColor: bgColor ?? AppColors.darkOrange.withValues(alpha: 0.9),
+
     ),
   );
 }

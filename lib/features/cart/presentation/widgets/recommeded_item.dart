@@ -63,7 +63,7 @@ class RecommededItem extends StatelessWidget {
                   RichText(text: TextSpan(
                       style: AppTextStyles.medium16P(color: AppColors.darkOrange),
                       children: [
-                        TextSpan(text: "\$"),
+                        TextSpan(text: "₹"),
                         WidgetSpan(child: SizedBox(width: AppDimensions.spacing_8,)),
                         TextSpan(text: "Price"),
                       ]

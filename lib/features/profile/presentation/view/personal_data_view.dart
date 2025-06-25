@@ -130,7 +130,6 @@ class PersonalDataView extends StatelessWidget {
         listenWhen:(prev,curr)=> curr is ProfilePersonalDataSaveState,
         listener: (context, state) {
           if(state is ProfilePersonalDataSaveState){
-
             state.isSuccess? customSnackBar(context, "Data Save Successfully") : null;
           }
         },

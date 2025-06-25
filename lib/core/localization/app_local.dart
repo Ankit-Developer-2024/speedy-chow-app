@@ -61,6 +61,10 @@ mixin AppLocal{
   static const String description='description';
   static const String addToCart='addToCart';
   static const String myCart='myCart';
+  static const String subTotal='subTotal';
+  static const String items='items';
+  static const String delivery='delivery';
+  static const String orderTotal='orderTotal';
   static const String recommendedForYou='recommendedForYou';
   static const String ouchHungry='ouchHungry';
   static const String notOrderedAnyFood='notOrderedAnyFood';
@@ -99,7 +103,10 @@ mixin AppLocal{
   static const String  confirmDeleteCheckBoxSubTitle="confirmDeleteCheckBoxSubTitle";
   static const String  accountDeletionProcessStart="accountDeletionProcessStart";
   static const String  accountDeletionProcessStartSuccessfully="accountDeletionProcessStartSuccessfully";
-
+  static const String  confirmSignOutTitle='confirmSignOutTitle';
+  static const String  confirmSignOutSubTitle='confirmSignOutSubTitle';
+  static const String  signOutProcessStart='signOutProcessStart';
+  static const String  signOutProcessSuccessfully='signOutProcessSuccessfully';
 
 
    static const Map<String, dynamic> EN = {
@@ -163,6 +170,10 @@ mixin AppLocal{
     description: "Description",
     addToCart: "Add to Cart",
     myCart: "My Cart",
+    subTotal: "Subtotal",
+     items: "Items",
+     delivery: "Delivery:",
+     orderTotal: "Order Total:",
     recommendedForYou: "Recommended For You",
     ouchHungry: "Ouch! Hungry",
     notOrderedAnyFood: "Seems like you have not ordered any food yet",
@@ -201,6 +212,9 @@ mixin AppLocal{
     confirmDeleteCheckBoxSubTitle:"Please choose the reason that best describes why you're leaving.",
     accountDeletionProcessStart: "Account Deletion Process start...",
     accountDeletionProcessStartSuccessfully: "Account deletion has been initiated. Your account will be permanently deleted if you don’t log in within 7 days.",
-
+    confirmSignOutTitle:"Confirm Sign Out",
+     confirmSignOutSubTitle:"Are you sure you want to sign out your account?",
+     signOutProcessStart: "Sign Out Process start...",
+     signOutProcessSuccessfully: "Sign Out successfully.",
 };
 }

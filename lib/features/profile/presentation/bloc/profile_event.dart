@@ -46,3 +46,9 @@ final class ProfileAccountDeletionConfirmEvent extends ProfileEvent{
   List<Object?> get props => [];
 }
 
+final class ProfileSignOutConfirmEvent extends ProfileEvent{
+
+  @override
+  List<Object?> get props => [];
+}
+

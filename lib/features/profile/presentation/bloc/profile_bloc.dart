@@ -27,6 +27,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfilePersonalDataSaveEvent>(_personalDataSave);
     on<ProfileAccountDeletionCheckBoxEvent>(_accountDeletionCheckBox);
     on<ProfileAccountDeletionConfirmEvent>(_accountDeletionConfirm);
+    on<ProfileSignOutConfirmEvent>(_signOutConfirm);
   }
 
   void _openDatePicker(
@@ -82,6 +83,14 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     await Future.delayed(Duration(seconds: 2));
     //call api here and send reason why you delete account -----selectedAccountDeletionReason have a value
     emit(ProfileAccountDeletionConfirmState(isSuccess: true,isLoading: false));
+
+  }
+
+  void _signOutConfirm(ProfileSignOutConfirmEvent event,Emitter<ProfileState> emit)async{
+    emit(ProfileSignOutConfirmState(isSuccess: false,isLoading: true));
+    await Future.delayed(Duration(seconds: 2));
+    //remove local data base value
+    emit(ProfileSignOutConfirmState(isSuccess: true,isLoading: false));
 
   }
 

@@ -5,6 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
+import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
+import 'package:speedy_chow/core/components/widgets/custonConfirmationDialogBox.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
@@ -38,6 +41,60 @@ class ProfileView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
+        child: BlocListener<ProfileBloc, ProfileState>(
+          listenWhen: (prev,curr)=> curr is ProfileSignOutConfirmState,
+          listener: (context, state) {
+             if(state is ProfileSignOutConfirmState){
+               if(state.isLoading){
+                 customLoaderDialog(context: context, title: "Sign out process start...");
+               }
+               else if(state.isSuccess){
+                 context.pop();
+                 context.pop();
+                 customSnackBar(context, "Sign out Successfully");
+               }
+               else if(!state.isSuccess && !state.isLoading){
+                 context.pop();
+                 context.pop();
+                 customSnackBar(context, "Error");
+               }
+             }
+          },
+          child: Button(
+            onTap: () {
+              customConfirmationDialogBox(
+                context: context,
+                title: AppLocal.confirmSignOutTitle.getString(context),
+                msg: AppLocal.confirmSignOutSubTitle.getString(context),
+                rightButtonTitle: AppLocal.signOut.getString(context),
+                onPress: () {
+                  context.read<ProfileBloc>().add(ProfileSignOutConfirmEvent());
+                },
+              );
+            },
+            color: AppColors.transparent,
+            border: Border.all(color: AppColors.errorRed),
+            overlayColor: WidgetStateProperty.all(
+              AppColors.errorRed.withAlpha(50),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: AppDimensions.spacing_10,
+              children: [
+                Icon(Icons.logout_sharp, color: AppColors.errorRed),
+                Text(
+                  AppLocal.signOut.getString(context),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.medium16P(color: AppColors.errorRed),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
         child: Column(
@@ -77,14 +134,20 @@ class ProfileView extends StatelessWidget {
             ),
             ProfileItem(
               onTap: () {
-                context.pushNamed(AppRoutes.personalData,extra: context.read<ProfileBloc>());
+                context.pushNamed(
+                  AppRoutes.personalData,
+                  extra: context.read<ProfileBloc>(),
+                );
               },
               icon: Icons.person_2_outlined,
               text: AppLocal.personalData.getString(context),
             ),
             ProfileItem(
               onTap: () {
-                context.pushNamed(AppRoutes.settings,extra: context.read<ProfileBloc>());
+                context.pushNamed(
+                  AppRoutes.settings,
+                  extra: context.read<ProfileBloc>(),
+                );
               },
               icon: Icons.settings,
               text: AppLocal.settings.getString(context),
@@ -95,38 +158,23 @@ class ProfileView extends StatelessWidget {
             ),
             ProfileItem(
               onTap: () {
-                context.pushNamed(AppRoutes.helpCenter,extra: context.read<ProfileBloc>());
+                context.pushNamed(
+                  AppRoutes.helpCenter,
+                  extra: context.read<ProfileBloc>(),
+                );
               },
               icon: Icons.help_center_outlined,
               text: AppLocal.helpCenter.getString(context),
             ),
             ProfileItem(
               onTap: () {
-                context.pushNamed(AppRoutes.requestAccountDeletion,extra: context.read<ProfileBloc>());
+                context.pushNamed(
+                  AppRoutes.requestAccountDeletion,
+                  extra: context.read<ProfileBloc>(),
+                );
               },
               icon: Icons.delete_outline_rounded,
               text: AppLocal.requestAccountDeletion.getString(context),
-            ),
-            Spacer(),
-            Button(
-              onTap: () {},
-              color: AppColors.transparent,
-              border: Border.all(color: AppColors.errorRed),
-              overlayColor: WidgetStateProperty.all(
-                AppColors.errorRed.withAlpha(50),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: AppDimensions.spacing_10,
-                children: [
-                  Icon(Icons.logout_sharp, color: AppColors.errorRed),
-                  Text(
-                    AppLocal.signOut.getString(context),
-                    textAlign: TextAlign.center,
-                    style: AppTextStyles.medium16P(color: AppColors.errorRed),
-                  ),
-                ],
-              ),
             ),
           ],
         ),
