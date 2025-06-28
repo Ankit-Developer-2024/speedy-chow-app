@@ -64,7 +64,10 @@ mixin AppLocal{
   static const String subTotal='subTotal';
   static const String items='items';
   static const String delivery='delivery';
+  static const String deliveryTo='deliveryTo';
   static const String orderTotal='orderTotal';
+  static const String selectPaymentMethod='selectPaymentMethod';
+  static const String cashOnDelivery='cashOnDelivery';
   static const String recommendedForYou='recommendedForYou';
   static const String ouchHungry='ouchHungry';
   static const String notOrderedAnyFood='notOrderedAnyFood';
@@ -173,7 +176,10 @@ mixin AppLocal{
     subTotal: "Subtotal",
      items: "Items",
      delivery: "Delivery:",
+     deliveryTo: "Delivery to",
      orderTotal: "Order Total:",
+     selectPaymentMethod: "Select a payment method",
+     cashOnDelivery: "Cash on Delivery/Pay on Delivery",
     recommendedForYou: "Recommended For You",
     ouchHungry: "Ouch! Hungry",
     notOrderedAnyFood: "Seems like you have not ordered any food yet",

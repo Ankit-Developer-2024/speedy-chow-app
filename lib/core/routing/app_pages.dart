@@ -8,6 +8,7 @@ import 'package:speedy_chow/features/auth/presentation/views/register_view.dart'
 import 'package:speedy_chow/features/auth/presentation/views/reset_password_view.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
+import 'package:speedy_chow/features/cart/presentation/view/select_payment_method.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_main_navigation_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
@@ -149,6 +150,14 @@ class AppPages {
         builder: (context, state) => BlocProvider.value(
           value: state.extra as ProfileBloc,
           child: AccountDeletionView(),
+        ),
+      ),
+      GoRoute(
+        name: AppRoutes.selectPaymentMethod,
+        path: '/${AppRoutes.selectPaymentMethod}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as CartBloc,
+          child: SelectPaymentMethod(),
         ),
       ),
     ],

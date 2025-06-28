@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/primary_button.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
+import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/widgets/cart_item.dart';
 import 'package:speedy_chow/features/cart/presentation/widgets/cart_total_amount_details.dart';
 import 'package:speedy_chow/features/cart/presentation/widgets/empty_cart.dart';
@@ -40,9 +43,9 @@ class CartView extends StatelessWidget {
       body: false
           ? EmptyCart()
           : Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimensions.spacing_24,
-                vertical:  AppDimensions.spacing_10
+              padding: const EdgeInsets.only(
+                left: AppDimensions.spacing_24,right: AppDimensions.spacing_24,
+                top:  AppDimensions.spacing_10
               ),
               child: CustomScrollView(
                 slivers: [
@@ -66,6 +69,9 @@ class CartView extends StatelessWidget {
                   ),
                   SliverAppBar(
                     leading:PrimaryButton(
+                      onPress: (){
+                        context.pushNamed(AppRoutes.selectPaymentMethod,extra: context.read<CartBloc>());
+                      },
                       title:"Proceed to Buy (* items)",
                       titleStyle: AppTextStyles.medium18P(color: AppColors.white),
                     ),
