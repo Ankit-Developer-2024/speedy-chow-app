@@ -28,7 +28,7 @@ Future customConfirmationDialogBox({
         Row(
           spacing: AppDimensions.spacing_8,
           children: [
-            ?isLeftButtonRequired ?   Expanded(
+            isLeftButtonRequired ? Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.darkOrange,
@@ -41,7 +41,7 @@ Future customConfirmationDialogBox({
                 },
                 child: Text( leftButtonTitle ?? AppLocal.cancel.getString(context),style: AppTextStyles.medium16P(color: AppColors.white),),
               ),
-            ) :null ,
+            ) : SizedBox.shrink() ,
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(

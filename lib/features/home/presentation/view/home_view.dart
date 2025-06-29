@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:speedy_chow/core/styles/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/home_category_view.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/home_products_view.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/home_top_view.dart';
 
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
+
+  @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  late HomeBloc _homeBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    _homeBloc = context.read<HomeBloc>();
+    _homeBloc.add(HomeFetchAllProductEvent());
+  }
 
   @override
   Widget build(BuildContext context) {

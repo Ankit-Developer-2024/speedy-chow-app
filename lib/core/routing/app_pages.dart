@@ -11,7 +11,8 @@ import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
 import 'package:speedy_chow/features/cart/presentation/view/select_payment_method.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_main_navigation_view.dart';
-import 'package:speedy_chow/features/home/presentation/view/home_product_detail_view.dart';
+import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
+import 'package:speedy_chow/features/product_details/presentation/view/home_product_detail_view.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/view/account_deletion_view.dart';
@@ -88,7 +89,7 @@ class AppPages {
             name: AppRoutes.home,
             path: '/${AppRoutes.home}',
             builder: (context, state) => BlocProvider(
-              create: (context) => getIt<HomeBloc>(),
+              create: (context) => getIt<HomeBloc>()..add(HomeFetchAllProductEvent()),
               child: HomeView(),
             ),
           ),
@@ -113,10 +114,12 @@ class AppPages {
       GoRoute(
         name: AppRoutes.productDetails,
         path: '/${AppRoutes.productDetails}',
-        builder: (context, state) => BlocProvider.value(
-          value: state.extra as HomeBloc,
-          child: HomeProductDetailView(),
-        ),
+        builder: (context, state) {
+         return BlocProvider(
+            create:(context)=> getIt<ProductDetailBloc>(),
+            child: HomeProductDetailView(),
+         );
+        }
       ),
 
       GoRoute(

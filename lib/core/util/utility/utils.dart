@@ -22,3 +22,7 @@ String getLocalSvg(String imgName){
 void appLog(dynamic text){
   if(kDebugMode) debugPrint(text?.toString());
 }
+
+int discountPrice(int price , int discountPercentage){
+  return (price-(price*(discountPercentage/100))).round();
+}

@@ -15,7 +15,7 @@ class ApiResponse<T>{
 });
 
   static fromJson<T>(Map<String,dynamic> json,{required Function? createResponseModel} ){
-        return ApiResponse(
+        return ApiResponse<T>(
         message: json["message"],
         success: json["success"],
         statusCode: json["rs"],

@@ -8,3 +8,17 @@ final class HomeInitial extends HomeState {
   @override
   List<Object> get props => [];
 }
+
+final class HomeFetchAllProductState extends HomeState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final List<Product> data ;
+
+  const HomeFetchAllProductState({required this.msg,required this.loading,required this.success,required this.data});
+
+
+  @override
+  List<Object> get props => [msg,loading,success,data];
+}
+
