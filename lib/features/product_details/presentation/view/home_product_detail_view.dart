@@ -11,6 +11,7 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/home/data/models/product_model.dart';
 import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 
@@ -23,17 +24,22 @@ class HomeProductDetailView extends StatefulWidget {
 
 class _HomeProductDetailViewState extends State<HomeProductDetailView> {
   late ProductDetailBloc _productDetailBloc;
+  bool _isInit=false;
 
-  @override
-  void initState() {
-    super.initState();
-    // final data = GoRouterState.of(context).extra as Map<String, dynamic>;
-    // final product = data["product"] as Product;
-    // print(product.name);
-    _productDetailBloc = context.read<ProductDetailBloc>();
-    _productDetailBloc
-        .add(ProductDetailFetchProductEvent(productId: "23rjb32"));
+   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+       if(!_isInit){
+         final product = GoRouterState.of(context).extra as Product;
+         _productDetailBloc = context.read<ProductDetailBloc>();
+         _productDetailBloc
+             .add(ProductDetailFetchProductEvent(productId: "product.name.toString()"));
+         _isInit=true;
+       }
+
   }
+
+
 
   @override
   Widget build(BuildContext context) {
