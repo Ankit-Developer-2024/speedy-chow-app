@@ -11,9 +11,9 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/home/data/models/product_model.dart';
 import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
+import 'package:speedy_chow/features/product_details/presentation/widgets/add_to_cart_btn.dart';
 
 class HomeProductDetailView extends StatefulWidget {
   const HomeProductDetailView({super.key});
@@ -24,22 +24,19 @@ class HomeProductDetailView extends StatefulWidget {
 
 class _HomeProductDetailViewState extends State<HomeProductDetailView> {
   late ProductDetailBloc _productDetailBloc;
-  bool _isInit=false;
+  bool _isInit = false;
 
-   @override
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-       if(!_isInit){
-         final product = GoRouterState.of(context).extra as Product;
-         _productDetailBloc = context.read<ProductDetailBloc>();
-         _productDetailBloc
-             .add(ProductDetailFetchProductEvent(productId: "product.name.toString()"));
-         _isInit=true;
-       }
-
+    if (!_isInit) {
+      final product = GoRouterState.of(context).extra as Product;
+      _productDetailBloc = context.read<ProductDetailBloc>();
+      _productDetailBloc.add(
+          ProductDetailFetchProductEvent(productId: "product.name.toString()"));
+      _isInit = true;
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +47,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
           listener: (context, state) {
             if (state is ProductDetailFetchProductState) {
               if (state.loading) {
-                customLoaderDialog(context: context, title: "Processing...");
+                customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
               } else if (state.success) {
                 context.pop();
               }
@@ -159,7 +156,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                     spacing: AppDimensions.spacing_4,
                                     children: [
                                       Text(String.fromCharCode(8377),
-                                          style: AppTextStyles.medium14P(
+                                          style: AppTextStyles.medium20P(
                                               color: AppColors.darkOrange)),
                                       Text("Free delivery",
                                           style: AppTextStyles.medium14P(
@@ -206,153 +203,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                   ),
 
                   //add to cart btn
-                  Align(
-                    alignment: Alignment(-1, 0.98),
-                    child: Container(
-                      color: AppColors.white,
-                      padding: EdgeInsets.symmetric(
-                          horizontal: AppDimensions.spacing_24,
-                          vertical: AppDimensions.spacing_2),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              BlocBuilder<ProductDetailBloc,
-                                  ProductDetailState>(
-                                buildWhen: (prev, curr) => curr
-                                    is ProductDetailIncAndDecProductQuantityState,
-                                builder: (context, state) {
-                                  if (state
-                                      is ProductDetailIncAndDecProductQuantityState) {
-                                    return Row(
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {
-                                              state.quantity <= 1
-                                                  ? null
-                                                  : context
-                                                      .read<ProductDetailBloc>()
-                                                      .add(ProductDetailIncAndDecProductQuantityEvent(
-                                                          quantity:
-                                                              state.quantity -
-                                                                  1));
-                                            },
-                                            icon: Text(
-                                              '-',
-                                              style:
-                                                  AppTextStyles.semiBold24P(),
-                                            )),
-                                        Text(state.quantity.toString(),
-                                            style: AppTextStyles.semibold18P()),
-                                        IconButton(
-                                            onPressed: () {
-                                              product.quantity! > state.quantity
-                                                  ? context
-                                                      .read<ProductDetailBloc>()
-                                                      .add(ProductDetailIncAndDecProductQuantityEvent(
-                                                          quantity:
-                                                              state.quantity +
-                                                                  1))
-                                                  : null;
-                                            },
-                                            icon: Text("+",
-                                                style: AppTextStyles
-                                                    .semiBold24P())),
-                                      ],
-                                    );
-                                  } else {
-                                    return Row(
-                                      children: [
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: Text(
-                                              '-',
-                                              style:
-                                                  AppTextStyles.semiBold24P(),
-                                            )),
-                                        Text("1",
-                                            style: AppTextStyles.semibold18P()),
-                                        IconButton(
-                                            onPressed: () {
-                                              context.read<ProductDetailBloc>().add(
-                                                  ProductDetailIncAndDecProductQuantityEvent(
-                                                      quantity: 2));
-                                            },
-                                            icon: Text("+",
-                                                style: AppTextStyles
-                                                    .semiBold24P())),
-                                      ],
-                                    );
-                                  }
-                                },
-                              ),
-                              Text(
-                                "${String.fromCharCode(8377)} ${discountPrice(product.price!, product.discountPercentage!)}",
-                                style: AppTextStyles.semiBold24P(
-                                    color: AppColors.darkOrange),
-                              ),
-                            ],
-                          ),
-                          BlocConsumer<ProductDetailBloc, ProductDetailState>(
-                            listenWhen: (prev,curr)=> curr is ProductDetailAddProductInCartState ,
-                            listener: (context, state) {
-                              if (state is ProductDetailAddProductInCartState) {
-                                if (state.success) {
-                                  customSnackBar(context, "Done");
-                                }
-                              }
-                            },
-                            buildWhen: (prev,curr)=> curr is ProductDetailAddProductInCartState,
-                            builder:(context,state){
-                              if(state is ProductDetailAddProductInCartState){
-                                return Button(
-                                    onTap: () {
-                                      context.read<ProductDetailBloc>().add(
-                                          ProductDetailAddProductInCartEvent(product: product ));
-                                    },
-                                    child:state.loading ? Center(child: Loader(),)  : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.shopping_cart,
-                                          color: AppColors.white,
-                                        ),
-                                        Text(
-                                          AppLocal.addToCart.getString(context),
-                                          style: AppTextStyles.semiBold14P(
-                                              color: AppColors.white),
-                                        )
-                                      ],
-                                    ));
-                              }else{
-                                return Button(
-                                    onTap: () {
-                                      context.read<ProductDetailBloc>().add(
-                                          ProductDetailAddProductInCartEvent(product: product ));
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          Icons.shopping_cart,
-                                          color: AppColors.white,
-                                        ),
-                                        Text(
-                                          AppLocal.addToCart.getString(context),
-                                          style: AppTextStyles.semiBold14P(
-                                              color: AppColors.white),
-                                        )
-                                      ],
-                                    ));
-                              }
-                            } ,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
+                  AddToCartBtn(product: product)
                 ],
               );
             } else {

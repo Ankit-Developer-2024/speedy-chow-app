@@ -2,6 +2,7 @@
 
 mixin AppLocal{
   static const String speedChow = 'speedChow';
+  static const String loading = 'loading';
   static const String whatWeServe = 'whatWeServe';
   static const String whatWeServeDesc = 'whatWeServeDesc';
   static const String skip = 'skip';
@@ -110,10 +111,12 @@ mixin AppLocal{
   static const String  confirmSignOutSubTitle='confirmSignOutSubTitle';
   static const String  signOutProcessStart='signOutProcessStart';
   static const String  signOutProcessSuccessfully='signOutProcessSuccessfully';
+  static const String  productSuccessfullyAdded='productSuccessfullyAdded';
 
 
    static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
+     loading: 'Loading...',
     whatWeServe: 'We serve incomparable delicacies',
     whatWeServeDesc: 'All the best restaurants with their top menu waiting for you, they cant’t wait for your order!!',
     skip: 'Skip',
@@ -222,5 +225,6 @@ mixin AppLocal{
      confirmSignOutSubTitle:"Are you sure you want to sign out your account?",
      signOutProcessStart: "Sign Out Process start...",
      signOutProcessSuccessfully: "Sign Out successfully.",
+     productSuccessfullyAdded: "Product successfully added to cart.",
 };
 }
