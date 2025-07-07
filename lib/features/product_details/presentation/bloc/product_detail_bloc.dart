@@ -89,9 +89,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     emit(ProductDetailAddProductInCartState(loading: true, success: false, msg: ""));
     await Future.delayed(Duration(seconds: 2));
 
-    print("-----------------------");
-    print(event.product);
-    print(totalProductQuantity);
     emit(ProductDetailAddProductInCartState(loading: false, success: true, msg: "Sucess"));
 
   }

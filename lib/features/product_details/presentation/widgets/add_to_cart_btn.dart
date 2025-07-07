@@ -36,8 +36,7 @@ class AddToCartBtn extends StatelessWidget {
                   buildWhen: (prev, curr) => curr
                   is ProductDetailIncAndDecProductQuantityState,
                   builder: (context, state) {
-                    if (state
-                    is ProductDetailIncAndDecProductQuantityState) {
+                    if (state is ProductDetailIncAndDecProductQuantityState) {
                       return Row(
                         children: [
                           IconButton(
