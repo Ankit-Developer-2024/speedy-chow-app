@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
@@ -21,180 +24,150 @@ class HomeProductsView extends StatelessWidget {
       ),
       sliver: BlocConsumer<HomeBloc, HomeState>(
         listener: (context, state) {},
+        buildWhen: (prev, curr) =>
+            curr is HomeFetchAllProductState ,
         builder: (context, state) {
           if (state is HomeFetchAllProductState) {
-            return SliverGrid(
-              delegate: SliverChildBuilderDelegate(
-                  childCount: state.data.length, (context, index) {
-                return InkWell(
-                  onTap: () {
-                    context.pushNamed(AppRoutes.productDetails,
-                        extra: state.data[index]
-                        );
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(AppDimensions.spacing_8),
-                    decoration: BoxDecoration(
-                        color: AppColors.grey50.withAlpha(80),
-                        borderRadius:
-                            BorderRadius.circular(AppDimensions.radius_8)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: AppDimensions.spacing_8,
+               if(state.loading==true){
+                 return SliverToBoxAdapter(
+                     child:Center(child: CircularProgressIndicator())
+                 );
+               }
+               if(state.data.isEmpty){
+                  return SliverToBoxAdapter(
+                    child:Column(
+                      spacing: AppDimensions.spacing_10,
                       children: [
-                        Stack(
-                          children: [
-                            ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(
-                                    AppDimensions.radius_8),
-                                child: Image.asset(
-                                  getLocalJpeg("burger"),
-                                  width:
-                                      MediaQuery.sizeOf(context).width / 2 - 45,
-                                )),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton.filledTonal(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
-                                        AppColors.white)),
-                                icon: Icon(
-                                  Icons.favorite_outline_sharp,
-                                  color: AppColors.red1000,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          state.data[index].name ?? '',
-                          style: AppTextStyles.medium18P(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          spacing: AppDimensions.spacing_8,
-                          children: [
-                            Icon(
-                              Icons.star,
-                              color: AppColors.darkOrange,
-                            ),
-                            Text(state.data[index].rating.toString(),
-                                style: AppTextStyles.medium18P())
-                          ],
-                        ),
-                        RichText(
-                            text: TextSpan(
-                                style: AppTextStyles.medium20P(
-                                    color: AppColors.darkOrange),
-                                children: [
-                              TextSpan(text: String.fromCharCode(8377)),
-                              WidgetSpan(
-                                  child: SizedBox(
-                                width: AppDimensions.spacing_2,
-                              )),
-                              TextSpan(
-                                  text: state.data[index].price.toString()),
-                            ]))
+                        Icon(Icons.search_outlined,size: AppDimensions.size_96,color: AppColors.darkOrange,),
+                        Text(AppLocal.noProductFound.getString(context),style: AppTextStyles.semiBold24P(color: AppColors.darkOrange),),
+                        Button(onTap: (){
+                          context.read<HomeBloc>().add(HomeFetchAllProductEvent());
+                        }, child: Center(child: Text(AppLocal.refresh.getString(context),style: AppTextStyles.semiBold16P(color: AppColors.white),),))
                       ],
-                    ),
-                  ),
-                );
-              }),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: AppDimensions.spacing_10,
-                  mainAxisSpacing: AppDimensions.spacing_10,
-                  mainAxisExtent: 225),
-            );
-          } else {
-            return SliverGrid(
-              delegate:
-                  SliverChildBuilderDelegate(childCount: 10, (context, index) {
-                return InkWell(
-                  onTap: () {
-                    context.pushNamed(AppRoutes.productDetails,
-                        extra: context.read<HomeBloc>());
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(AppDimensions.spacing_8),
-                    decoration: BoxDecoration(
-                        color: AppColors.grey50.withAlpha(80),
-                        borderRadius:
-                            BorderRadius.circular(AppDimensions.radius_8)),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: AppDimensions.spacing_8,
-                      children: [
-                        Stack(
-                          children: [
-                            ClipRRect(
-                                borderRadius: BorderRadiusGeometry.circular(
-                                    AppDimensions.radius_8),
-                                child: Image.asset(
-                                  getLocalJpeg("burger"),
-                                  width:
-                                      MediaQuery.sizeOf(context).width / 2 - 45,
-                                )),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: IconButton.filledTonal(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                    backgroundColor: WidgetStateProperty.all(
-                                        AppColors.white)),
-                                icon: Icon(
-                                  Icons.favorite_outline_sharp,
-                                  color: AppColors.red1000,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Text(
-                          "Burger Name sdfs df s",
-                          style: AppTextStyles.medium18P(),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisSize: MainAxisSize.min,
-                          spacing: AppDimensions.spacing_8,
-                          children: [
-                            Icon(
-                              Icons.star,
-                              color: AppColors.darkOrange,
-                            ),
-                            Text(
-                              "Ratings",
-                              style: AppTextStyles.medium18P(),
-                            )
-                          ],
-                        ),
-                        RichText(
-                            text: TextSpan(
-                                style: AppTextStyles.medium20P(
-                                    color: AppColors.darkOrange),
-                                children: [
-                              TextSpan(text: "\$"),
-                              WidgetSpan(
-                                  child: SizedBox(
-                                width: AppDimensions.spacing_8,
-                              )),
-                              TextSpan(text: "Price"),
-                            ]))
-                      ],
-                    ),
-                  ),
-                );
-              }),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: AppDimensions.spacing_10,
-                  mainAxisSpacing: AppDimensions.spacing_10,
-                  mainAxisExtent: 225),
+                    )
+                  );
+               }else {
+                 return SliverGrid(
+                   delegate: SliverChildBuilderDelegate(
+                       childCount: state.data.length, (context, index) {
+                     return InkWell(
+                       onTap: () {
+                         context.pushNamed(AppRoutes.productDetails,
+                             extra: state.data[index]);
+                       },
+                       child: Container(
+                         padding: EdgeInsets.all(AppDimensions.spacing_8),
+                         decoration: BoxDecoration(
+                             color: AppColors.grey50.withAlpha(80),
+                             borderRadius:
+                             BorderRadius.circular(AppDimensions.radius_8)),
+                         child: Column(
+                           crossAxisAlignment: CrossAxisAlignment.start,
+                           spacing: AppDimensions.spacing_8,
+                           children: [
+                             Stack(
+                               children: [
+                                 ClipRRect(
+                                     borderRadius: BorderRadiusGeometry
+                                         .circular(
+                                         AppDimensions.radius_8),
+                                     child: Image.asset(
+                                       getLocalJpeg("burger"),
+                                       width:
+                                       MediaQuery
+                                           .sizeOf(context)
+                                           .width / 2 - 45,
+                                     )),
+                                 Align(
+                                   alignment: Alignment.topRight,
+                                   child: IconButton.filledTonal(
+                                     onPressed: () {},
+                                     style: ButtonStyle(
+                                         backgroundColor: WidgetStateProperty
+                                             .all(
+                                             AppColors.white)),
+                                     icon: Icon(
+                                       Icons.favorite_outline_sharp,
+                                       color: AppColors.red1000,
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                             Text(
+                               state.data[index].name ?? '',
+                               style: AppTextStyles.medium18P(),
+                               overflow: TextOverflow.ellipsis,
+                             ),
+                             Row(
+                               crossAxisAlignment: CrossAxisAlignment.center,
+                               mainAxisSize: MainAxisSize.min,
+                               spacing: AppDimensions.spacing_8,
+                               children: [
+                                 Icon(
+                                   Icons.star,
+                                   color: AppColors.darkOrange,
+                                 ),
+                                 Text(state.data[index].rating.toString(),
+                                     style: AppTextStyles.medium18P())
+                               ],
+                             ),
+                             RichText(
+                                 text: TextSpan(
+                                     style: AppTextStyles.medium20P(
+                                         color: AppColors.darkOrange),
+                                     children: [
+                                       state.data[index].discountPercentage == 0
+                                           ? WidgetSpan(
+                                           child: SizedBox(
+                                             width: 0,
+                                           ))
+                                           : TextSpan(
+                                           text:
+                                           "${String.fromCharCode(8377)} ${state
+                                               .data[index].price.toString()}",
+                                           style: TextStyle(
+                                               decoration:
+                                               TextDecoration.lineThrough,
+                                               decorationThickness: 1.5,
+                                               color: AppColors.grey300)),
+                                       WidgetSpan(
+                                           child: SizedBox(
+                                             width: AppDimensions.spacing_10,
+                                           )),
+                                       TextSpan(
+                                           text:
+                                           "${String.fromCharCode(
+                                               8377)} ${discountPrice(
+                                               state.data[index].price!,
+                                               state.data[index]
+                                                   .discountPercentage!)}")
+                                     ])),
+                           ],
+                         ),
+                       ),
+                     );
+                   }),
+                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                       crossAxisCount: 2,
+                       crossAxisSpacing: AppDimensions.spacing_10,
+                       mainAxisSpacing: AppDimensions.spacing_10,
+                       mainAxisExtent: 225),
+                 );
+               }
+
+          }  else {
+            return SliverToBoxAdapter(
+                child:Column(
+                  spacing: AppDimensions.spacing_10,
+                  children: [
+                    Icon(Icons.search_outlined,size: AppDimensions.size_96,color: AppColors.darkOrange,),
+                    Text(AppLocal.noProductFound.getString(context),style: AppTextStyles.semiBold24P(color: AppColors.darkOrange),),
+                    Button(onTap: (){
+                      context.read<HomeBloc>().add(HomeFetchAllProductEvent());
+                    }, child: Center(child: Text(AppLocal.refresh.getString(context),style: AppTextStyles.semiBold16P(color: AppColors.white),),))
+                  ],
+                )
             );
           }
         },

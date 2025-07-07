@@ -11,8 +11,9 @@ class ProductRepositoryImpl implements ProductRepository{
 });
 
   @override
-  Future<ApiResponse?> fetchAllProduct() async{
-    return await productLocalSource.fetchAllProduct();
+  Future<ApiResponse?> fetchAllProduct(
+      {required List<String> filterProductByName}) async{
+    return await productLocalSource.fetchAllProduct(filterProductByName: filterProductByName);
   }
 
 }

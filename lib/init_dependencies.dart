@@ -8,10 +8,15 @@ import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
 import 'package:speedy_chow/features/config/data/repository/config_repo_impl.dart';
+import 'package:speedy_chow/features/home/data/data_source/local_source/category_local_source.dart';
+import 'package:speedy_chow/features/home/data/data_source/local_source/category_local_source_impl.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source_impl.dart';
+import 'package:speedy_chow/features/home/data/repositories/category_repository_impl.dart';
 import 'package:speedy_chow/features/home/data/repositories/product_repository_impl.dart';
+import 'package:speedy_chow/features/home/domain/repositories/category_repository.dart';
 import 'package:speedy_chow/features/home/domain/repositories/product_repository.dart';
+import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_category.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source.dart';
@@ -74,12 +79,15 @@ void _initAuthBloc(){
 void _initHomeBloc(){
   //data_source
   getIt..registerFactory<ProductLocalSource>(()=>ProductLocalSourceImpl())
+  ..registerFactory<CategoryLocalSource>(()=>CategoryLocalSourceImpl())
   //repositories
   ..registerFactory<ProductRepository>(()=>ProductRepositoryImpl(productLocalSource: getIt<ProductLocalSource>()))
+  ..registerFactory<CategoryRepository>(()=>CategoryRepositoryImpl(categoryLocalSource: getIt<CategoryLocalSource>()))
   //use_case
   ..registerFactory<FetchAllProduct>(()=>FetchAllProduct(productRepository: getIt<ProductRepository>()))
+  ..registerFactory<FetchAllCategory>(()=>FetchAllCategory(categoryRepository: getIt<CategoryRepository>()))
   //bloc
-  ..registerFactory<HomeBloc>(()=>HomeBloc(fetchAllProduct: getIt<FetchAllProduct>()));
+  ..registerFactory<HomeBloc>(()=>HomeBloc(fetchAllProduct: getIt<FetchAllProduct>(),fetchAllCategory: getIt<FetchAllCategory>()));
 
 }
 

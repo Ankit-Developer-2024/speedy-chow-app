@@ -60,6 +60,7 @@ class AppDimensions {
   static const double size_84 = 84;
   static const double size_85 = 85;
   static const double size_88 = 88;
+  static const double size_89 = 89;
   static const double size_92 = 92;
   static const double size_96 = 96;
   static const double size_126 = 126;

@@ -22,3 +22,25 @@ final class HomeFetchAllProductState extends HomeState{
   List<Object> get props => [msg,loading,success,data];
 }
 
+final class HomeFetchAllCategoryState extends HomeState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final List<Category> data ;
+
+  const HomeFetchAllCategoryState({required this.msg,required this.loading,required this.success,required this.data});
+
+
+  @override
+  List<Object> get props => [msg,loading,success,data];
+
+}
+
+final class HomeSelectAndUnselectCategoryState extends HomeState{
+   final DateTime dateTime=DateTime.now();
+
+  @override
+  List<Object?> get props => [ dateTime];
+
+}
+

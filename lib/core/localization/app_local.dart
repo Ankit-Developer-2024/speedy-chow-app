@@ -112,6 +112,8 @@ mixin AppLocal{
   static const String  signOutProcessStart='signOutProcessStart';
   static const String  signOutProcessSuccessfully='signOutProcessSuccessfully';
   static const String  productSuccessfullyAdded='productSuccessfullyAdded';
+  static const String  noProductFound='noProductFound';
+  static const String  refresh='refresh';
 
 
    static const Map<String, dynamic> EN = {
@@ -226,5 +228,7 @@ mixin AppLocal{
      signOutProcessStart: "Sign Out Process start...",
      signOutProcessSuccessfully: "Sign Out successfully.",
      productSuccessfullyAdded: "Product successfully added to cart.",
+     noProductFound: "No product found.",
+     refresh: "Refresh",
 };
 }

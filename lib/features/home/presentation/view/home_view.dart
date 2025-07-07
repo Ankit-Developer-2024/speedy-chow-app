@@ -20,7 +20,9 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _homeBloc = context.read<HomeBloc>();
-    _homeBloc.add(HomeFetchAllProductEvent());
+    _homeBloc
+      ..add(HomeFetchAllProductEvent())
+      ..add(HomeFetchAllCategoryEvent());
   }
 
   @override

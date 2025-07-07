@@ -4,7 +4,7 @@ import 'package:speedy_chow/features/home/data/models/product_model.dart';
 
 class ProductLocalSourceImpl implements ProductLocalSource {
   @override
-  Future<ApiResponse?> fetchAllProduct() async {
+  Future<ApiResponse?> fetchAllProduct({required List<String> filterProductByName}) async {
     await Future.delayed(Duration(seconds: 2));
 
     var data = [
@@ -118,17 +118,7 @@ class ProductLocalSourceImpl implements ProductLocalSource {
     "category": "Burger",
     "rating": 3.3
     },
-    {
-    "name": "Mango Juice #12",
-    "description": "Refreshing juice made from ripe Alphonso mangoes, served chilled with no added preservatives.",
-    "photo": "https://example.com/images/mango_juice.jpg",
-    "price": 50,
-    "discount": 10,
-    "quantity": 11,
-    "category": "Juice",
-    "rating": 3.7
-    },
-    {
+      {
     "name": "Hakka Noodles #13",
     "description": "Stir-fried noodles with mixed vegetables, soy sauce, and garlic, offering a classic Indo-Chinese flavor.",
     "photo": "https://example.com/images/hakka_noodles.jpg",
@@ -169,6 +159,10 @@ class ProductLocalSourceImpl implements ProductLocalSource {
     "rating": 3.7
     },
     ];
+    if(filterProductByName.isNotEmpty){
+      data=data.where((item)=>filterProductByName.contains(item['category'])).toList();
+    }
+
     Map<String, dynamic> json = {
       "message": "Product fetch Successfully",
       "success": true,
