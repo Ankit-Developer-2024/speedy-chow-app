@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
@@ -24,6 +23,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shadowColor: AppColors.grey10.withAlpha(100),
         leading: IconButton(
           onPressed: () {
             context.read<NavigationBloc>().add(
@@ -96,7 +96,7 @@ class ProfileView extends StatelessWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
+        padding: const EdgeInsets.only(left: AppDimensions.size_24,right:AppDimensions.size_24,top: AppDimensions.size_24 ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

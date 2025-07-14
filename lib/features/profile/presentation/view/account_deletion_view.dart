@@ -90,7 +90,7 @@ class AccountDeletionView extends StatelessWidget {
         padding: const EdgeInsets.only(
           left: AppDimensions.spacing_24,
           right: AppDimensions.spacing_24,
-          bottom: AppDimensions.spacing_10,
+          top: AppDimensions.spacing_10,
         ),
         child: Column(
           children: [

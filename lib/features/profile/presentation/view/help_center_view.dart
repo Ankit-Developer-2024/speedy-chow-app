@@ -10,6 +10,7 @@ class HelpCenterView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: ProfileItemAppBar(title: AppLocal.helpCenter.getString(context)) as PreferredSizeWidget,
+
     );
   }
 }

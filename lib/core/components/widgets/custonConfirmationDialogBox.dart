@@ -34,7 +34,6 @@ Future customConfirmationDialogBox({
                   backgroundColor: AppColors.darkOrange,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimensions.radiusSmall)),
                   elevation: 0,
-
                 ),
                 onPressed: () {
                   context.pop();

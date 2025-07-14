@@ -114,6 +114,9 @@ mixin AppLocal{
   static const String  productSuccessfullyAdded='productSuccessfullyAdded';
   static const String  noProductFound='noProductFound';
   static const String  refresh='refresh';
+  static const String  enable='enable';
+  static const String  galleryPermission='galleryPermission';
+  static const String  galleryPermissionDesc='galleryPermissionDesc';
 
 
    static const Map<String, dynamic> EN = {
@@ -230,5 +233,8 @@ mixin AppLocal{
      productSuccessfullyAdded: "Product successfully added to cart.",
      noProductFound: "No product found.",
      refresh: "Refresh",
+     enable: "Enable",
+     galleryPermission: "Gallery Permission",
+     galleryPermissionDesc: "Please allow access to your gallery. Speedy chow cannot pick photo without this permission.",
 };
 }

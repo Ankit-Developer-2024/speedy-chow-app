@@ -14,7 +14,7 @@ class SettingsView extends StatelessWidget {
     return Scaffold(
     appBar: ProfileItemAppBar(title: AppLocal.settings.getString(context)),
     body: Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimensions.size_24),
+      padding: const EdgeInsets.only(left: AppDimensions.size_24,right:AppDimensions.size_24,top: AppDimensions.size_24 ),
       child: Column(
         spacing: AppDimensions.spacing_10,
         children: [

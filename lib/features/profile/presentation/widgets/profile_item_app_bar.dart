@@ -11,6 +11,7 @@ class ProfileItemAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      shadowColor: AppColors.grey10.withAlpha(100),
       leading: IconButton(
         onPressed: ()async{
           FocusScope.of(context).unfocus();

@@ -32,6 +32,7 @@ class PersonalDataView extends StatelessWidget {
         child: SingleChildScrollView(
           padding: EdgeInsets.only(
               left: AppDimensions.spacing_24,
+              top: AppDimensions.spacing_24,
               right: AppDimensions.spacing_24,
               bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
