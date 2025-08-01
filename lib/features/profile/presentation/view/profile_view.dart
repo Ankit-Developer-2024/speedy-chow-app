@@ -53,7 +53,8 @@ class ProfileView extends StatelessWidget {
                else if(state.isSuccess){
                  context.pop();
                  context.pop();
-                 customSnackBar(context, "Sign out Successfully");
+                customSnackBar(context, "Sign out Successfully",seconds: 1);
+                 context.goNamed(AppRoutes.login);
                }
                else if(!state.isSuccess && !state.isLoading){
                  context.pop();

@@ -17,6 +17,8 @@ import 'package:speedy_chow/features/home/data/data_source/local_source/category
 import 'package:speedy_chow/features/home/data/data_source/local_source/category_local_source_impl.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source_impl.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/product_remote_source.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/product_remote_source_impl.dart';
 import 'package:speedy_chow/features/home/data/repositories/category_repository_impl.dart';
 import 'package:speedy_chow/features/home/data/repositories/product_repository_impl.dart';
 import 'package:speedy_chow/features/home/domain/repositories/category_repository.dart';
@@ -31,6 +33,11 @@ import 'package:speedy_chow/features/product_details/domain/repositories/product
 import 'package:speedy_chow/features/product_details/domain/use_case/product_detail_fetch_product_use_case.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:speedy_chow/features/splash/data/data_source/verify_token_remote_source.dart';
+import 'package:speedy_chow/features/splash/data/data_source/verify_token_remote_source_impl.dart';
+import 'package:speedy_chow/features/splash/data/repositories/verify_token_repo_impl.dart';
+import 'package:speedy_chow/features/splash/domain/repositories/verify_token_repo.dart';
+import 'package:speedy_chow/features/splash/domain/use_cases/verfiy_token_use_case.dart';
 
 final getIt = GetIt.instance;
 
@@ -47,6 +54,9 @@ Future<void> initDependencies() async{
 
   //config controller 
    _initConfig();
+
+   //config controller
+   _initSplashBloc();
 
   //_initNavigation
   _initNavigationBloc();
@@ -73,6 +83,12 @@ void _initConfig(){
     getIt.registerLazySingleton<ConfigBloc>(()=>ConfigBloc(configRepoImpl: ConfigRepoImpl()));
 }
 
+void _initSplashBloc(){
+    getIt..registerFactory<VerifyTokenRemoteSource>(()=>VerifyTokenRemoteSourceImpl())
+    ..registerFactory<VerifyTokenRepo>(()=>VerifyTokenRepoImpl(verifyTokenRemoteSource: getIt<VerifyTokenRemoteSource>()))
+    ..registerFactory<VerifyTokenUseCase>(()=>VerifyTokenUseCase(verifyTokenRepo: getIt<VerifyTokenRepo>()));
+}
+
 void _initNavigationBloc(){
     getIt.registerLazySingleton<NavigationBloc>(()=>NavigationBloc());
 }
@@ -84,9 +100,10 @@ void _initAuthBloc(){
 void _initHomeBloc(){
   //data_source
   getIt..registerFactory<ProductLocalSource>(()=>ProductLocalSourceImpl())
+  ..registerFactory<ProductRemoteSource>(()=>ProductRemoteSourceImpl())
   ..registerFactory<CategoryLocalSource>(()=>CategoryLocalSourceImpl())
   //repositories
-  ..registerFactory<ProductRepository>(()=>ProductRepositoryImpl(productLocalSource: getIt<ProductLocalSource>()))
+  ..registerFactory<ProductRepository>(()=>ProductRepositoryImpl(productLocalSource: getIt<ProductLocalSource>(),productRemoteSource: getIt<ProductRemoteSource>()))
   ..registerFactory<CategoryRepository>(()=>CategoryRepositoryImpl(categoryLocalSource: getIt<CategoryLocalSource>()))
   //use_case
   ..registerFactory<FetchAllProduct>(()=>FetchAllProduct(productRepository: getIt<ProductRepository>()))

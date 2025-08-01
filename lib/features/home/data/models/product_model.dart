@@ -8,6 +8,7 @@ class ProductModel extends Product {
       required super.category,
       required super.price,
       required super.discountPercentage,
+      required super.discountedPrice,
       required super.rating,
       required super.quantity});
 
@@ -15,16 +16,17 @@ class ProductModel extends Product {
     return ProductModel(
         name: json["name"],
         description: json["description"],
-        img: json["img"],
+        img: json["image"],
         category: json["category"],
         price: json["price"],
-        discountPercentage: json["discount"],
+        discountPercentage: json["discountPercentage"],
+        discountedPrice: json["discountedPrice"],
         rating:json["rating"],
-        quantity: json["quantity"]);
+        quantity: json["totalQuantity"]);
   }
 
-  static List<ProductModel> createResponseModel(List<Map<String,dynamic>> json){
-    List<ProductModel> products=(json as List).map((product) {
+  static List<ProductModel> createResponseModel(List<dynamic> json){
+    List<ProductModel> products=(json).map((product) {
       return ProductModel.fromJson(product);
     }).toList();
     return  products;

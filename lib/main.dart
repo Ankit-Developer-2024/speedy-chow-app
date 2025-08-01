@@ -20,7 +20,7 @@ Future<void> main() async {
   AppSecretConfig(
     flavor: Flavor.dev,
     values: AppSecretValues(
-      baseUrl: "https://--",
+      baseUrl: "http://192.168.43.81:3000/",
       timeOut: const Duration(seconds: 30),
     ),
   );

@@ -5,6 +5,7 @@ import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:speedy_chow/core/enum/enums.dart';
 import 'package:speedy_chow/core/services/networking/interceptor/curl_interceptor.dart';
 import 'package:speedy_chow/core/services/networking/interceptor/logging_interceptor.dart';
+import 'package:speedy_chow/core/services/networking/interceptor/token_interceptor.dart';
 import 'package:speedy_chow/core/util/config/app_secret_config.dart';
 
 class DioManager{
@@ -29,6 +30,7 @@ class DioManager{
 
   static final _curlInterceptor = CurlInterceptor();
   static final _loggingInterceptor = LoggingInterceptor();
+  static final _tokenInterceptor = TokenInterceptor();
 
   static Dio? _instance;
   static Dio get httpDio{
@@ -38,6 +40,7 @@ class DioManager{
       if(AppSecretConfig.instance!.flavor !=Flavor.production){
          _instance!.interceptors.add(_prettyDioLogger);
          _instance!.interceptors.add(_curlInterceptor);
+         _instance!.interceptors.add(_tokenInterceptor);
       }
       return _instance!;
     }else{
@@ -46,6 +49,7 @@ class DioManager{
       if(AppSecretConfig.instance!.flavor != Flavor.production){
         _instance!.interceptors.add(_prettyDioLogger);
         _instance!.interceptors.add(_curlInterceptor);
+        _instance!.interceptors.add(_tokenInterceptor);
       }
       return _instance!;
     }

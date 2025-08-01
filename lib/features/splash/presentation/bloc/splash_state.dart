@@ -9,8 +9,11 @@ final class SplashInitial extends SplashState {
 }
 
 final class ShowLoginViewState extends SplashState{
+  final String screenName;
+
+  ShowLoginViewState({required this.screenName});
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [screenName];
 }
 
 final class ShowOneTimeUiState extends SplashState{

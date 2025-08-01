@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:speedy_chow/core/services/preferences/app_secure_storage.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -88,10 +89,10 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   void _signOutConfirm(ProfileSignOutConfirmEvent event,Emitter<ProfileState> emit)async{
     emit(ProfileSignOutConfirmState(isSuccess: false,isLoading: true));
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: 1));
     //remove local data base value
+    AppSecureStorage.instance.clearBothToken();
     emit(ProfileSignOutConfirmState(isSuccess: true,isLoading: false));
-
   }
 
 

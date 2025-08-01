@@ -9,6 +9,7 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
+import 'package:speedy_chow/features/splash/domain/use_cases/verfiy_token_use_case.dart';
 import 'package:speedy_chow/features/splash/presentation/bloc/splash_bloc.dart';
 import 'package:speedy_chow/init_dependencies.dart';
 
@@ -25,7 +26,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   void initState() {
     super.initState();
-    _splashBloc = SplashBloc(configBloc: getIt<ConfigBloc>());
+    _splashBloc = SplashBloc(configBloc: getIt<ConfigBloc>(),verifyTokenUseCase: getIt<VerifyTokenUseCase>());
      _splashBloc.add(SplashViewCompleteEvent());
   }
 
@@ -44,7 +45,7 @@ class _SplashViewState extends State<SplashView> {
           if (state is ShowOneTimeUiState) {
             context.goNamed(AppRoutes.oneTime);
           } else if (state is ShowLoginViewState) {
-            context.goNamed(AppRoutes.home);
+            context.goNamed(state.screenName);
           }
         },
         child: Scaffold(
