@@ -21,6 +21,10 @@ class LoggingInterceptor extends Interceptor{
 
   @override
   void onResponse(Response response , ResponseInterceptorHandler handler){
+    // if (response.statusCode == 401) {
+    //   appLog('<-Info-> Received 401 Unauthorized');
+    //   return handler.next(response); // Continue with the response
+    // }
     appLog('-----------New Api Call Start--------------');
     appLog('-------------REQUEST-----------------');
     appLog('<-Method->  ${response.requestOptions.method}');
@@ -45,8 +49,13 @@ class LoggingInterceptor extends Interceptor{
 
   @override
   void onError(DioException err,ErrorInterceptorHandler handler){
-
+    // if(err.type==DioExceptionType.badResponse && err.response?.statusCode==401){
+    //   appLog('<-Error Info-> Handling 401 error without stopping');
+    //   handler.next(err);
+    //   return ;
+    // }
     appLog('-----------New Api Error--------------');
+    appLog('<-Type-> ${err.type}');
     appLog('<-Method-> ${err.requestOptions.method}');
     appLog('<-BaseUrl-> ${err.requestOptions.baseUrl}');
     appLog('<-Params-> ${err.requestOptions.queryParameters}');

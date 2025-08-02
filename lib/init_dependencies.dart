@@ -4,6 +4,11 @@ import 'package:flutter_localization/flutter_localization.dart';
 import 'package:get_it/get_it.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
+import 'package:speedy_chow/features/auth/data/data_source/aut_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/auth_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/auth_login_repo_impl.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/auth_login_repo.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
@@ -17,6 +22,8 @@ import 'package:speedy_chow/features/home/data/data_source/local_source/category
 import 'package:speedy_chow/features/home/data/data_source/local_source/category_local_source_impl.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source.dart';
 import 'package:speedy_chow/features/home/data/data_source/local_source/product_local_source_impl.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/category_remote_source.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/category_remote_source_impl.dart';
 import 'package:speedy_chow/features/home/data/data_source/remote_source/product_remote_source.dart';
 import 'package:speedy_chow/features/home/data/data_source/remote_source/product_remote_source_impl.dart';
 import 'package:speedy_chow/features/home/data/repositories/category_repository_impl.dart';
@@ -94,7 +101,13 @@ void _initNavigationBloc(){
 }
 
 void _initAuthBloc(){
-  getIt.registerFactory<AuthBloc>(()=>AuthBloc());
+  getIt..registerFactory<AuthRemoteSource>(()=>AuthRemoteSourceImpl())
+
+  ..registerFactory<AuthLoginRepo>(()=>AuthLoginRepoImpl(authRemoteSource: getIt<AuthRemoteSource>()))
+
+  ..registerFactory<AuthLoginUseCase>(()=>AuthLoginUseCase(authLoginRepo: getIt<AuthLoginRepo>()))
+
+  ..registerSingleton(AuthBloc(authLoginUseCase: getIt<AuthLoginUseCase>()));
 }
 
 void _initHomeBloc(){
@@ -102,9 +115,10 @@ void _initHomeBloc(){
   getIt..registerFactory<ProductLocalSource>(()=>ProductLocalSourceImpl())
   ..registerFactory<ProductRemoteSource>(()=>ProductRemoteSourceImpl())
   ..registerFactory<CategoryLocalSource>(()=>CategoryLocalSourceImpl())
+  ..registerFactory<CategoryRemoteSource>(()=>CategoryRemoteSourceImpl())
   //repositories
   ..registerFactory<ProductRepository>(()=>ProductRepositoryImpl(productLocalSource: getIt<ProductLocalSource>(),productRemoteSource: getIt<ProductRemoteSource>()))
-  ..registerFactory<CategoryRepository>(()=>CategoryRepositoryImpl(categoryLocalSource: getIt<CategoryLocalSource>()))
+  ..registerFactory<CategoryRepository>(()=>CategoryRepositoryImpl(categoryLocalSource: getIt<CategoryLocalSource>(),categoryRemoteSource: getIt<CategoryRemoteSource>()))
   //use_case
   ..registerFactory<FetchAllProduct>(()=>FetchAllProduct(productRepository: getIt<ProductRepository>()))
   ..registerFactory<FetchAllCategory>(()=>FetchAllCategory(categoryRepository: getIt<CategoryRepository>()))

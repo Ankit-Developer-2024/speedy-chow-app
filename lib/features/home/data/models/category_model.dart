@@ -16,7 +16,7 @@ class CategoryModel extends Category {
   }
 
   static List<CategoryModel> createResponseModel(
-      List<Map<String, dynamic>> category) {
+      List<dynamic> category) {
     List<CategoryModel> categoryModel =
         category.map((item) => CategoryModel.fromJson(item)).toList();
 

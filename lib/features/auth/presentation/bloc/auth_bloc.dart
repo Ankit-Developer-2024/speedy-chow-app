@@ -3,6 +3,10 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/usecase/use_case.dart';
+import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -13,7 +17,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String email ='';
   Timer? _otpTimer;
 
-  AuthBloc() : super(AuthInitial()) {
+  final AuthLoginUseCase authLoginUseCase;
+
+  AuthBloc({required this.authLoginUseCase}) : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
     on<AuthLoginEvent>(_login);
     on<AuthOpenRegisterViewEvent>(_openRegisterView);
@@ -34,22 +40,31 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _login(AuthLoginEvent event, Emitter<AuthState> emit) async{
 
-    emit(AuthLoginState(isLoading: true ,isSuccess: false));
-    await Future.delayed(Duration(seconds: 1));
-    //call api here
-    if(event.email =="demo@gmail.com" && event.password =="demo001"){
-      emit(AuthLoginState(isLoading: false,isSuccess: true,));
-    }else{
-      emit(AuthLoginState(isLoading: false,isSuccess: false ));
+    try{
+
+      emit(AuthLoginState(isLoading: true ,isSuccess: false,message: "",data: AuthModels(id: "", email: "", role: "")));
+      await Future.delayed(Duration(seconds: 1));
+
+      ApiResponse? response=await authLoginUseCase(AuthLoginParam(email: event.email, password: event.password));
+      if(response?.success==true){
+        emit(AuthLoginState(isLoading: false, isSuccess: true, message: response!.message.toString(), data: response.data ?? AuthModels(id: "", email: "", role: "")));
+      }else{
+        emit(AuthLoginState(isLoading: false, isSuccess: false, message: response!.message.toString(), data: response.data ?? AuthModels(id: "", email: "", role: "")));
+      }
+    }catch(err){
+      emit(AuthLoginState(isLoading: false, isSuccess: false, message: err.toString(), data: AuthModels(id: "", email: "", role: "")));
     }
+
   }
 
   void _openRegisterView(AuthOpenRegisterViewEvent event, Emitter<AuthState> emit){
     emit(AuthOpenRegisterViewState());
   }
+
   void _openLoginView(AuthOpenLoginViewEvent event, Emitter<AuthState> emit){
     emit(AuthOpenLoginViewState());
   }
+
 
   void _registerUser(AuthRegisterEvent event ,Emitter<AuthState> emit) async{
 

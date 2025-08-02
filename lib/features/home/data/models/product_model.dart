@@ -2,7 +2,9 @@ import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 
 class ProductModel extends Product {
   ProductModel(
-      {required super.name,
+      {
+       required super.id,
+       required super.name,
       required super.description,
       required super.img,
       required super.category,
@@ -14,6 +16,7 @@ class ProductModel extends Product {
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
     return ProductModel(
+        id: json["id"],
         name: json["name"],
         description: json["description"],
         img: json["image"],

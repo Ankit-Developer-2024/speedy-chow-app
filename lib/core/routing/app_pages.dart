@@ -41,18 +41,12 @@ class AppPages {
       GoRoute(
         name: AppRoutes.login,
         path: '/login',
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: LoginView(),
-        ),
+        builder: (context, state) => LoginView(),
       ),
       GoRoute(
         name: AppRoutes.register,
         path: '/register',
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: RegisterView(),
-        ),
+        builder: (context, state) => RegisterView(),
       ),
       GoRoute(
         name: AppRoutes.forgotPassword,

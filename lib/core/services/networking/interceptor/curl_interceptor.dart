@@ -37,9 +37,11 @@ class CurlInterceptor extends Interceptor{
            debugPrint("======>>>>><<<<<======");
            appLog(curl);
            debugPrint("======>>>>><<<<<======");
+           handler.next(err);
        }catch(e){
          debugPrint('CurlInterceptor error: $e');
        }
+
 
    }
 

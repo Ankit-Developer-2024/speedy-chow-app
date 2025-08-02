@@ -9,6 +9,7 @@ import 'package:speedy_chow/app.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/enum/enums.dart';
 import 'package:speedy_chow/core/util/config/app_secret_config.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
 import 'package:speedy_chow/init_dependencies.dart';
 
@@ -31,7 +32,11 @@ Future<void> main() async {
         lazy: false,
         create: (_)=> getIt<ConfigBloc>()..add(LoadConfigEvent())
     ),
- BlocProvider<NavigationBloc>(
+    BlocProvider<AuthBloc>(
+        lazy: false,
+        create: (_)=> getIt<AuthBloc>()
+    ),
+    BlocProvider<NavigationBloc>(
         lazy: false,
         create: (_)=> getIt<NavigationBloc>()
     ),

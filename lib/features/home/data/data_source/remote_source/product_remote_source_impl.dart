@@ -7,7 +7,7 @@ import 'package:speedy_chow/features/home/data/models/product_model.dart';
 class ProductRemoteSourceImpl implements ProductRemoteSource{
   @override
   Future<ApiResponse?> fetchAllProduct({required List<String> filterProductByName})async {
-    ApiResponse? response =await DioRequest.get<List<ProductModel>>(AppUrl.fetchProduct, createResponseModel: ProductModel.createResponseModel);
+    ApiResponse? response =await DioRequest.get<List<ProductModel>>(AppUrl.fetchProduct,queryParam: {"category":filterProductByName},createResponseModel: ProductModel.createResponseModel);
     return response;
   }
 }

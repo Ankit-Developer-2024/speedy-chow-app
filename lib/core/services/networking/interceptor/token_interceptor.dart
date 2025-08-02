@@ -10,12 +10,20 @@ class TokenInterceptor implements Interceptor{
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async{
    try{
+     // if(err.type==DioExceptionType.badResponse && err.response?.statusCode==401){
+     //   appLog('<-Error Info-> Handling 401 error without stopping');
+     //   handler.next(err);
+     //   return ;
+     // }
+     if(err.requestOptions.path==AppUrl.verify || err.requestOptions.path==AppUrl.refresh){
+       handler.next(err);
+       return ;
+     }
      if(err.response?.statusCode==401){
        await RefreshTokenHelper.refresh();
        String? newAccessToken=await AppSecureStorage.instance.getAccessToken();
        if(newAccessToken!=null && newAccessToken.isNotEmpty){
          DioManager.httpDio.options.headers["Authorization"] = "Bearer $newAccessToken";
-          print("===================================tokrn itercept");
          // Retry the failed request
          final RequestOptions options = err.requestOptions;
          final retryResponse = await DioManager.httpDio.request(
@@ -27,12 +35,12 @@ class TokenInterceptor implements Interceptor{
              headers: options.headers,
            ),
          );
-         return handler.resolve(retryResponse);
+         handler.resolve(retryResponse);
+         return ;
        }
        return handler.next(err);
      }
    }catch(err){
-     print("on error token-----$err");
      debugPrint('TokenInterceptor error: $err');
    }
   }
@@ -40,18 +48,19 @@ class TokenInterceptor implements Interceptor{
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
       try{
-        if(options.path==AppUrl.verify){
+        if(options.path==AppUrl.verify || options.path==AppUrl.refresh){
           String? refreshToken=  await AppSecureStorage.instance.getRefreshToken();
           if(refreshToken!=null && refreshToken.isNotEmpty){
             options.headers["authorization"]="Bearer $refreshToken";
           }
-
           handler.next(options);
-        }else{
+        }
+        else{
           String? accessToken=  await AppSecureStorage.instance.getAccessToken();
           if(accessToken!=null && accessToken.isNotEmpty){
             options.headers["authorization"]="Bearer $accessToken";
           }
+
 
           handler.next(options);
         }
@@ -65,6 +74,10 @@ class TokenInterceptor implements Interceptor{
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
    try{
+    if(response.data['data']==null) {
+      handler.next(response);
+      return ;
+    }
      String? accessToken=  response.data["accessToken"];
      String? refreshToken=  response.data["refreshToken"];
      if(accessToken!=null){
@@ -78,7 +91,7 @@ class TokenInterceptor implements Interceptor{
      }
      handler.next(response);
    }catch(err){
-     debugPrint('TokenInterceptor error: $err');
+     debugPrint('TokenInterceptor error onResponse: $err');
    }
   }
 

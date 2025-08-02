@@ -158,13 +158,13 @@ class _LoginViewState extends State<LoginView> {
                       if (state.isSuccess && !state.isLoading) {
                         customSnackBar(
                           context,
-                          AppLocal.loginSuccess.getString(context),
+                          state.message
                         );
                         context.goNamed(AppRoutes.home);
                       } else if (!state.isSuccess && !state.isLoading) {
                         customSnackBar(
                           context,
-                          AppLocal.loginFailed.getString(context),
+                          state.message,
                           bgColor: AppColors.red800,
                         );
                       }

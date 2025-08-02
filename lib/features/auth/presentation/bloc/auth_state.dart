@@ -23,18 +23,13 @@ final class PasswordHiddenState extends AuthState {
 final class AuthLoginState extends AuthState {
   final bool isLoading;
   final bool isSuccess;
+  final String message;
+  final AuthModels data;
 
-  AuthLoginState({required this.isLoading,required this.isSuccess});
-
-  AuthLoginState copyWith({bool? isLoading, bool? isSuccess}) {
-    return AuthLoginState(
-      isLoading: isLoading ?? this.isLoading,
-      isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  AuthLoginState({required this.isLoading, required this.isSuccess, required this.message, required this.data});
 
   @override
-  List<Object?> get props => [isLoading, isSuccess];
+  List<Object?> get props => [isLoading, isSuccess,message,data];
 }
 
 

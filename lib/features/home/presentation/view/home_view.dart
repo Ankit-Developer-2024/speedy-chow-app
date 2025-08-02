@@ -22,22 +22,27 @@ class _HomeViewState extends State<HomeView> {
     _homeBloc = context.read<HomeBloc>();
     _homeBloc
       ..add(HomeFetchAllProductEvent())
-     ..add(HomeFetchAllCategoryEvent());
+      ..add(HomeFetchAllCategoryEvent());
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(child: HomeTopView()),
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          context.read<HomeBloc>().add(HomeFetchAllProductEvent());
+        },
+        child: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(child: HomeTopView()),
 
-          SliverToBoxAdapter(child: HomeCategoryView()),
+            SliverToBoxAdapter(child: HomeCategoryView()),
 
-          HomeProductsView(),
-        ],
+            HomeProductsView(),
+          ],
 
-        //category
+          //category
+        ),
       ),
     );
   }
