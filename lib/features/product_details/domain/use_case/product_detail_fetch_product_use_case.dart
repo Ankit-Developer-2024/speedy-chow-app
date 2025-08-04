@@ -9,7 +9,7 @@ class ProductDetailFetchProductUseCase implements UseCase<ApiResponse,ProductDet
   ProductDetailFetchProductUseCase({required this.productDetailRepository});
   @override
   Future<ApiResponse?> call(ProductDetailParam params) async{
-    return await productDetailRepository.fetchProduct(params.productId);
+    return await productDetailRepository.fetchProduct(productId:params.productId);
   }
 
 }

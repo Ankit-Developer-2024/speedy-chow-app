@@ -40,6 +40,8 @@ import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.da
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source_impl.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/repositories/product_detail_repository_impl.dart';
 import 'package:speedy_chow/features/product_details/domain/repositories/product_detail_repository.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/product_detail_fetch_product_use_case.dart';
@@ -138,8 +140,9 @@ void _initHomeBloc(){
 void _initProductDetailBloc(){
   //data_source
   getIt..registerFactory<ProductDetailLocalSource>(()=>ProductDetailLocalSourceImpl())
+  ..registerFactory<ProductDetailRemoteSource>(()=>ProductDetailRemoteSourceImpl())
   //repositories
-  ..registerFactory<ProductDetailRepository>(()=>ProductDetailRepositoryImpl(productDetailLocalSource: getIt<ProductDetailLocalSource>()))
+  ..registerFactory<ProductDetailRepository>(()=>ProductDetailRepositoryImpl(productDetailLocalSource: getIt<ProductDetailLocalSource>(),productDetailRemoteSource: getIt<ProductDetailRemoteSource>()))
   //use_case
   ..registerFactory<ProductDetailFetchProductUseCase>(()=>ProductDetailFetchProductUseCase(productDetailRepository: getIt<ProductDetailRepository>()))
   //bloc

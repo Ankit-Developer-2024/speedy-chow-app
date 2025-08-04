@@ -21,7 +21,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   }
 
   void _fetchProduct(ProductDetailFetchProductEvent event, Emitter<ProductDetailState> emit) async {
-
     emit(ProductDetailFetchProductState(
         msg: "",
         loading: true,
@@ -33,6 +32,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             category: null,
             price: null,
             discountPercentage: null,
+            discountedPrice: null,
             rating: null,
             quantity: null)));
 
@@ -40,7 +40,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       ApiResponse? response = await productDetailFetchProductUseCase(
           ProductDetailParam(productId: event.productId));
       if (response?.success == true) {
-        ProductDetailFetchProductState obj=ProductDetailFetchProductState(msg: "msg", loading: false, success: true, data: response?.data );
         emit(ProductDetailFetchProductState(
             msg: response?.message ?? '',
             loading: false,
@@ -48,7 +47,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             data: response?.data ));
       } else {
         emit(ProductDetailFetchProductState(
-            msg: response?.message ?? "Something went wrong",
+            msg: response?.message ?? "Something went wrong!",
             loading: false,
             success: response?.success ?? false,
             data: response?.data ?? ProductDetails(
@@ -58,6 +57,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
                 category: null,
                 price: null,
                 discountPercentage: null,
+                discountedPrice: null,
                 rating: null,
                 quantity: null)));
       }
@@ -73,6 +73,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
               category: null,
               price: null,
               discountPercentage: null,
+              discountedPrice: null,
               rating: null,
               quantity: null)));
     }

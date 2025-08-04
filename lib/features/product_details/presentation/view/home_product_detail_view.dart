@@ -9,6 +9,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/home/domain/enitites/product.dart';
+import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/product_details/presentation/widgets/add_to_cart_btn.dart';
 
@@ -30,7 +31,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
       final product = GoRouterState.of(context).extra as Product;
       _productDetailBloc = context.read<ProductDetailBloc>();
       _productDetailBloc.add(
-          ProductDetailFetchProductEvent(productId: "product.name.toString()"));
+          ProductDetailFetchProductEvent(productId: product.id.toString()));
       _isInit = true;
     }
   }
@@ -41,6 +42,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         child: BlocConsumer<ProductDetailBloc, ProductDetailState>(
+          listenWhen: (prev, curr) => curr is ProductDetailFetchProductState,
           listener: (context, state) {
             if (state is ProductDetailFetchProductState) {
               if (state.loading) {
@@ -54,7 +56,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
           builder: (context, state) {
             if (state is ProductDetailFetchProductState &&
                 state.success == true) {
-              final product = state.data;
+              final ProductDetails product = state.data;
               return Stack(
                 fit: StackFit.loose,
                 children: [
@@ -121,7 +123,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                     style: AppTextStyles.medium20P(
                                         color: AppColors.darkOrange),
                                     children: [
-                                  TextSpan(
+                                 product.discountPercentage==0 ? TextSpan() : TextSpan(
                                       text:
                                           "${String.fromCharCode(8377)} ${product.price.toString()}",
                                       style: TextStyle(
@@ -135,7 +137,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                   )),
                                   TextSpan(
                                       text:
-                                          "${String.fromCharCode(8377)} ${discountPrice(product.price!, product.discountPercentage!)}")
+                                          "${String.fromCharCode(8377)} ${product.discountedPrice.toString()}")
                                 ])),
                             Container(
                               height: 50,

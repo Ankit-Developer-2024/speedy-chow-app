@@ -6,6 +6,7 @@ class ProductDetails{
   final String? category;
   final int? price;
   final int? discountPercentage;
+  final int? discountedPrice;
   final double? rating;
   final int? quantity;
 
@@ -16,6 +17,7 @@ class ProductDetails{
     required this.category,
     required this.price,
     required this.discountPercentage,
+    required this.discountedPrice,
     required this.rating,
     required this.quantity,
   });

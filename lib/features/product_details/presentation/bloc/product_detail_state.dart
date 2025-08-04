@@ -15,7 +15,12 @@ final class ProductDetailFetchProductState extends ProductDetailState{
   final bool success;
   final ProductDetails data ;
 
-  const ProductDetailFetchProductState({required this.msg,required this.loading,required this.success,required this.data});
+  const ProductDetailFetchProductState({
+    required this.msg,
+    required this.loading,
+    required this.success,
+    required this.data
+  });
 
 
   @override
