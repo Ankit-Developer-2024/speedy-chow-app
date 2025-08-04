@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/home_category_view.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/home_products_view.dart';
@@ -23,6 +24,8 @@ class _HomeViewState extends State<HomeView> {
     _homeBloc
       ..add(HomeFetchAllProductEvent())
       ..add(HomeFetchAllCategoryEvent());
+    context.read<AuthBloc>().add(AuthUserEvent());
+
   }
 
   @override
@@ -31,6 +34,7 @@ class _HomeViewState extends State<HomeView> {
       body: RefreshIndicator(
         onRefresh: ()async{
           context.read<HomeBloc>().add(HomeFetchAllProductEvent());
+          context.read<AuthBloc>().add(AuthUserEvent());
         },
         child: CustomScrollView(
           slivers: [

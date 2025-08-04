@@ -174,3 +174,15 @@ final class AuthResetPasswordState extends AuthState{
   List<Object?> get props =>[isSuccess,isLoading];
 
 }
+
+final class AuthUserState extends AuthState{
+
+  final bool isLoading;
+  final bool isSuccess;
+  final String message;
+
+  AuthUserState({required this.isLoading, required this.isSuccess, required this.message});
+
+  @override
+  List<Object?> get props =>[isLoading,isSuccess,message];
+}

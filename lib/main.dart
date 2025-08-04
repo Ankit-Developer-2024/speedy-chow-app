@@ -40,8 +40,6 @@ Future<void> main() async {
         lazy: false,
         create: (_)=> getIt<NavigationBloc>()
     ),
-
-
   ], child: const MyApp()));
 }
 

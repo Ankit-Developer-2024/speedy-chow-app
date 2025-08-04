@@ -6,7 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
+import 'package:speedy_chow/features/auth/data/models/user_model.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -16,10 +18,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   bool isAgree =false;
   String email ='';
   Timer? _otpTimer;
-
+  UserModel? userModel;
   final AuthLoginUseCase authLoginUseCase;
+  final FetchUserUseCase fetchUserUseCase;
 
-  AuthBloc({required this.authLoginUseCase}) : super(AuthInitial()) {
+  AuthBloc({required this.authLoginUseCase,required this.fetchUserUseCase}) : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
     on<AuthLoginEvent>(_login);
     on<AuthOpenRegisterViewEvent>(_openRegisterView);
@@ -32,6 +35,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthStartOtpTimerEvent>(_startOtpTimer);
     on<AuthTickOtpTimerEvent>(_tickOtpTimer);
     on<AuthResetPasswordEvent>(_resetPassword);
+    on<AuthUserEvent>(_fetchUser);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -159,6 +163,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }else{
       emit(AuthResetPasswordMatchState(isMatch: false));
     }
+
+  }
+
+  void _fetchUser(AuthUserEvent event,Emitter<AuthState> emit)async{
+      emit(AuthUserState(isLoading: true,isSuccess: false,message: ""));
+      try{
+        ApiResponse? response= await fetchUserUseCase(NoParams());
+        if(response?.success==true){
+          userModel=response?.data;
+          emit(AuthUserState(isLoading: false, isSuccess: true, message: response!.message.toString()));
+        }else{
+          emit(AuthUserState(isLoading: false, isSuccess: false, message: response!.message.toString()));
+        }
+      }catch(e){
+        emit(AuthUserState(isLoading: false, isSuccess: false, message: e.toString()));
+      }
 
   }
 

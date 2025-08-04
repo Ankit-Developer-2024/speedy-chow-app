@@ -6,9 +6,14 @@ import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/features/auth/data/data_source/aut_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/auth_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/user_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/user_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/auth_login_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/user_repo_impl.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/auth_login_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/user_repo.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
@@ -102,12 +107,15 @@ void _initNavigationBloc(){
 
 void _initAuthBloc(){
   getIt..registerFactory<AuthRemoteSource>(()=>AuthRemoteSourceImpl())
+  ..registerFactory<UserRemoteSource>(()=>UserRemoteSourceImpl())
 
   ..registerFactory<AuthLoginRepo>(()=>AuthLoginRepoImpl(authRemoteSource: getIt<AuthRemoteSource>()))
+  ..registerFactory<UserRepo>(()=>UserRepoImpl(userRemoteSource: getIt<UserRemoteSource>()))
 
   ..registerFactory<AuthLoginUseCase>(()=>AuthLoginUseCase(authLoginRepo: getIt<AuthLoginRepo>()))
+  ..registerFactory<FetchUserUseCase>(()=>FetchUserUseCase(userRepo: getIt<UserRepo>()))
 
-  ..registerSingleton(AuthBloc(authLoginUseCase: getIt<AuthLoginUseCase>()));
+  ..registerSingleton(AuthBloc(authLoginUseCase: getIt<AuthLoginUseCase>(),fetchUserUseCase: getIt<FetchUserUseCase>()));
 }
 
 void _initHomeBloc(){

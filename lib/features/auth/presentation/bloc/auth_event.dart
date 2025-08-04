@@ -110,3 +110,9 @@ final class AuthResetPasswordEvent extends AuthEvent{
   List<Object?> get props => [newPassword,newConfirmPassword];
 
 }
+
+final class AuthUserEvent extends AuthEvent{
+  @override
+  List<Object?> get props => [];
+
+}

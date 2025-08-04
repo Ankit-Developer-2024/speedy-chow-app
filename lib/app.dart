@@ -10,8 +10,6 @@ import 'init_dependencies.dart';
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
     initFlutterLocalization();

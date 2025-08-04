@@ -58,6 +58,7 @@ mixin AppLocal{
   static const String cart='cart';
   static const String profile='profile';
   static const String yourLocation='yourLocation';
+  static const String deliverTo='deliverTo';
   static const String provideBestFood='provideBestFood';
   static const String description='description';
   static const String addToCart='addToCart';
@@ -177,6 +178,7 @@ mixin AppLocal{
     cart: "Cart",
     profile: "Profile",
     yourLocation: "Your Location",
+     deliverTo: "Deliver to",
     provideBestFood: "Provide the best food for you",
     description: "Description",
     addToCart: "Add to Cart",

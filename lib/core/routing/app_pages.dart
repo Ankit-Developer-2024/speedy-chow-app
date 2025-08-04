@@ -51,18 +51,12 @@ class AppPages {
       GoRoute(
         name: AppRoutes.forgotPassword,
         path: '/${AppRoutes.forgotPassword}',
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: ForgotPasswordView(),
-        ),
+        builder: (context, state) => ForgotPasswordView(),
       ),
       GoRoute(
         name: AppRoutes.resetPassword,
         path: '/${AppRoutes.resetPassword}',
-        builder: (context, state) => BlocProvider(
-          create: (context) => getIt<AuthBloc>(),
-          child: ResetPasswordView(),
-        ),
+        builder: (context, state) => ResetPasswordView(),
       ),
 
       // GoRoute(
@@ -105,6 +99,9 @@ class AppPages {
           ),
         ],
       ),
+
+
+
       GoRoute(
         name: AppRoutes.productDetails,
         path: '/${AppRoutes.productDetails}',
