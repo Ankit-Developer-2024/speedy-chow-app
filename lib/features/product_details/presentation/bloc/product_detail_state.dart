@@ -27,6 +27,24 @@ final class ProductDetailFetchProductState extends ProductDetailState{
   List<Object> get props => [msg,loading,success,data];
 }
 
+final class ProductDetailUserCartFetchState extends ProductDetailState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final ProductDetails data ;
+
+  const ProductDetailUserCartFetchState({
+    required this.msg,
+    required this.loading,
+    required this.success,
+    required this.data
+  });
+
+
+  @override
+  List<Object> get props => [msg,loading,success,data];
+}
+
 final class ProductDetailIncAndDecProductQuantityState extends ProductDetailState{
   final int quantity;
 

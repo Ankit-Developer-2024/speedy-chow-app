@@ -30,4 +30,8 @@ class ProductDetailModel extends ProductDetails {
   static ProductDetailModel createResponseModel(Map<String,dynamic> json){
     return  ProductDetailModel.fromJson(json);
   }
+
+  static ProductDetailModel createResponseModelWithList(List<dynamic> json){
+    return  ProductDetailModel.fromJson(json[0]);
+  }
 }

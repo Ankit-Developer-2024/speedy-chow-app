@@ -5,5 +5,6 @@ class AppUrl{
   static final String login='auth/login';
   static final String user='user';
   static final String fetchProduct='product';
+  static final String fetchCart='cart';
   static final String fetchCategory='category';
 }

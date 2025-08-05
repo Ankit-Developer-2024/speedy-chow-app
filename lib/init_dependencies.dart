@@ -42,9 +42,14 @@ import 'package:speedy_chow/features/product_details/data/data_source/local_sour
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source_impl.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/user_cart_product_details_remote_source.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/user_cart_product_details_remote_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/repositories/product_detail_repository_impl.dart';
+import 'package:speedy_chow/features/product_details/data/repositories/user_cart_product_details_repo_impl.dart';
 import 'package:speedy_chow/features/product_details/domain/repositories/product_detail_repository.dart';
+import 'package:speedy_chow/features/product_details/domain/repositories/user_cart_product_details_repo.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/product_detail_fetch_product_use_case.dart';
+import 'package:speedy_chow/features/product_details/domain/use_case/user_cart_product_details_use_case.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/splash/data/data_source/verify_token_remote_source.dart';
@@ -141,12 +146,15 @@ void _initProductDetailBloc(){
   //data_source
   getIt..registerFactory<ProductDetailLocalSource>(()=>ProductDetailLocalSourceImpl())
   ..registerFactory<ProductDetailRemoteSource>(()=>ProductDetailRemoteSourceImpl())
+  ..registerFactory<UserCartProductDetailsRemoteSource>(()=>UserCartProductDetailsRemoteSourceImpl())
   //repositories
   ..registerFactory<ProductDetailRepository>(()=>ProductDetailRepositoryImpl(productDetailLocalSource: getIt<ProductDetailLocalSource>(),productDetailRemoteSource: getIt<ProductDetailRemoteSource>()))
+  ..registerFactory<UserCartProductDetailsRepo>(()=>UserCartProductDetailsRepoImpl(userCartProductDetailsRemoteSource: getIt<UserCartProductDetailsRemoteSource>()))
   //use_case
   ..registerFactory<ProductDetailFetchProductUseCase>(()=>ProductDetailFetchProductUseCase(productDetailRepository: getIt<ProductDetailRepository>()))
+  ..registerFactory<UserCartProductDetailsUseCase>(()=>UserCartProductDetailsUseCase(userCartProductDetailsRepo: getIt<UserCartProductDetailsRepo>()))
   //bloc
-  ..registerFactory<ProductDetailBloc>(()=>ProductDetailBloc(productDetailFetchProductUseCase: getIt<ProductDetailFetchProductUseCase>()));
+  ..registerFactory<ProductDetailBloc>(()=>ProductDetailBloc(productDetailFetchProductUseCase: getIt<ProductDetailFetchProductUseCase>(),userCartProductDetailsUseCase: getIt<UserCartProductDetailsUseCase>()));
 }
 
 void _initCartBloc(){

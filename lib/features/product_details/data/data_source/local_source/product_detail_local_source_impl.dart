@@ -11,10 +11,11 @@ class ProductDetailLocalSourceImpl implements ProductDetailLocalSource{
       {
         "name": "Paneer Pasta #1",
         "description": "Rich and creamy pasta made with succulent cubes of paneer, tossed in a flavorful white sauce with herbs and saut\u00e9ed vegetables.",
-        "photo": "https://example.com/images/paneer_pasta.jpg",
+        "image": "https://example.com/images/paneer_pasta.jpg",
         "price": 180,
-        "discount": 10,
-        "quantity": 50,
+        "discountPercentage": 10,
+        "discountedPrice":150,
+        "totalQuantity": 50,
         "category": "Pasta",
         "rating": 3.1
       },
