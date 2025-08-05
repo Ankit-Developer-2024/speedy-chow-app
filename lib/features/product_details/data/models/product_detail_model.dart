@@ -31,7 +31,5 @@ class ProductDetailModel extends ProductDetails {
     return  ProductDetailModel.fromJson(json);
   }
 
-  static ProductDetailModel createResponseModelWithList(List<dynamic> json){
-    return  ProductDetailModel.fromJson(json[0]);
-  }
+
 }

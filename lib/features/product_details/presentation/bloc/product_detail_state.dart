@@ -27,13 +27,13 @@ final class ProductDetailFetchProductState extends ProductDetailState{
   List<Object> get props => [msg,loading,success,data];
 }
 
-final class ProductDetailUserCartFetchState extends ProductDetailState{
+final class ProductQuantityUserCartFetchState extends ProductDetailState{
   final String msg;
   final bool loading;
   final bool success;
-  final ProductDetails data ;
+  final UserCartProductQuantity data ;
 
-  const ProductDetailUserCartFetchState({
+  const ProductQuantityUserCartFetchState({
     required this.msg,
     required this.loading,
     required this.success,

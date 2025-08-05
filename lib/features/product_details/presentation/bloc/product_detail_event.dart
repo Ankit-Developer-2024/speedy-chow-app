@@ -13,10 +13,10 @@ final class ProductDetailFetchProductEvent extends ProductDetailEvent{
   List<Object?> get props => [productId];
 }
 
-final class ProductDetailUserCartFetchEvent extends ProductDetailEvent{
+final class ProductQuantityUserCartFetchEvent extends ProductDetailEvent{
   final String productId;
 
-  const ProductDetailUserCartFetchEvent({required this.productId});
+  const ProductQuantityUserCartFetchEvent({required this.productId});
   @override
   List<Object?> get props => [productId];
 }
@@ -27,7 +27,7 @@ final class ProductDetailIncAndDecProductQuantityEvent extends ProductDetailEven
   const ProductDetailIncAndDecProductQuantityEvent({required this.quantity});
 
   @override
-  List<Object?> get props => [quantity];
+  List<Object?> get props => [];
 
 }
 

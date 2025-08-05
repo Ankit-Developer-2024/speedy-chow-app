@@ -30,8 +30,10 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
     if (!_isInit) {
       final product = GoRouterState.of(context).extra as Product;
       _productDetailBloc = context.read<ProductDetailBloc>();
-      _productDetailBloc.add(
-          ProductDetailFetchProductEvent(productId: product.id.toString()));
+      _productDetailBloc..add(
+          ProductDetailFetchProductEvent(productId: product.id.toString()))
+      ..add(ProductQuantityUserCartFetchEvent(productId: product.id.toString()))
+      ;
       _isInit = true;
     }
   }
