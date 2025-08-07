@@ -7,7 +7,8 @@ import 'package:speedy_chow/features/product_details/data/models/user_cart_produ
 class UserCartProductQuantityRemoteSourceImpl implements UserCartProductQuantityRemoteSource{
 
   @override
-  Future<ApiResponse?> fetchUserCartProductQuantity({required String id})async{
+  Future<ApiResponse?> fetchUserCartProductQuantity({required String productId})async{
+    String id=productId;
     ApiResponse? response= await DioRequest.get("${AppUrl.fetchCart}/$id", createResponseModel: UserCartProductQuantityModel.createResponseModel);
     return response;
   }

@@ -11,7 +11,7 @@ class UserCartProductQuantityRepoImpl implements UserCartProductQuantityRepo{
   UserCartProductQuantityRepoImpl({required this.userCartProductQuantityRemoteSource});
   @override
   Future<ApiResponse?> fetchUserCartProductQuantity({required String productId}) async{
-    return await userCartProductQuantityRemoteSource.fetchUserCartProductQuantity(id: productId);
+    return await userCartProductQuantityRemoteSource.fetchUserCartProductQuantity(productId: productId);
   }
 
 }

@@ -105,6 +105,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             quantity: null, cartId: null)));
 
     try {
+      print("=====================${event.productId}");
       ApiResponse? response = await userCartProductQuantityUseCase(
           UserCartProductQuantityParam(productId: event.productId));
       if (response?.success == true) {
