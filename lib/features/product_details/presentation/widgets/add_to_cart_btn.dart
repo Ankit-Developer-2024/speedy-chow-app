@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoader.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/loader.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
@@ -19,9 +21,12 @@ class AddToCartBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment(-1, 0.98),
+      alignment: Alignment(-1, 0.99),
       child: Container(
-        color: AppColors.white,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          boxShadow: [BoxShadow(color: AppColors.grey500.withAlpha(50),blurRadius: 5,offset: Offset(0, -1))],
+        ),
         padding: EdgeInsets.symmetric(
             horizontal: AppDimensions.spacing_24,
             vertical: AppDimensions.spacing_2),
@@ -31,10 +36,18 @@ class AddToCartBtn extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                BlocBuilder<ProductDetailBloc,
+                BlocConsumer<ProductDetailBloc,
                     ProductDetailState>(
-                  buildWhen: (prev, curr) => curr
-                  is ProductDetailIncAndDecProductQuantityState,
+                  listener: (context,state){
+                    if(state is ProductDetailIncAndDecProductQuantityState){
+                      if(state.loading==true){
+                        customLoader(context: context);
+                      }else {
+                        context.pop();
+                      }
+                    }
+                  },
+                  buildWhen: (prev, curr) => curr is ProductDetailIncAndDecProductQuantityState,
                   builder: (context, state) {
                     if (state is ProductDetailIncAndDecProductQuantityState) {
                       return Row(
@@ -113,16 +126,17 @@ class AddToCartBtn extends StatelessWidget {
                 if (state is ProductDetailAddProductInCartState) {
                   if (state.success) {
                     customSnackBar(context, bgColor: AppColors.primaryGreen, AppLocal.productSuccessfullyAdded.getString(context));
+                  }else if(state.success==false && state.loading==false){
+                    customSnackBar(context, bgColor: AppColors.primaryGreen, state.msg.isEmpty ? AppLocal.productSuccessfullyAdded.getString(context) : state.msg);
                   }
                 }
               },
-              buildWhen: (prev, curr) =>
-              curr is ProductDetailAddProductInCartState,
+              buildWhen: (prev,curr)=> (curr is ProductDetailIncAndDecProductQuantityState || curr is ProductDetailAddProductInCartState),
               builder: (context, state) {
                 if (state is ProductDetailAddProductInCartState) {
                   return Button(
                       onTap: () {
-                        context.read<ProductDetailBloc>().add(
+                        context.read<ProductDetailBloc>().isProductAlreadyAddedToCart ? customSnackBar(context, "Item already added in cart!",bgColor: AppColors.yellow800) : context.read<ProductDetailBloc>().add(
                             ProductDetailAddProductInCartEvent(
                                 product: product));
                       },
@@ -139,8 +153,7 @@ class AddToCartBtn extends StatelessWidget {
                             color: AppColors.white,
                           ),
                           Text(
-                            AppLocal.addToCart
-                                .getString(context),
+                            context.read<ProductDetailBloc>().isProductAlreadyAddedToCart ? "Product Already added to cart!"  : AppLocal.addToCart.getString(context),
                             style:
                             AppTextStyles.semiBold14P(
                                 color: AppColors.white),
@@ -150,7 +163,7 @@ class AddToCartBtn extends StatelessWidget {
                 } else {
                   return Button(
                       onTap: () {
-                        context.read<ProductDetailBloc>().add(
+                        context.read<ProductDetailBloc>().isProductAlreadyAddedToCart ? customSnackBar(context, "Item already added in cart!",bgColor: AppColors.yellow800) : context.read<ProductDetailBloc>().add(
                             ProductDetailAddProductInCartEvent(
                                 product: product));
                       },
@@ -163,7 +176,7 @@ class AddToCartBtn extends StatelessWidget {
                             color: AppColors.white,
                           ),
                           Text(
-                            AppLocal.addToCart.getString(context),
+                           context.read<ProductDetailBloc>().isProductAlreadyAddedToCart ? "Product Already added to cart!"  : AppLocal.addToCart.getString(context),
                             style: AppTextStyles.semiBold14P(
                                 color: AppColors.white),
                           )

@@ -40,15 +40,25 @@ import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.da
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source_impl.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/add_product_to_cart_remote_source.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/add_product_to_cart_remote_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/product_detail_remote_source_impl.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/update_cart_quantity_remote_source.dart';
+import 'package:speedy_chow/features/product_details/data/data_source/remote_source/update_cart_quantity_remote_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/user_cart_product_quantity_remote_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/user_cart_product_quantity_remote_source_impl.dart';
+import 'package:speedy_chow/features/product_details/data/repositories/add_product_to_cart_repo_impl.dart';
 import 'package:speedy_chow/features/product_details/data/repositories/product_detail_repository_impl.dart';
+import 'package:speedy_chow/features/product_details/data/repositories/update_cart_quantity_repo_impl.dart';
 import 'package:speedy_chow/features/product_details/data/repositories/user_cart_product_quantity_repo_impl.dart';
+import 'package:speedy_chow/features/product_details/domain/repositories/add_product_to_cart_repo.dart';
 import 'package:speedy_chow/features/product_details/domain/repositories/product_detail_repository.dart';
+import 'package:speedy_chow/features/product_details/domain/repositories/update_cart_quantity_repo.dart';
 import 'package:speedy_chow/features/product_details/domain/repositories/user_cart_product_quantity_repo.dart';
+import 'package:speedy_chow/features/product_details/domain/use_case/add_product_to_cart_use_case.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/product_detail_fetch_product_use_case.dart';
+import 'package:speedy_chow/features/product_details/domain/use_case/update_cart_quantity_use_case.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/user_cart_product_quantity_use_case.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
@@ -147,14 +157,25 @@ void _initProductDetailBloc(){
   getIt..registerFactory<ProductDetailLocalSource>(()=>ProductDetailLocalSourceImpl())
   ..registerFactory<ProductDetailRemoteSource>(()=>ProductDetailRemoteSourceImpl())
   ..registerFactory<UserCartProductQuantityRemoteSource>(()=>UserCartProductQuantityRemoteSourceImpl())
+  ..registerFactory<UpdateCartQuantityRemoteSource>(()=>UpdateCartQuantityRemoteSourceImpl())
+  ..registerFactory<AddProductToCartRemoteSource>(()=>AddProductToCartRemoteSourceImpl())
   //repositories
   ..registerFactory<ProductDetailRepository>(()=>ProductDetailRepositoryImpl(productDetailLocalSource: getIt<ProductDetailLocalSource>(),productDetailRemoteSource: getIt<ProductDetailRemoteSource>()))
   ..registerFactory<UserCartProductQuantityRepo>(()=>UserCartProductQuantityRepoImpl(userCartProductQuantityRemoteSource: getIt<UserCartProductQuantityRemoteSource>()))
+  ..registerFactory<UpdateCartQuantityRepo>(()=>UpdateCartQuantityRepoImpl(updateCartQuantityRemoteSource: getIt<UpdateCartQuantityRemoteSource>()))
+  ..registerFactory<AddProductToCartRepo>(()=>AddProductToCartRepoImpl(addProductToCartRemoteSource: getIt<AddProductToCartRemoteSource>()))
   //use_case
   ..registerFactory<ProductDetailFetchProductUseCase>(()=>ProductDetailFetchProductUseCase(productDetailRepository: getIt<ProductDetailRepository>()))
   ..registerFactory<UserCartProductQuantityUseCase>(()=>UserCartProductQuantityUseCase(userCartProductQuantityRepo: getIt<UserCartProductQuantityRepo>()))
+  ..registerFactory<UpdateCartQuantityUseCase>(()=>UpdateCartQuantityUseCase(updateCartQuantityRepo: getIt<UpdateCartQuantityRepo>()))
+  ..registerFactory<AddProductToCartUseCase>(()=>AddProductToCartUseCase(addProductToCartRepo: getIt<AddProductToCartRepo>()))
   //bloc
-  ..registerFactory<ProductDetailBloc>(()=>ProductDetailBloc(productDetailFetchProductUseCase: getIt<ProductDetailFetchProductUseCase>(),userCartProductQuantityUseCase: getIt<UserCartProductQuantityUseCase>()));
+  ..registerFactory<ProductDetailBloc>(()=>ProductDetailBloc(
+      productDetailFetchProductUseCase: getIt<ProductDetailFetchProductUseCase>(),
+      userCartProductQuantityUseCase: getIt<UserCartProductQuantityUseCase>(),
+      updateCartQuantityUseCase: getIt<UpdateCartQuantityUseCase>(),
+      addProductToCartUseCase: getIt<AddProductToCartUseCase>()
+  ));
 }
 
 void _initCartBloc(){
