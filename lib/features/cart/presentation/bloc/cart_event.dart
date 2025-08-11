@@ -1,12 +1,19 @@
 part of 'cart_bloc.dart';
 
-@immutable
+
 sealed class CartEvent extends Equatable {}
 
 final class CartFetchUserCartEvent extends CartEvent{
-  final String userId;
-
-  CartFetchUserCartEvent({required this.userId});
   @override
-  List<Object?> get props => [userId];
+  List<Object?> get props => [];
+}
+
+final class UpdateCartEvent extends CartEvent{
+   final Cart cart;
+   final int quantity;
+
+  UpdateCartEvent({required this.cart,required this.quantity});
+
+  @override
+  List<Object?> get props => [cart,quantity];
 }

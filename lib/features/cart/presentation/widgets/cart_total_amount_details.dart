@@ -10,63 +10,48 @@ class CartTotalAmountDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      buildWhen: (prev,curr)=>curr is CartFetchUserCartState,
-      builder: (context, state) {
-        if(state is CartFetchUserCartState){
-          if(state.loading==true){
-            return SizedBox.shrink();
-          }else if(state.data.cartItem!.isEmpty){
-            return SizedBox.shrink();
-          }else {
-            return Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "${AppLocal.items.getString(context)}(${state.data.cartItem!.length}):",
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                    Text(
-                      "₹${state.data.totalPrice}",
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocal.delivery.getString(context),
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                    Text(
-                      "₹00.00",
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocal.orderTotal.getString(context),
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                    Text(
-                      "₹${state.data.totalPrice}",
-                      style: AppTextStyles.semibold18P(),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }
-        }else{
-          return SizedBox.shrink();
-        }
-      },
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "${AppLocal.items.getString(context)}(${context.read<CartBloc>().items.length.toString()}):",
+              style: AppTextStyles.semibold18P(),
+            ),
+            Text(
+              "₹${context.read<CartBloc>().totalPrice.toString()}",
+              style: AppTextStyles.semibold18P(),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocal.delivery.getString(context),
+              style: AppTextStyles.semibold18P(),
+            ),
+            Text(
+              "₹00.00",
+              style: AppTextStyles.semibold18P(),
+            ),
+          ],
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              AppLocal.orderTotal.getString(context),
+              style: AppTextStyles.semibold18P(),
+            ),
+            Text(
+              "₹${context.read<CartBloc>().totalPrice.toString()}",
+              style: AppTextStyles.semibold18P(),
+            ),
+          ],
+        ),
+      ],
     );
   }
 }

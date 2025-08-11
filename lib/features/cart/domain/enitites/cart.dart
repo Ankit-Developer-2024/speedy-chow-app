@@ -1,8 +1,9 @@
 import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 
 class Cart{
-  final double? totalPrice;
-  final List<Product>? cartItem;
+  final String? id;
+  final int? quantity;
+  final Product? product;
 
-  Cart({required this.totalPrice, required this.cartItem});
+  Cart({required this.id,required this.quantity,required this.product});
 }

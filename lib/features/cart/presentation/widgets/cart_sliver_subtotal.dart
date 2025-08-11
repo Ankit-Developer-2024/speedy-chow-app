@@ -15,41 +15,20 @@ class CartSliverSubtotal extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      buildWhen: (prev,curr)=>curr is CartFetchUserCartState,
-      builder: (context, state) {
-        if(state is CartFetchUserCartState){
-          if(state.loading==true){
-            return SliverToBoxAdapter(
-              child: SizedBox.shrink(),
-            );
-          }else if(state.data.cartItem!.isEmpty){
-            return SliverToBoxAdapter(
-              child: SizedBox.shrink(),
-            );
-          }else{
-            return SliverToBoxAdapter(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    AppLocal.subTotal.getString(context),
-                    style: AppTextStyles.semiBold24P(),
-                  ),
-                  Text(
-                    "₹${state.data.totalPrice}",
-                    style: AppTextStyles.semiBold24P(),
-                  ),
-                ],
-              ),
-            );
-          }
-        }else{
-          return SliverToBoxAdapter(
-            child: SizedBox.shrink(),
-          );
-        }
-      },
+    return SliverToBoxAdapter(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            AppLocal.subTotal.getString(context),
+            style: AppTextStyles.semiBold24P(),
+          ),
+          Text(
+            "₹${context.read<CartBloc>().totalPrice.toString()}",
+            style: AppTextStyles.semiBold24P(),
+          ),
+        ],
+      ),
     );
   }
 }

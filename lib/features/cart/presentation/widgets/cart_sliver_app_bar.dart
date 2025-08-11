@@ -12,48 +12,17 @@ class CartSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CartBloc, CartState>(
-      buildWhen: (prev,curr)=> curr is CartFetchUserCartState,
-      builder: (context, state) {
-        if(state is CartFetchUserCartState){
-          if(state.loading==true){
-            return SliverToBoxAdapter(
-              child: SizedBox.shrink(),
-            );
-          }else if(state.data.cartItem!.isEmpty){
-            return SliverToBoxAdapter(
-              child: SizedBox.shrink(),
-            );
-          }
-          else{
-            return SliverAppBar(
-              leading: PrimaryButton(
-                onPress: () {
-                  context.pushNamed(AppRoutes.selectPaymentMethod,
-                      extra: context.read<CartBloc>());
-                },
-                title: "Proceed to Buy (${state.data.cartItem!.length} items)",
-                titleStyle: AppTextStyles.medium18P(color: AppColors.white),
-              ),
-              leadingWidth: double.infinity,
-              pinned: true,
-            );
-          }
-        } else{
-          return SliverAppBar(
-            leading: PrimaryButton(
-              onPress: () {
-
-              },
-              title: "Proceed to Buy (* items)",
-              titleStyle: AppTextStyles.medium18P(color: AppColors.white),
-            ),
-            leadingWidth: double.infinity,
-            pinned: true,
-          );
-        }
-
-      },
+    return SliverAppBar(
+      leading: PrimaryButton(
+        onPress: () {
+          context.pushNamed(AppRoutes.selectPaymentMethod,
+              extra: context.read<CartBloc>());
+        },
+        title: "Proceed to Buy (${context.read<CartBloc>().items.length.toString()} items)",
+        titleStyle: AppTextStyles.medium18P(color: AppColors.white),
+      ),
+      leadingWidth: double.infinity,
+      pinned: true,
     );
   }
 }

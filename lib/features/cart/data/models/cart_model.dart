@@ -3,16 +3,23 @@ import 'package:speedy_chow/features/home/data/models/product_model.dart';
 import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 
 class CartModel extends Cart {
-  CartModel({required super.totalPrice, required super.cartItem});
+  CartModel({required super.id,required super.quantity ,required super.product});
 
   factory CartModel.fromJson(Map<String, dynamic> json) {
     return CartModel(
-        totalPrice: json["totalPrice"] ?? 0.0,
-        cartItem: json['cartItem']!=null ? (json['cartItem'] as List).map<ProductModel>((item)=> ProductModel.fromJson(item)).toList() : []
+        id: json["id"] ??"",
+        quantity: json["quantity"] ?? 1,
+        product: json['product']!=null ? ProductModel.fromJson(json["product"]) : null
     );
   }
 
+  static List<CartModel> createResponseModelWithList(List<dynamic> json){
+    List<CartModel> cartModels=(json).map((item)=>CartModel.fromJson(item)).toList();
+    return cartModels;
+   }
+
+
   static CartModel createResponseModel(Map<String,dynamic> json){
     return CartModel.fromJson(json);
-  }
+   }
 }

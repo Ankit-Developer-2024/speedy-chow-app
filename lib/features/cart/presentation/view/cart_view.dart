@@ -29,7 +29,7 @@ class _CartViewState extends State<CartView> {
     super.initState();
     _cartBloc = context.read<CartBloc>();
     _cartBloc
-      .add(CartFetchUserCartEvent(userId: "userId"));
+      .add(CartFetchUserCartEvent());
   }
   @override
   Widget build(BuildContext context) {
@@ -53,12 +53,56 @@ class _CartViewState extends State<CartView> {
         ),
         centerTitle: true,
       ),
-      body: false
-          ? EmptyCart()
-          : Padding(
+      body: BlocConsumer<CartBloc,CartState>(
+        listener: (context,state){
+
+        },
+        buildWhen: (prev,curr)=> curr is CartFetchUserCartState || curr is UpdateCartState ,
+        builder: (context,state){
+          if(state is CartFetchUserCartState){
+            if(state.loading==true){
+              return Center(child: CircularProgressIndicator(),);
+            }
+            else if(state.data.isEmpty){
+              return EmptyCart();
+            }else{
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: AppDimensions.spacing_24,right: AppDimensions.spacing_24,
+                    top:  AppDimensions.spacing_10
+                ),
+                child: CustomScrollView(
+                  slivers: [
+                    CartSliverSubtotal(),
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: 10,),
+                    ),
+                    CartSliverAppBar(),
+                    SliverToBoxAdapter(
+                      child: Column(
+                        spacing: AppDimensions.spacing_10,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CartItem(),
+                          CartTotalAmountDetails(),
+                          Divider(radius: BorderRadius.circular(AppDimensions.radius_100),),
+                          Text(
+                            AppLocal.recommendedForYou.getString(context),
+                            style: AppTextStyles.semibold18P(),
+                          ),
+                          RecommededItem(),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }else if(state is UpdateCartState){
+            return Padding(
               padding: const EdgeInsets.only(
-                left: AppDimensions.spacing_24,right: AppDimensions.spacing_24,
-                top:  AppDimensions.spacing_10
+                  left: AppDimensions.spacing_24,right: AppDimensions.spacing_24,
+                  top:  AppDimensions.spacing_10
               ),
               child: CustomScrollView(
                 slivers: [
@@ -85,7 +129,12 @@ class _CartViewState extends State<CartView> {
                   ),
                 ],
               ),
-            ),
+            );
+          }
+          else{
+            return  SizedBox.shrink();
+          }
+        },)
     );
   }
 }
