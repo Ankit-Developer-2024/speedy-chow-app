@@ -7,7 +7,7 @@ import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 class FetchCartProductsRemoteSourceImpl implements FetchCartProductsRemoteSource{
   @override
   Future<ApiResponse?> fetchCartProducts() async{
-    ApiResponse? response= await DioRequest.get(AppUrl.fetchCart, createResponseModel: CartModel.createResponseModelWithList);
+    ApiResponse? response= await DioRequest.get(AppUrl.cart, createResponseModel: CartModel.createResponseModelWithList);
     return response;
   }
 }

@@ -80,8 +80,9 @@ class CartItem extends StatelessWidget {
                                     "${String.fromCharCode(
                                         8377)} ${item.product!.discountedPrice}")
                               ])),
-                      item.product!.quantity!<=0 ? Text("Out of Stock",style: AppTextStyles.medium16P(color: AppColors.errorRed)) : Text("In Stock",style: AppTextStyles.medium16P(color: AppColors.primaryGreen)),
+                      item.product!.quantity!<=0 ? Text("Out of stock",style: AppTextStyles.medium16P(color: AppColors.errorRed)) : Text("In stock",style: AppTextStyles.medium16P(color: AppColors.primaryGreen)),
                       BlocConsumer<CartBloc, CartState>(
+                        listenWhen: (prev,curr)=>curr is UpdateCartState,
                         listener: (context,state){
                            if(state is UpdateCartState){
                              if(state.loading==true){
@@ -92,6 +93,7 @@ class CartItem extends StatelessWidget {
                              }
                            }
                         },
+                        buildWhen: (prev,curr)=>curr is UpdateCartState,
                         builder: (context, state) {
                           if(state is UpdateCartState){
                             if(state.success==true){
@@ -99,26 +101,26 @@ class CartItem extends StatelessWidget {
                                 children: [
                                   IconButton(
                                       onPressed: (){
-                                        context.read<CartBloc>().items[index].quantity! <= 1
+                                        item.quantity! <= 1
                                             ? null
                                             : context
                                             .read<CartBloc>()
                                             .add(UpdateCartEvent(
-                                            cart: context.read<CartBloc>().items[index],
+                                            cart: item,
                                             quantity:
-                                            context.read<CartBloc>().items[index].quantity! -
+                                            item.quantity! -
                                                 1));
                                       }, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero,icon: Text('-',style: AppTextStyles.semiBold24P(),)),
-                                  Text(context.read<CartBloc>().items[index].quantity.toString(),style: AppTextStyles.semibold18P()),
+                                  Text(item.quantity.toString(),style: AppTextStyles.semibold18P()),
                                   IconButton(onPressed: (){
-                                    context.read<CartBloc>().items[index].product!.quantity! <= context.read<CartBloc>().items[index].quantity!
+                                    item.product!.quantity! <= item.quantity!
                                         ? null
                                         : context
                                         .read<CartBloc>()
                                         .add(UpdateCartEvent(
-                                        cart: context.read<CartBloc>().items[index],
+                                        cart: item,
                                         quantity:
-                                        context.read<CartBloc>().items[index].quantity! +
+                                        item.quantity! +
                                             1));
                                   }, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero, icon: Text("+",style: AppTextStyles.semiBold24P())),
                                 ],
@@ -127,7 +129,7 @@ class CartItem extends StatelessWidget {
                               return Row(
                                 children: [
                                   IconButton( onPressed: (){ }, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero,icon: Text('-',style: AppTextStyles.semiBold24P(),)),
-                                  Text(context.read<CartBloc>().items[index].quantity.toString(),style: AppTextStyles.semibold18P()),
+                                  Text(item.quantity.toString(),style: AppTextStyles.semibold18P()),
                                   IconButton(onPressed: (){}, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero, icon: Text("+",style: AppTextStyles.semiBold24P())),
                                 ],
                               );
@@ -137,39 +139,58 @@ class CartItem extends StatelessWidget {
                               children: [
                                 IconButton(
                                     onPressed: (){
-                                      context.read<CartBloc>().items[index].quantity! <= 1
+                                      item.quantity! <= 1
                                           ? null
                                           : context
                                           .read<CartBloc>()
                                           .add(UpdateCartEvent(
-                                          cart: context.read<CartBloc>().items[index],
+                                          cart: item,
                                           quantity:
-                                          context.read<CartBloc>().items[index].quantity! -
+                                          item.quantity! -
                                               1));
                                     }, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero,icon: Text('-',style: AppTextStyles.semiBold24P(),)),
-                                Text(context.read<CartBloc>().items[index].quantity!.toString(),style: AppTextStyles.semibold18P()),
+                                Text(item.quantity!.toString(),style: AppTextStyles.semibold18P()),
                                 IconButton(onPressed: (){
-                                  context.read<CartBloc>().items[index].product!.quantity! <= context.read<CartBloc>().items[index].quantity!
+                                  item.product!.quantity! <= item.quantity!
                                       ? null
                                       : context
                                       .read<CartBloc>()
                                       .add(UpdateCartEvent(
-                                      cart: context.read<CartBloc>().items[index],
+                                      cart: item,
                                       quantity:
-                                      context.read<CartBloc>().items[index].quantity! +
+                                      item.quantity! +
                                           1));
                                 }, visualDensity: VisualDensity(horizontal: 0,vertical: 0),padding: EdgeInsets.zero, icon: Text("+",style: AppTextStyles.semiBold24P())),
                               ],
                             );
                           }
 
-  },
-),
+                        },
+                       ),
                     ],
                   )
                 ],
               ),
-              IconButton(onPressed: (){}, icon: Icon(Icons.delete_forever_rounded,color: AppColors.errorRed,size: AppDimensions.size_32,))
+              BlocConsumer<CartBloc, CartState>(
+                listenWhen: (prev,curr)=>curr is DeleteCartState,
+                listener: (context,state){
+                  if(state is DeleteCartState){
+                    if(state.loading==true){
+                      customLoader(context: context);
+                    }
+                    else {
+                      context.pop();
+                    }
+                  }
+                },
+                buildWhen: (prev,curr)=>curr is DeleteCartState,
+                builder: (context, state) {
+                  return IconButton(onPressed: (){
+                    context.read<CartBloc>().add(DeleteCartEvent(cart: item));
+                  }, icon: Icon(Icons.delete_forever_rounded,color: AppColors.errorRed,size: AppDimensions.size_32,));
+
+                },
+                )
 
             ],
           ),

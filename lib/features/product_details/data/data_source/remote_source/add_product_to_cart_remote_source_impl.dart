@@ -7,7 +7,7 @@ import 'package:speedy_chow/features/product_details/data/models/user_cart_produ
 class AddProductToCartRemoteSourceImpl implements AddProductToCartRemoteSource{
   @override
   Future<ApiResponse?> addProductToCart({required Map<String,dynamic> data}) async{
-   ApiResponse? response= await DioRequest.post(AppUrl.fetchCart, data:data, createResponseModel: UserCartProductQuantityModel.createResponseModelWithMap);
+   ApiResponse? response= await DioRequest.post(AppUrl.cart, data:data, createResponseModel: UserCartProductQuantityModel.createResponseModelWithMap);
    return response;
   }
 }

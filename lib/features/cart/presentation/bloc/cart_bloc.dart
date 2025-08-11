@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 
@@ -16,10 +17,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   final FetchCartProductsUseCase fetchCartProductsUseCase;
   final UpdateCartUseCase updateCartUseCase;
+  final DeleteCartUseCase deleteCartUseCase;
 
-  CartBloc({required this.fetchCartProductsUseCase,required this.updateCartUseCase}) : super(CartInitial()) {
+  CartBloc({required this.fetchCartProductsUseCase,required this.updateCartUseCase,required this.deleteCartUseCase}) : super(CartInitial()) {
     on<CartFetchUserCartEvent>(_fetchUserCart);
     on<UpdateCartEvent>(_updateCart);
+    on<DeleteCartEvent>(_deleteCart);
   }
 
   void _fetchUserCart(CartFetchUserCartEvent event, Emitter<CartState> emit) async{
@@ -80,6 +83,22 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     }
   }
 
+  void _deleteCart(DeleteCartEvent event,Emitter<CartState> emit)async{
+    try{
+      emit(DeleteCartState(msg: "", loading: true, success: false));
+
+      ApiResponse? response=await deleteCartUseCase(DeleteCartParam(cartId: event.cart.id.toString()));
+      if(response?.success==true){
+        items.remove(event.cart);
+        totalPrice=_totalPrice(items);
+        emit(DeleteCartState(msg: response?.message.toString() ?? "Item deleted successfully", loading: false, success: true));
+      }else{
+        emit(DeleteCartState(msg: response?.message.toString() ?? "Item Not deleted", loading: false, success: false));
+      }
+    }catch(e){
+      emit(DeleteCartState(msg: e.toString(), loading: false, success: false));
+    }
+  }
 
 }
 

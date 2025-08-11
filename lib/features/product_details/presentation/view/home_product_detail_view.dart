@@ -141,6 +141,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                       text:
                                           "${String.fromCharCode(8377)} ${product.discountedPrice.toString()}")
                                 ])),
+                            product.quantity!=null &&product.quantity!<=0 ? Text("Out of stock",style: AppTextStyles.medium16P(color: AppColors.errorRed),) : Text("In stock",style: AppTextStyles.medium16P(color: AppColors.primaryGreen),),
                             Container(
                               height: 50,
                               padding:

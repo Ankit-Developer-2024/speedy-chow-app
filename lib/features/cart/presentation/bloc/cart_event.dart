@@ -17,3 +17,13 @@ final class UpdateCartEvent extends CartEvent{
   @override
   List<Object?> get props => [cart,quantity];
 }
+
+
+final class DeleteCartEvent extends CartEvent{
+   final Cart cart;
+
+   DeleteCartEvent({required this.cart});
+
+  @override
+  List<Object?> get props => [cart];
+}

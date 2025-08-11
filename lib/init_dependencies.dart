@@ -17,14 +17,19 @@ import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.d
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
+import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source.dart';
+import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source_impl.dart';
+import 'package:speedy_chow/features/cart/data/repositories/delete_cart_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/fetch_cart_products_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/update_cart_repo_impl.dart';
+import 'package:speedy_chow/features/cart/domain/repositories/delete_cart_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/fetch_cart_products_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/update_cart_repo.dart';
+import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
@@ -191,14 +196,17 @@ void _initCartBloc(){
 
   ..registerFactory<FetchCartProductsRemoteSource>(()=>FetchCartProductsRemoteSourceImpl())
   ..registerFactory<UpdateCartRemoteSource>(()=>UpdateCartRemoteSourceImpl())
+  ..registerFactory<DeleteCartRemoteSource>(()=>DeleteCartRemoteSourceImpl())
   //repositories
   ..registerFactory<FetchCartProductsRepo>(()=>FetchCartProductsRepoImpl(fetchCartProductsRemoteSource: getIt<FetchCartProductsRemoteSource>(), cartLocalSource: getIt<CartLocalSource>()))
   ..registerFactory<UpdateCartRepo>(()=>UpdateCartRepoImpl(updateCartRemoteSource: getIt<UpdateCartRemoteSource>()))
+  ..registerFactory<DeleteCartRepo>(()=>DeleteCartRepoImpl(deleteCartRemoteSource: getIt<DeleteCartRemoteSource>()))
   //use_case
   ..registerFactory<FetchCartProductsUseCase>(()=>FetchCartProductsUseCase(fetchCartProductsRepo: getIt<FetchCartProductsRepo>()))
   ..registerFactory<UpdateCartUseCase>(()=>UpdateCartUseCase(updateCartRepo: getIt<UpdateCartRepo>()))
+  ..registerFactory<DeleteCartUseCase>(()=>DeleteCartUseCase(deleteCartRepo: getIt<DeleteCartRepo>()))
   //bloc
-  ..registerFactory<CartBloc>(()=>CartBloc(fetchCartProductsUseCase: getIt<FetchCartProductsUseCase>(),updateCartUseCase: getIt<UpdateCartUseCase>()));
+  ..registerFactory<CartBloc>(()=>CartBloc(fetchCartProductsUseCase: getIt<FetchCartProductsUseCase>(),updateCartUseCase: getIt<UpdateCartUseCase>(),deleteCartUseCase:getIt<DeleteCartUseCase>() ));
 
 }
 

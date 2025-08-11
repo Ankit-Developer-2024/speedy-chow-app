@@ -32,3 +32,14 @@ final class UpdateCartState extends CartState{
   @override
   List<Object?> get props => [msg,loading,success];
 }
+
+final class DeleteCartState extends CartState{
+  final String msg;
+  final bool loading;
+  final bool success;
+
+  DeleteCartState({required this.msg, required this.loading, required this.success});
+
+  @override
+  List<Object?> get props => [msg,loading,success];
+}

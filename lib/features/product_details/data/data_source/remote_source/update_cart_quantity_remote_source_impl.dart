@@ -8,7 +8,7 @@ class UpdateCartQuantityRemoteSourceImpl implements UpdateCartQuantityRemoteSour
   @override
   Future<ApiResponse?> updateCartQuantity({required String cartId, required Map<String, dynamic> data}) async{
 
-    ApiResponse? response= await DioRequest.patch("${AppUrl.fetchCart}/$cartId",data: data ,createResponseModel: UserCartProductQuantityModel.createResponseModelWithMap);
+    ApiResponse? response= await DioRequest.patch("${AppUrl.cart}/$cartId",data: data ,createResponseModel: UserCartProductQuantityModel.createResponseModelWithMap);
     return response;
   }
 }

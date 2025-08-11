@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
@@ -54,10 +56,17 @@ class _CartViewState extends State<CartView> {
         centerTitle: true,
       ),
       body: BlocConsumer<CartBloc,CartState>(
+        listenWhen: (prev,curr)=> curr is  CartFetchUserCartState,
         listener: (context,state){
-
+          if(state is CartFetchUserCartState){
+            if(state.loading==true){
+              customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
+            }else{
+              context.pop();
+            }
+          }
         },
-        buildWhen: (prev,curr)=> curr is CartFetchUserCartState || curr is UpdateCartState ,
+        buildWhen: (prev,curr)=> curr is CartFetchUserCartState || curr is UpdateCartState ||curr is DeleteCartState ,
         builder: (context,state){
           if(state is CartFetchUserCartState){
             if(state.loading==true){
@@ -79,6 +88,9 @@ class _CartViewState extends State<CartView> {
                     ),
                     CartSliverAppBar(),
                     SliverToBoxAdapter(
+                      child: SizedBox(height: 10,),
+                    ),
+                    SliverToBoxAdapter(
                       child: Column(
                         spacing: AppDimensions.spacing_10,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -98,8 +110,8 @@ class _CartViewState extends State<CartView> {
                 ),
               );
             }
-          }else if(state is UpdateCartState){
-            return Padding(
+          }else if(state is UpdateCartState || state is DeleteCartState){
+            return context.read<CartBloc>().items.isEmpty ? EmptyCart() : Padding(
               padding: const EdgeInsets.only(
                   left: AppDimensions.spacing_24,right: AppDimensions.spacing_24,
                   top:  AppDimensions.spacing_10
@@ -111,6 +123,9 @@ class _CartViewState extends State<CartView> {
                     child: SizedBox(height: 10,),
                   ),
                   CartSliverAppBar(),
+                  SliverToBoxAdapter(
+                    child: SizedBox(height: 10,),
+                  ),
                   SliverToBoxAdapter(
                     child: Column(
                       spacing: AppDimensions.spacing_10,

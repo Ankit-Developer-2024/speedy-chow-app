@@ -24,7 +24,7 @@ class CartSliverSubtotal extends StatelessWidget {
             style: AppTextStyles.semiBold24P(),
           ),
           Text(
-            "₹${context.read<CartBloc>().totalPrice.toString()}",
+            "₹ ${context.read<CartBloc>().totalPrice.toString()}",
             style: AppTextStyles.semiBold24P(),
           ),
         ],

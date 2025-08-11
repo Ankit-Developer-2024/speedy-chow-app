@@ -9,7 +9,7 @@ class UserCartProductQuantityRemoteSourceImpl implements UserCartProductQuantity
   @override
   Future<ApiResponse?> fetchUserCartProductQuantity({required String productId})async{
     String id=productId;
-    ApiResponse? response= await DioRequest.get("${AppUrl.fetchCart}/$id", createResponseModel: UserCartProductQuantityModel.createResponseModel);
+    ApiResponse? response= await DioRequest.get("${AppUrl.cart}/$id", createResponseModel: UserCartProductQuantityModel.createResponseModel);
     return response;
   }
 }

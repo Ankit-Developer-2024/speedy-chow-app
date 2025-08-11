@@ -7,7 +7,7 @@ import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 class UpdateCartRemoteSourceImpl implements UpdateCartRemoteSource{
   @override
   Future<ApiResponse?> updateCartQuantity({required String cartId, required Map<String, dynamic> data}) async{
-    ApiResponse? response= await DioRequest.patch("${AppUrl.fetchCart}/$cartId",data: data ,createResponseModel: CartModel.createResponseModel);
+    ApiResponse? response= await DioRequest.patch("${AppUrl.cart}/$cartId",data: data ,createResponseModel: CartModel.createResponseModel);
     return response;
   }
 }
