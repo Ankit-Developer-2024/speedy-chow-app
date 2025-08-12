@@ -25,7 +25,6 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   ProfileBloc() : super(ProfileInitial()) {
     on<ProfileDataOpenDatePickerEvent>(_openDatePicker);
-    on<ProfilePersonalDataSaveEvent>(_personalDataSave);
     on<ProfileAccountDeletionCheckBoxEvent>(_accountDeletionCheckBox);
     on<ProfileAccountDeletionConfirmEvent>(_accountDeletionConfirm);
     on<ProfileSignOutConfirmEvent>(_signOutConfirm);
@@ -38,30 +37,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     emit(ProfileDataOpenDatePickerState());
   }
 
-  void _personalDataSave(
-    ProfilePersonalDataSaveEvent event,
-    Emitter<ProfileState> emit,
-  ) async {
-     try{
-       emit(ProfilePersonalDataSaveState(isLoading: true, isSuccess: false));
-       await Future.delayed(Duration(seconds: 2));
-       Map data = {
-         "name": event.fullName,
-         "dob": event.dob,
-         "gender": event.gender,
-         "phone": event.phone,
-         "email": event.email,
-       };
-       //call api here
-       emit(ProfilePersonalDataSaveState(isLoading: false, isSuccess: true));
-     }catch(e){
-       emit(ProfilePersonalDataSaveState(isLoading: false, isSuccess: false));
-     }
-  }
-
 
   void _accountDeletionCheckBox(ProfileAccountDeletionCheckBoxEvent event , Emitter<ProfileState> emit){
-
 
     accountDeletionReason.entries.map((reason){
       if(reason.key==event.title){

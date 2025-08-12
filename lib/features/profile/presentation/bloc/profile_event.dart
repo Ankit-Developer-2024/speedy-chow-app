@@ -9,26 +9,6 @@ final class ProfileDataOpenDatePickerEvent extends ProfileEvent {
 }
 
 
-
-final class ProfilePersonalDataSaveEvent extends ProfileEvent {
-  final String? fullName;
-  final String? dob;
-  final String? gender;
-  final String? phone;
-  final String? email;
-
-  ProfilePersonalDataSaveEvent({
-    required this.fullName,
-    required this.dob,
-    required this.gender,
-    required this.phone,
-    required this.email,
-  });
-
-  @override
-  List<Object?> get props => [fullName,dob,gender,phone,email];
-}
-
 final class ProfileAccountDeletionCheckBoxEvent extends ProfileEvent{
 
   final bool isCheck;

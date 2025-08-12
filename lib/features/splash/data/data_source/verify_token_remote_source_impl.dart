@@ -8,7 +8,6 @@ class VerifyTokenRemoteSourceImpl implements VerifyTokenRemoteSource{
   @override
   Future<ApiResponse?> verifyToken() async{
     ApiResponse? response=await DioRequest.get(AppUrl.verify, createResponseModel: VerifyTokenModel.createResponseModel);
-
     return response;
   }
 }

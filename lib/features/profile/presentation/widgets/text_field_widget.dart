@@ -13,13 +13,17 @@ class TextFieldWidget extends StatelessWidget {
     this.enabled,
     this.prefixIcon,
     this.keyboardType,
+    this.suffixIcon,
+    this.readOnly,
   });
   final String title;
   final TextEditingController? controller;
   final FormFieldValidator<String>? validator;
   final Function(String)? onChanged;
   final bool? enabled;
+  final bool? readOnly;
   final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final TextInputType? keyboardType;
 
   @override
@@ -30,9 +34,10 @@ class TextFieldWidget extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       spacing: AppDimensions.spacing_8,
       children: [
-        Text(title, style: AppTextStyles.medium16P()),
+       title.isEmpty ? SizedBox.shrink() : Text(title, style: AppTextStyles.medium16P()),
         TextFormField(
           controller: controller,
+          readOnly: readOnly ?? true,
           autovalidateMode: AutovalidateMode.onUserInteraction,
           keyboardType:keyboardType ,
           style: AppTextStyles.medium14P(),
@@ -40,8 +45,8 @@ class TextFieldWidget extends StatelessWidget {
             hintText: title,
             enabled: enabled ?? true,
             prefixIcon: prefixIcon,
-            prefixIconConstraints: BoxConstraints(minWidth: 20)
-
+            prefixIconConstraints: BoxConstraints(minWidth: 20),
+            suffixIcon: suffixIcon
 
           ),
           validator: validator,

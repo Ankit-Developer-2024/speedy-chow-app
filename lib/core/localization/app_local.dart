@@ -86,6 +86,7 @@ mixin AppLocal{
   static const String gender='gender';
   static const String phone='phone';
   static const String save='save';
+  static const String change='change';
   static const String location='location';
   static const String language='language';
   static const String whyDeleteAccount='whyDeleteAccount';
@@ -207,6 +208,7 @@ mixin AppLocal{
     gender: "Gender",
     phone: "Phone",
     save: "Save",
+     change: "Change",
     location: "Location",
     language: "Language",
     whyDeleteAccount: "Why are you deleting your account?",

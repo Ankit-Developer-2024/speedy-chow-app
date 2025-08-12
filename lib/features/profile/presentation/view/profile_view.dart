@@ -12,6 +12,7 @@ import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
@@ -111,11 +112,7 @@ class ProfileView extends StatelessWidget {
                 spacing: AppDimensions.spacing_8,
                 children: [
                   UserImageView(),
-                  Text("Ankit", style: AppTextStyles.semiBold18P()),
-                  Text(
-                    "demo001@gmail.com",
-                    style: AppTextStyles.semiBold18P(color: AppColors.grey60),
-                  ),
+                  Text(context.read<AuthBloc>().userModel!.name.toString(), style: AppTextStyles.semiBold18P()),
                   Container(
                     height: AppDimensions.size_4,
                     width: double.infinity,
