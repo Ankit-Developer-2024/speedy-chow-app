@@ -23,7 +23,7 @@ class PersonalDataDropDown extends StatelessWidget {
       children: [
         Text(title, style: AppTextStyles.medium16P()),
         DropdownMenu(
-            width: double.maxFinite,
+            width:  MediaQuery.sizeOf(context).width * .6,
             controller: controller,
             hintText: "Select Gender",
             dropdownMenuEntries: [

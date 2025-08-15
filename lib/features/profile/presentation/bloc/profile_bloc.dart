@@ -1,7 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
+import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/services/preferences/app_secure_storage.dart';
+import 'package:speedy_chow/features/auth/data/models/user_model.dart';
+import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:speedy_chow/features/profile/domain/use_cases/update_user_use_case.dart';
 
 part 'profile_event.dart';
 part 'profile_state.dart';
@@ -21,25 +26,37 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
      'Other': false,
    };
 
-   String? selectedAccountDeletionReason;
+   UserModel? userModel;
 
-  ProfileBloc() : super(ProfileInitial()) {
-    on<ProfileDataOpenDatePickerEvent>(_openDatePicker);
+  String? selectedAccountDeletionReason;
+  final UpdateUserUseCase updateUserUseCase;
+
+  ProfileBloc({required this.updateUserUseCase}) : super(ProfileInitial()) {
+    on<PersonalDataUpdateProfileEvent>(_personalDataUpdate);
     on<ProfileAccountDeletionCheckBoxEvent>(_accountDeletionCheckBox);
     on<ProfileAccountDeletionConfirmEvent>(_accountDeletionConfirm);
     on<ProfileSignOutConfirmEvent>(_signOutConfirm);
   }
 
-  void _openDatePicker(
-    ProfileDataOpenDatePickerEvent event,
-    Emitter<ProfileState> emit,
-  ) {
-    emit(ProfileDataOpenDatePickerState());
+  void _personalDataUpdate(PersonalDataUpdateProfileEvent event,Emitter<ProfileState> emit)async{
+    try{
+      emit(PersonalDataUpdateProfileState(loading: true, success: false, msg: "", user: event.user));
+      ApiResponse? response= await updateUserUseCase(UpdateUserParam(data: event.data));
+      if(response?.success==true){
+        if(response!=null && response.data!=null){
+          userModel=response.data;
+          emit(PersonalDataUpdateProfileState(loading: false, success: true, msg: response.message ?? "User updated successfully", user: response.data));
+        }
+      }else{
+        emit(PersonalDataUpdateProfileState(loading: false, success: false, msg: response?.message ?? "User not updated successfully", user: event.user));
+      }
+
+    }catch(e,stack){
+      emit(PersonalDataUpdateProfileState(loading: false, success: false, msg: e.toString(), user: event.user));
+    }
   }
 
-
   void _accountDeletionCheckBox(ProfileAccountDeletionCheckBoxEvent event , Emitter<ProfileState> emit){
-
     accountDeletionReason.entries.map((reason){
       if(reason.key==event.title){
        if(!accountDeletionReason[event.title]){

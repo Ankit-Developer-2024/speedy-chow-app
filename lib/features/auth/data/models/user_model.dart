@@ -19,7 +19,7 @@ class UserModel extends User {
         name: json['name']??"",
         email: json["email"] ?? "",
         gender: json["gender"]??"",
-        phone: json["phone"]??"",
+        phone: json["phone"]??0,
         dob: json["dob"]??"",
         image: json["image"]??"",
         addresses: json["addresses"]==null ? null : (json["addresses"] as List).map((val)=>AddressModel.fromJson(val)).toList(),

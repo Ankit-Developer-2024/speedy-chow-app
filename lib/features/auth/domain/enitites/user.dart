@@ -5,7 +5,7 @@ class User{
   String? name;
   String? email;
   String? gender;
-  String? phone;
+  int? phone;
   String? dob;
   String? image;
   List<Address>? addresses;

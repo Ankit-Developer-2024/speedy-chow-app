@@ -116,3 +116,12 @@ final class AuthUserEvent extends AuthEvent{
   List<Object?> get props => [];
 
 }
+
+final class AuthUpdateUserEvent extends AuthEvent{
+  final UserModel user;
+
+  AuthUpdateUserEvent({required this.user});
+  @override
+  List<Object?> get props => [user];
+
+}

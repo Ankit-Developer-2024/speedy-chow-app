@@ -186,3 +186,11 @@ final class AuthUserState extends AuthState{
   @override
   List<Object?> get props =>[isLoading,isSuccess,message];
 }
+
+final class AuthUpdateUserState extends AuthState{
+  final DateTime timestamp;
+  AuthUpdateUserState() : timestamp = DateTime.now();
+  @override
+  List<Object?> get props => [timestamp];
+
+}

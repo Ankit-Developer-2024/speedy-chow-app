@@ -7,6 +7,7 @@ import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
 import 'package:speedy_chow/features/auth/data/models/user_model.dart';
+import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
 
@@ -181,6 +182,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
 
   }
+
+  void _updateUser(AuthUpdateUserEvent event , Emitter<AuthState> emit){
+    userModel=event.user;
+    emit(AuthUpdateUserState());
+  }
+
+
 
 
 

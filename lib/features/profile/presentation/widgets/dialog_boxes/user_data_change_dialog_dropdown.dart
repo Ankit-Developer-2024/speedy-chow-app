@@ -6,19 +6,18 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/text_field_widget.dart';
 
-Future userDataChangeDialog({
+Future userDataChangeDialogDropDown({
   required BuildContext context,
   required String title,
   String? leftButtonTitle,
   bool isLeftButtonRequired=true,
   required String rightButtonTitle,
   required VoidCallback rightOnPress,
-   VoidCallback? leftOnPress,
+  VoidCallback? leftOnPress,
   required TextEditingController controller,
-  TextInputType? keyboardType,
-  bool? textFieldEnable,
 }) {
   return showAdaptiveDialog(
     useSafeArea: true,
@@ -28,18 +27,10 @@ Future userDataChangeDialog({
     builder: (context) => AlertDialog(
       title: Text(title, textAlign: TextAlign.center),
       titleTextStyle: AppTextStyles.semiBold18P(),
-      content: InkWell(
-        onTap: (textFieldEnable!=null||textFieldEnable==false) ? ()async{
-          DateTime? selectedDate = await showDatePicker(
-            context: context,
-            firstDate: DateTime(1900),
-            lastDate: DateTime.now(),
-          );
-          controller.text =
-          "${selectedDate!.year.toString()}/${selectedDate.month.toString()}/${selectedDate.day.toString()}";
-
-        } : null,
-          child: TextFieldWidget( enabled: textFieldEnable ?? true, title: "", controller: controller,keyboardType:keyboardType,readOnly: false,)),
+      content: PersonalDataDropDown(
+        title: AppLocal.gender.getString(context),
+        controller: controller,
+      ),
       actions: [
         Row(
           spacing: AppDimensions.spacing_8,
@@ -76,8 +67,8 @@ Future userDataChangeDialog({
       elevation: 10,
       shadowColor: AppColors.darkOrange,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
-        side: BorderSide(color: AppColors.grey500)
+          borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
+          side: BorderSide(color: AppColors.grey500)
       ),
     ),
   );

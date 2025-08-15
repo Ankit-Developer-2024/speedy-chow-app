@@ -8,13 +8,6 @@ final class ProfileInitial extends ProfileState {
   List<Object?> get props => [];
 }
 
-final class ProfileDataOpenDatePickerState extends ProfileState{
-  final DateTime timestamp = DateTime.now();
-
-  @override
-  List<Object?> get props => [timestamp];
-}
-
 final class ProfilePersonalDataSaveState extends ProfileState {
   final bool isLoading;
   final bool isSuccess;
@@ -60,4 +53,17 @@ final class ProfileSignOutConfirmState extends ProfileState{
   @override
   List<Object?> get props => [isLoading,isSuccess];
 }
+
+final class PersonalDataUpdateProfileState extends ProfileState{
+  final bool loading;
+  final bool success;
+  final String msg;
+  final UserModel user;
+
+  PersonalDataUpdateProfileState({required this.loading,required this.success,required this.msg,required this.user});
+  @override
+  List<Object?> get props => [loading,success,msg,user];
+
+}
+
 

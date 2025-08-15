@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 String getLocalJpeg(String imgName){
   return "assets/jpeg_and_jpg/$imgName.jpeg";
@@ -23,4 +24,13 @@ void appLog(dynamic text){
 
 int discountPrice(int price , int discountPercentage){
   return (price-(price*(discountPercentage/100))).round();
+}
+
+String getProperDate(String? time){
+  if(time!=null &&  time.isNotEmpty){
+    DateTime dateTime=DateTime.parse(time).toLocal();
+    return DateFormat('dd/MMM/yyyy').format(dateTime);
+  }else{
+    return "";
+  }
 }

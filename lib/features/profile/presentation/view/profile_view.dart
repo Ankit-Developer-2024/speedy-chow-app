@@ -17,8 +17,20 @@ import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
 
-class ProfileView extends StatelessWidget {
+class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
+
+  @override
+  State<ProfileView> createState() => _ProfileViewState();
+}
+
+class _ProfileViewState extends State<ProfileView> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ProfileBloc>().userModel=context.read<AuthBloc>().userModel;
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/custonConfirmationDialogBox.dart';
 import 'package:speedy_chow/core/components/widgets/loader.dart';
@@ -10,10 +12,12 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/auth/data/models/user_model.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog_dropdown.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/text_field_widget.dart';
@@ -37,18 +41,16 @@ class _PersonalDataViewState extends State<PersonalDataView> {
 
   final TextEditingController emailController = TextEditingController();
 
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
   UserModel? userModel;
   @override
   void initState() {
     super.initState();
-    userModel=context.read<AuthBloc>().userModel;
+    userModel=context.read<ProfileBloc>().userModel; 
     if(userModel!=null){
       nameController.text= userModel?.name ?? "";
-      dobController.text= userModel?.dob ?? "";
+      dobController.text= getProperDate(userModel?.dob);
       genderController.text= userModel?.gender ?? "";
-      phoneController.text= userModel?.phone ?? "";
+      phoneController.text= userModel?.phone.toString() ?? "";
       emailController.text= userModel?.email ?? "";
     }
   }
@@ -78,115 +80,439 @@ class _PersonalDataViewState extends State<PersonalDataView> {
           child: Column(
             children: [
               UserImageView(),
-              Form(
-                key: _formKey,
-                child: Column(
-                  spacing: AppDimensions.spacing_10,
-                  children: [
-                    TextFieldWidget(
-                      title: AppLocal.fullName.getString(context),
-                      controller: nameController,
-                      suffixIcon: IconButton(onPressed: (){
-                        userDataChangeDialog(context: context, title: AppLocal.fullName.getString(context), rightButtonTitle: AppLocal.change.getString(context),
-                          rightOnPress: (){
-                              if(nameController.text.isNotEmpty){
-                                //call api here
-                              }
-                        },
-                          controller: nameController,);
-                      }, icon: Icon(Icons.edit)),
+              
+              //user info
+              BlocConsumer<ProfileBloc, ProfileState>(
+                listenWhen: (prev,curr)=> curr is PersonalDataUpdateProfileState,
+                listener: (context, state) {
+                       if(state is PersonalDataUpdateProfileState){
+                         if(state.loading==true){
+                           customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
+                         }else{
+                           context.pop();
+                           customSnackBar(context, state.msg);
+                         }
+                       }
+                     },
+                buildWhen: (prev,curr)=> curr is PersonalDataUpdateProfileState,
+                builder: (context, state) {
+                  if(state is PersonalDataUpdateProfileState){
+                    if(state.success==true){
+                      userModel=state.user;
+                      nameController.text= userModel?.name ?? "";
+                      dobController.text= getProperDate(userModel?.dob);
+                      genderController.text= userModel?.gender ?? "";
+                        phoneController.text= userModel?.phone.toString() ?? "";
+                        emailController.text= userModel?.email ?? "";
+                      return Column(
+                        spacing: AppDimensions.spacing_10,
+                        children: [
+                          TextFieldWidget(
+                            title: AppLocal.fullName.getString(context),
+                            controller: nameController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(
+                                context: context,
+                                title: AppLocal.fullName.getString(context),
+                                rightButtonTitle: AppLocal.change.getString(context),
+                                leftOnPress: (){
+                                  nameController.text=userModel?.name ?? "" ;
+                                  context.pop();
+                                },
+                                rightOnPress: (){
+                                  if(nameController.text.isNotEmpty){
+                                    context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"name":nameController.text}, user: userModel!));
+                                    context.pop();
+                                  }else{
+                                    customSnackBar(context, AppLocal.userNameRequired.getString(context));
+                                  }
+                                },
+                                controller: nameController,);
+                            }, icon: Icon(Icons.edit)),
+                          ),
 
-                    ),
-                    BlocListener<ProfileBloc, ProfileState>(
-                      listener: (context, state) async {
-                        if (state is ProfileDataOpenDatePickerState) {
-                          DateTime? selectedDate = await showDatePicker(
-                            context: context,
-                            firstDate: DateTime(1900),
-                            lastDate: DateTime.now(),
-                          );
-                          dobController.text =
-                              "${selectedDate!.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()}";
-                        }
-                      },
-                      child: InkWell(
-                        borderRadius: BorderRadius.circular(
-                          AppDimensions.radius_8,
-                        ),
-                        onTap: () {
-                          context.read<ProfileBloc>().add(
-                            ProfileDataOpenDatePickerEvent(),
-                          );
+                          TextFieldWidget(
+                            title: AppLocal.dateOfBirth.getString(context),
+                            controller: dobController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(context: context,
+                                  textFieldEnable: false,
+                                  title: AppLocal.dateOfBirth.getString(context),
+                                  rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    dobController.text=getProperDate(userModel?.dob);
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(dobController.text.isNotEmpty){
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
+                                      context.pop();
+                                    }else{
+                                      customSnackBar(context, "DOB field may be empty!");
+                                    }
+                                  },
+                                  controller: dobController);
+                            }, icon: Icon(Icons.edit)),
+                          ),
+
+                          TextFieldWidget(
+                            title: AppLocal.gender.getString(context),
+                            controller: genderController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialogDropDown(context: context, title: AppLocal.gender.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                                leftOnPress: (){
+                                  genderController.text=userModel?.gender ?? "" ;
+                                  context.pop();
+                                },
+                                rightOnPress: (){
+                                  if(genderController.text.isNotEmpty){
+                                    context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
+                                    context.pop();
+                                  }else{
+                                    customSnackBar(context, "Gender field may be empty!");
+                                  }
+                                },
+                                controller: genderController,);
+                            }, icon: Icon(Icons.edit)),
+                          ),
+
+                          TextFieldWidget(
+                            keyboardType: TextInputType.number,
+                            title: AppLocal.phone.getString(context),
+                            controller: phoneController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(
+                                  context: context,
+                                  title: AppLocal.phone.getString(context),
+                                  keyboardType: TextInputType.phone,
+                                  rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    phoneController.text=userModel?.phone.toString() ?? "" ;
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(phoneController.text.isEmpty){
+                                      customSnackBar(context, AppLocal.phoneNumberRequired.getString(context));
+                                    }
+                                    else if(phoneController.text.length!=10){
+                                      customSnackBar(context, AppLocal.validPhoneNumber.getString(context));
+                                    }else if(phoneController.text.length==10){
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"phone":phoneController.text}, user: userModel!));
+                                      context.pop();
+                                    }
+                                  },
+                                  controller: phoneController);
+                            }, icon: Icon(Icons.edit)),
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.only(
+                                left: AppDimensions.spacing_8,
+                              ),
+                              child: Text("+91", style: AppTextStyles.medium14P()),
+                            ),
+
+                          ),
+
+                          TextFieldWidget(
+                            title: AppLocal.emailAddress.getString(context),
+                            controller: emailController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(context: context, title: AppLocal.emailAddress.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    emailController.text=userModel?.email ?? "" ;
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(emailController.text.isEmpty){
+                                      customSnackBar(context, AppLocal.emailRequired.getString(context),bgColor: AppColors.yellow800);
+                                    }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(emailController.text)){
+                                      customSnackBar(context, AppLocal.validEmail.getString(context),bgColor: AppColors.yellow800);
+                                    }else{
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"email":emailController.text}, user: userModel!));
+                                      context.pop();
+                                    }
+                                  },
+                                  controller: emailController);
+                            }, icon: Icon(Icons.edit)),
+
+                          ),
+                        ],
+                      );
+                    }else{
+                      return Column(
+                        spacing: AppDimensions.spacing_10,
+                        children: [
+                          TextFieldWidget(
+                            title: AppLocal.fullName.getString(context),
+                            controller: nameController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(
+                                context: context,
+                                title: AppLocal.fullName.getString(context),
+                                rightButtonTitle: AppLocal.change.getString(context),
+                                leftOnPress: (){
+                                  nameController.text=userModel?.name ?? "" ;
+                                  context.pop();
+                                },
+                                rightOnPress: (){
+                                  if(nameController.text.isNotEmpty){
+                                    context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"name":nameController.text}, user: userModel!));
+                                    context.pop();
+                                  }else{
+                                    customSnackBar(context, AppLocal.userNameRequired.getString(context));
+                                  }
+                                },
+                                controller: nameController,);
+                            }, icon: Icon(Icons.edit)),
+                          ),
+
+                          TextFieldWidget(
+                            title: AppLocal.dateOfBirth.getString(context),
+                            controller: dobController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(context: context,
+                                  textFieldEnable: false,
+                                  title: AppLocal.dateOfBirth.getString(context),
+                                  rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    dobController.text= getProperDate(userModel?.dob);
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(dobController.text.isNotEmpty){
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
+                                      context.pop();
+                                    }else{
+                                      customSnackBar(context, "DOB field may be empty!");
+                                    }
+                                  },
+                                  controller: dobController);
+                            }, icon: Icon(Icons.edit)),
+                          ),
+
+                          TextFieldWidget(
+                            title: AppLocal.gender.getString(context),
+                            controller: genderController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialogDropDown(context: context, title: AppLocal.gender.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                                leftOnPress: (){
+                                  genderController.text=userModel?.gender ?? "" ;
+                                  context.pop();
+                                },
+                                rightOnPress: (){
+                                  if(genderController.text.isNotEmpty){
+                                    context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
+                                    context.pop();
+                                  }else{
+                                    customSnackBar(context, "Gender field may be empty!");
+                                  }
+                                },
+                                controller: genderController,);
+                            }, icon: Icon(Icons.edit)),
+                          ),
+
+                          TextFieldWidget(
+                            keyboardType: TextInputType.number,
+                            title: AppLocal.phone.getString(context),
+                            controller: phoneController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(
+                                  context: context,
+                                  title: AppLocal.phone.getString(context),
+                                  keyboardType: TextInputType.phone,
+                                  rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    phoneController.text=userModel?.phone.toString() ?? "" ;
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(phoneController.text.isEmpty){
+                                      customSnackBar(context, AppLocal.phoneNumberRequired.getString(context));
+                                    }
+                                    else if(phoneController.text.length!=10){
+                                      customSnackBar(context, AppLocal.validPhoneNumber.getString(context));
+                                    }else if(phoneController.text.length==10){
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"phone":phoneController.text}, user: userModel!));
+                                      context.pop();
+                                    }
+                                  },
+                                  controller: phoneController);
+                            }, icon: Icon(Icons.edit)),
+                            prefixIcon: Padding(
+                              padding: const EdgeInsets.only(
+                                left: AppDimensions.spacing_8,
+                              ),
+                              child: Text("+91", style: AppTextStyles.medium14P()),
+                            ),
+
+                          ),
+
+                          TextFieldWidget(
+                            title: AppLocal.emailAddress.getString(context),
+                            controller: emailController,
+                            suffixIcon: IconButton(onPressed: (){
+                              userDataChangeDialog(context: context, title: AppLocal.emailAddress.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                                  leftOnPress: (){
+                                    emailController.text=userModel?.email ?? "" ;
+                                    context.pop();
+                                  },
+                                  rightOnPress: (){
+                                    if(emailController.text.isEmpty){
+                                      customSnackBar(context, AppLocal.emailRequired.getString(context),bgColor: AppColors.yellow800);
+                                    }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                        .hasMatch(emailController.text)){
+                                      customSnackBar(context, AppLocal.validEmail.getString(context),bgColor: AppColors.yellow800);
+                                    }else{
+                                      context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"email":emailController.text}, user: userModel!));
+                                      context.pop();
+                                    }
+                                  },
+                                  controller: emailController);
+                            }, icon: Icon(Icons.edit)),
+
+                          ),
+                        ],
+                      );
+                    }
+                  }
+                return Column(
+                spacing: AppDimensions.spacing_10,
+                children: [
+                  TextFieldWidget(
+                    title: AppLocal.fullName.getString(context),
+                    controller: nameController,
+                    suffixIcon: IconButton(onPressed: (){
+                      userDataChangeDialog(context: context, title: AppLocal.fullName.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                        leftOnPress: (){
+                          nameController.text=userModel?.name ?? "" ;
+                          context.pop();
                         },
-                        child: TextFieldWidget(
-                          enabled: false,
+                        rightOnPress: (){
+                            if(nameController.text.isNotEmpty){
+                              context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"name":nameController.text}, user: userModel!));
+                              context.pop();
+                            }else{
+                              customSnackBar(context, AppLocal.userNameRequired.getString(context));
+                            }
+                      },
+                        controller: nameController,);
+                    }, icon: Icon(Icons.edit)),
+                  ),
+
+                  TextFieldWidget(
+                    title: AppLocal.dateOfBirth.getString(context),
+                    controller: dobController,
+                    suffixIcon: IconButton(onPressed: (){
+                         userDataChangeDialog(context: context,
+                          textFieldEnable: false,
                           title: AppLocal.dateOfBirth.getString(context),
-                          controller: dobController,
-                        ),
+                          rightButtonTitle: AppLocal.change.getString(context),
+                          leftOnPress: (){
+                            dobController.text=getProperDate(userModel?.dob);
+                            context.pop();
+                             },
+                          rightOnPress: (){
+                            if(dobController.text.isNotEmpty){
+                              context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
+                              context.pop();
+                            }else{
+                              customSnackBar(context, "DOB field may be empty!");
+                            }
+                          },
+                          controller: dobController);
+                    }, icon: Icon(Icons.edit)),
+                  ),
+
+                  TextFieldWidget(
+                    title: AppLocal.gender.getString(context),
+                    controller: genderController,
+                    suffixIcon: IconButton(onPressed: (){
+                      userDataChangeDialogDropDown(context: context, title: AppLocal.gender.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                        leftOnPress: (){
+                          genderController.text=userModel?.gender ?? "" ;
+                          context.pop();
+                        },
+                        rightOnPress: (){
+                          if(dobController.text.isNotEmpty){
+                            context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
+                            context.pop();
+                          }else{
+                            customSnackBar(context, "Gender field may be empty!");
+                          }
+                        },
+                        controller: genderController,);
+                    }, icon: Icon(Icons.edit)),
+                  ),
+
+                  TextFieldWidget(
+                    keyboardType: TextInputType.number,
+                    title: AppLocal.phone.getString(context),
+                    controller: phoneController,
+                    suffixIcon: IconButton(onPressed: (){
+                      userDataChangeDialog(
+                          context: context,
+                          title: AppLocal.phone.getString(context),
+                          keyboardType: TextInputType.phone,
+                          rightButtonTitle: AppLocal.change.getString(context),
+                          leftOnPress: (){
+                            phoneController.text=userModel?.phone.toString() ?? "" ;
+                            context.pop();
+                          },
+                          rightOnPress: (){
+                            if(phoneController.text.isEmpty){
+                               customSnackBar(context, AppLocal.phoneNumberRequired.getString(context));
+                            }
+                            else if(phoneController.text.length!=10){
+                              customSnackBar(context, AppLocal.validPhoneNumber.getString(context));
+                            }else if(phoneController.text.length==10){
+                                context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"phone":phoneController.text}, user: userModel!));
+                                context.pop();
+                            }
+                          },
+                          controller: phoneController);
+                    }, icon: Icon(Icons.edit)),
+                    prefixIcon: Padding(
+                      padding: const EdgeInsets.only(
+                        left: AppDimensions.spacing_8,
                       ),
+                      child: Text("+91", style: AppTextStyles.medium14P()),
                     ),
-                    PersonalDataDropDown(
-                      title: AppLocal.gender.getString(context),
-                      controller: genderController,
-                    ),
-                    TextFieldWidget(
-                      keyboardType: TextInputType.number,
-                      title: AppLocal.phone.getString(context),
-                      controller: phoneController,
-                      suffixIcon: IconButton(onPressed: (){
-                        userDataChangeDialog(context: context, title: AppLocal.phone.getString(context), rightButtonTitle: AppLocal.change.getString(context),
-                            rightOnPress: (){
 
-                            },
-                            controller: phoneController);
-                      }, icon: Icon(Icons.edit)),
-                      validator: (val){
-                        if(val!.isEmpty){
-                          return AppLocal.phoneNumberRequired.getString(context);
-                        }
-                        else if(val.length!=10){
-                          return AppLocal.validPhoneNumber.getString(context);
-                        }
-                        return null;
-                      },
-                      prefixIcon: Padding(
-                        padding: const EdgeInsets.only(
-                          left: AppDimensions.spacing_8,
-                        ),
-                        child: Text("+91", style: AppTextStyles.medium14P()),
-                      ),
+                  ),
 
-                    ),
-                    TextFieldWidget(
-                      title: AppLocal.emailAddress.getString(context),
-                      controller: emailController,
-                      suffixIcon: IconButton(onPressed: (){
-                        userDataChangeDialog(context: context, title: AppLocal.emailAddress.getString(context), rightButtonTitle: AppLocal.change.getString(context),
-                            leftOnPress: (){
-                             emailController.text=userModel?.email ?? "" ;
-                             context.pop();
-                            },
-                            rightOnPress: (){
-                              if(emailController.text.isEmpty){
-                                customSnackBar(context, AppLocal.emailRequired.getString(context),bgColor: AppColors.yellow800);
-                              }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                                  .hasMatch(emailController.text)){
-                                customSnackBar(context, AppLocal.validEmail.getString(context),bgColor: AppColors.yellow800);
-                              }
-                            },
-                            controller: emailController);
-                      }, icon: Icon(Icons.edit)),
+                  TextFieldWidget(
+                    title: AppLocal.emailAddress.getString(context),
+                    controller: emailController,
+                    suffixIcon: IconButton(onPressed: (){
+                      userDataChangeDialog(context: context, title: AppLocal.emailAddress.getString(context), rightButtonTitle: AppLocal.change.getString(context),
+                          leftOnPress: (){
+                           emailController.text=userModel?.email ?? "" ;
+                           context.pop();
+                          },
+                          rightOnPress: (){
+                            if(emailController.text.isEmpty){
+                              customSnackBar(context, AppLocal.emailRequired.getString(context),bgColor: AppColors.yellow800);
+                            }else if(!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                                .hasMatch(emailController.text)){
+                              customSnackBar(context, AppLocal.validEmail.getString(context),bgColor: AppColors.yellow800);
+                            }else{
+                              context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"email":emailController.text}, user: userModel!));
+                              context.pop();
+                            }
 
-                    ),
-                  ],
-                ),
-              ),
+                          },
+                          controller: emailController);
+                    }, icon: Icon(Icons.edit)),
+
+                  ),
+                ],
+              );
+  },
+             ),
             ],
           ),
         ),
       ),
-
     );
   }
-
 }
