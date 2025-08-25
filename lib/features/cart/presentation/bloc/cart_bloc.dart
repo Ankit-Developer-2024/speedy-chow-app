@@ -3,8 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/update_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 
 part 'cart_event.dart';
@@ -19,7 +21,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final UpdateCartUseCase updateCartUseCase;
   final DeleteCartUseCase deleteCartUseCase;
 
-  CartBloc({required this.fetchCartProductsUseCase,required this.updateCartUseCase,required this.deleteCartUseCase}) : super(CartInitial()) {
+  CartBloc({
+    required this.fetchCartProductsUseCase,
+    required this.updateCartUseCase,
+    required this.deleteCartUseCase,
+  }) : super(CartInitial()) {
     on<CartFetchUserCartEvent>(_fetchUserCart);
     on<UpdateCartEvent>(_updateCart);
     on<DeleteCartEvent>(_deleteCart);
@@ -99,7 +105,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(DeleteCartState(msg: e.toString(), loading: false, success: false));
     }
   }
-
 }
 
 int _totalPrice(List<Cart> items){

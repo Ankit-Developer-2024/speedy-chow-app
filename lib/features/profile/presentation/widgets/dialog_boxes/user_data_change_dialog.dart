@@ -6,7 +6,7 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/text_field_widget.dart';
+import 'package:speedy_chow/core/components/widgets/text_field_widget.dart';
 
 Future userDataChangeDialog({
   required BuildContext context,

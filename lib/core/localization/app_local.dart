@@ -81,6 +81,8 @@ mixin AppLocal{
   static const String helpCenter='helpCenter';
   static const String requestAccountDeletion='requestAccountDeletion';
   static const String signOut='signOut';
+  static const String country='country';
+  static const String countryRequired='countryRequired';
   static const String fullName='fullName';
   static const String dateOfBirth='dateOfBirth';
   static const String gender='gender';
@@ -120,6 +122,33 @@ mixin AppLocal{
   static const String  enable='enable';
   static const String  galleryPermission='galleryPermission';
   static const String  galleryPermissionDesc='galleryPermissionDesc';
+  static const String  dobFieldEmpty='dobFieldEmpty';
+  static const String  genderFieldEmpty='genderFieldEmpty';
+  static const String  changeDeliveryAddress='changeDeliveryAddress';
+  static const String  addNewDeliveryAddress='addNewDeliveryAddress';
+  static const String  editDeliveryAddress='editDeliveryAddress';
+  static const String  editAddress='editAddress';
+  static const String  deliverAddress='deliverAddress';
+  static const String  maybeAssistDelivery='maybeAssistDelivery';
+  static const String  useMyLocation='useMyLocation';
+  static const String  houseNo='houseNo';
+  static const String  houseNoRequired='houseNoRequired';
+  static const String  street='street';
+  static const String  streetRequired='streetRequired';
+  static const String  landmark='landmark';
+  static const String  landmarkRequired='landmarkRequired';
+  static const String  zipcode='zipcode';
+  static const String  zipcodeRequired='zipcodeRequired';
+  static const String  city='city';
+  static const String  cityRequired='cityRequired';
+  static const String  state='state';
+  static const String  stateRequired='stateRequired';
+  static const String  makeDefaultAddress='makeDefaultAddress';
+  static const String  addAddress='addAddress';
+  static const String  updateAddress='updateAddress';
+  static const String  selectDeliveryAddress='selectDeliveryAddress';
+  static const String  allAddresses='allAddresses';
+  static const String  or='or';
 
 
    static const Map<String, dynamic> EN = {
@@ -203,6 +232,8 @@ mixin AppLocal{
     helpCenter: "Help Center",
     requestAccountDeletion: "Request Account Deletion",
     signOut: "Sign Out",
+     country: "Country",
+     countryRequired: "Country is required.",
     fullName: "Full Name",
     dateOfBirth: "Date of Birth",
     gender: "Gender",
@@ -242,5 +273,32 @@ mixin AppLocal{
      enable: "Enable",
      galleryPermission: "Gallery Permission",
      galleryPermissionDesc: "Please allow access to your gallery. Speedy chow cannot pick photo without this permission.",
+     dobFieldEmpty: "DOB field may be empty!",
+     genderFieldEmpty: "Gender field may be empty!",
+     changeDeliveryAddress:"Change delivery Address",
+     addNewDeliveryAddress: "Add new delivery address",
+     editDeliveryAddress: "Edit delivery address",
+     editAddress: "Edit address",
+     deliverAddress: "Deliver to this address",
+     maybeAssistDelivery: "May be used to assist delivery",
+     useMyLocation: "Use my location",
+     houseNo: "House no., Flat, Building",
+     houseNoRequired: "House no., Flat, Building is required.",
+     street: "Street, Area, Sector, Village",
+     streetRequired: "Street, Area, Sector, Village is required.",
+     landmark: "Landmark",
+     landmarkRequired: "Landmark is required.",
+     zipcode: "Zipcode",
+     zipcodeRequired: "Zipcode is required.",
+     city: "Town/City",
+     cityRequired: "Town/City is required.",
+     state: "State",
+     stateRequired: "State is required.",
+     makeDefaultAddress: "Make this my default address",
+     addAddress: "Add address",
+     updateAddress: "Update address",
+     selectDeliveryAddress: "Select a delivery address",
+     allAddresses: "All addresses",
+     or: "or",
 };
 }

@@ -40,6 +40,7 @@ class AppDimensions {
   static const double size_1 = 1;
   static const double size_2 = 2;
   static const double size_4 = 4;
+  static const double size_10 = 10;
   static const double size_12 = 12;
   static const double size_16 = 16;
   static const double size_17 = 17;

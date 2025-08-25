@@ -45,6 +45,7 @@ class AppColors {
   static const Color indigo900 = Color(0xff140330);
   static const Color indigo400 = Color(0xff8540f5);
   static const Color yellow800 = Color(0xffFFDD67);
+  static const Color yellow900 = Color(0xffffca0f);
   static const Color shadowGreen = Color(0xff25AF5C);
 
   static const Color red = Color(0xffC92931);

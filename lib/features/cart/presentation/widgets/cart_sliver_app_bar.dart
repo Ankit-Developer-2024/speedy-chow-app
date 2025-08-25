@@ -15,8 +15,7 @@ class CartSliverAppBar extends StatelessWidget {
     return SliverAppBar(
       leading: PrimaryButton(
         onPress: () {
-          context.pushNamed(AppRoutes.selectPaymentMethod,
-              extra: context.read<CartBloc>());
+          context.pushNamed(AppRoutes.paymentMethod);
         },
         title: "Proceed to Buy (${context.read<CartBloc>().items.length.toString()} items)",
         titleStyle: AppTextStyles.medium18P(color: AppColors.white),

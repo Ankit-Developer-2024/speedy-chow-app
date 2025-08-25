@@ -1,4 +1,4 @@
-import 'package:speedy_chow/features/auth/data/models/address_model.dart';
+import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
 
 class UserModel extends User {

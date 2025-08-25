@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/services/preferences/app_secure_storage.dart';
-import 'package:speedy_chow/features/auth/data/models/user_model.dart';
+import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/domain/use_cases/update_user_use_case.dart';

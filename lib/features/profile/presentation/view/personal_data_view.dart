@@ -13,14 +13,14 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/auth/data/models/user_model.dart';
+import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog_dropdown.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/text_field_widget.dart';
+import 'package:speedy_chow/core/components/widgets/text_field_widget.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
 
 class PersonalDataView extends StatefulWidget {
@@ -148,7 +148,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                       context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
                                       context.pop();
                                     }else{
-                                      customSnackBar(context, "DOB field may be empty!");
+                                      customSnackBar(context, AppLocal.dobFieldEmpty.getString(context));
                                     }
                                   },
                                   controller: dobController);
@@ -169,7 +169,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                     context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
                                     context.pop();
                                   }else{
-                                    customSnackBar(context, "Gender field may be empty!");
+                                    customSnackBar(context, AppLocal.genderFieldEmpty.getString(context));
                                   }
                                 },
                                 controller: genderController,);
@@ -283,7 +283,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                       context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
                                       context.pop();
                                     }else{
-                                      customSnackBar(context, "DOB field may be empty!");
+                                      customSnackBar(context, AppLocal.dobFieldEmpty.getString(context));
                                     }
                                   },
                                   controller: dobController);
@@ -304,7 +304,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                     context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
                                     context.pop();
                                   }else{
-                                    customSnackBar(context, "Gender field may be empty!");
+                                    customSnackBar(context, AppLocal.genderFieldEmpty.getString(context));
                                   }
                                 },
                                 controller: genderController,);
@@ -416,7 +416,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                               context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"dob":dobController.text}, user: userModel!));
                               context.pop();
                             }else{
-                              customSnackBar(context, "DOB field may be empty!");
+                              customSnackBar(context, AppLocal.dobFieldEmpty.getString(context));
                             }
                           },
                           controller: dobController);
@@ -437,7 +437,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                             context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"gender":genderController.text}, user: userModel!));
                             context.pop();
                           }else{
-                            customSnackBar(context, "Gender field may be empty!");
+                            customSnackBar(context, AppLocal.dobFieldEmpty.getString(context));
                           }
                         },
                         controller: genderController,);

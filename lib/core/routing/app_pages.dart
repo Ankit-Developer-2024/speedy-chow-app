@@ -8,7 +8,8 @@ import 'package:speedy_chow/features/auth/presentation/views/register_view.dart'
 import 'package:speedy_chow/features/auth/presentation/views/reset_password_view.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
-import 'package:speedy_chow/features/cart/presentation/view/select_payment_method.dart';
+import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
+import 'package:speedy_chow/features/payment_method/presentation/view/payment_method_view.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_main_navigation_view.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
@@ -147,11 +148,11 @@ class AppPages {
         ),
       ),
       GoRoute(
-        name: AppRoutes.selectPaymentMethod,
-        path: '/${AppRoutes.selectPaymentMethod}',
-        builder: (context, state) => BlocProvider.value(
-          value: state.extra as CartBloc,
-          child: SelectPaymentMethod(),
+        name: AppRoutes.paymentMethod,
+        path: '/${AppRoutes.paymentMethod}',
+        builder: (context, state) => BlocProvider(
+          create: (context)=> getIt<PaymentMethodBloc>(),
+          child: PaymentMethodView(),
         ),
       ),
     ],

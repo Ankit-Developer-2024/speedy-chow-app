@@ -17,20 +17,30 @@ import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.d
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/update_address_remote_source.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/update_address_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/repositories/add_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/delete_cart_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/fetch_cart_products_repo_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/repositories/update_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/update_cart_repo_impl.dart';
+import 'package:speedy_chow/features/payment_method/domain/repostories/add_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/delete_cart_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/fetch_cart_products_repo.dart';
+import 'package:speedy_chow/features/payment_method/domain/repostories/update_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/update_cart_repo.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/update_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/config/bloc/config_bloc.dart';
@@ -50,6 +60,7 @@ import 'package:speedy_chow/features/home/domain/repositories/product_repository
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_category.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
+import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/local_source/product_detail_local_source_impl.dart';
 import 'package:speedy_chow/features/product_details/data/data_source/remote_source/add_product_to_cart_remote_source.dart';
@@ -118,6 +129,9 @@ Future<void> initDependencies() async{
 
     //cart
    _initCartBloc();
+
+   //paymentMethod
+   _paymentMethod();
 
   // profileBloc
    _initProfileBloc();
@@ -202,6 +216,7 @@ void _initCartBloc(){
   ..registerFactory<FetchCartProductsRemoteSource>(()=>FetchCartProductsRemoteSourceImpl())
   ..registerFactory<UpdateCartRemoteSource>(()=>UpdateCartRemoteSourceImpl())
   ..registerFactory<DeleteCartRemoteSource>(()=>DeleteCartRemoteSourceImpl())
+
   //repositories
   ..registerFactory<FetchCartProductsRepo>(()=>FetchCartProductsRepoImpl(fetchCartProductsRemoteSource: getIt<FetchCartProductsRemoteSource>(), cartLocalSource: getIt<CartLocalSource>()))
   ..registerFactory<UpdateCartRepo>(()=>UpdateCartRepoImpl(updateCartRemoteSource: getIt<UpdateCartRemoteSource>()))
@@ -211,8 +226,29 @@ void _initCartBloc(){
   ..registerFactory<UpdateCartUseCase>(()=>UpdateCartUseCase(updateCartRepo: getIt<UpdateCartRepo>()))
   ..registerFactory<DeleteCartUseCase>(()=>DeleteCartUseCase(deleteCartRepo: getIt<DeleteCartRepo>()))
   //bloc
-  ..registerFactory<CartBloc>(()=>CartBloc(fetchCartProductsUseCase: getIt<FetchCartProductsUseCase>(),updateCartUseCase: getIt<UpdateCartUseCase>(),deleteCartUseCase:getIt<DeleteCartUseCase>() ));
+  ..registerFactory<CartBloc>(()=>CartBloc(
+      fetchCartProductsUseCase: getIt<FetchCartProductsUseCase>(),
+      updateCartUseCase: getIt<UpdateCartUseCase>(),
+      deleteCartUseCase:getIt<DeleteCartUseCase>()
+  ));
 
+}
+
+void _paymentMethod(){
+
+  getIt..registerFactory<UpdateAddressRemoteSource>(()=>UpdateAddressRemoteSourceImpl())
+  ..registerFactory<AddAddressRemoteSource>(()=>AddAddressRemoteSourceImpl())
+
+  ..registerFactory<UpdateAddressRepo>(()=>UpdateAddressRepoImpl(updateAddressRemoteSource: getIt<UpdateAddressRemoteSource>()))
+  ..registerFactory<AddAddressRepo>(()=>AddAddressRepoImpl(addAddressRemoteSource: getIt<AddAddressRemoteSource>()))
+
+  ..registerFactory<UpdateAddressUseCase>(()=>UpdateAddressUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
+  ..registerFactory<AddAddressUseCase>(()=>AddAddressUseCase(addAddressRepo: getIt<AddAddressRepo>()))
+
+  ..registerFactory<PaymentMethodBloc>(()=>PaymentMethodBloc(
+    updateAddressUseCase:getIt<UpdateAddressUseCase>(),
+    addAddressUseCase:getIt<AddAddressUseCase>(),
+  ));
 }
 
 void _initProfileBloc(){

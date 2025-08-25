@@ -61,12 +61,12 @@ class _ProfileViewState extends State<ProfileView> {
           listener: (context, state) {
              if(state is ProfileSignOutConfirmState){
                if(state.isLoading){
-                 customLoaderDialog(context: context, title: "Sign out process start...");
+                 customLoaderDialog(context: context, title: "");
                }
                else if(state.isSuccess){
                  context.pop();
                  context.pop();
-                customSnackBar(context, "Sign out Successfully",seconds: 1);
+                 customSnackBar(context, "Sign out Successfully",seconds: 1);
                  context.goNamed(AppRoutes.login);
                }
                else if(!state.isSuccess && !state.isLoading){

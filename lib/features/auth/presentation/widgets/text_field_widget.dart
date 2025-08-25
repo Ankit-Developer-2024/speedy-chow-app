@@ -26,6 +26,7 @@ class TextFieldWidget extends StatelessWidget {
       controller: controller,
       obscureText: isObscureText ?? false,
       decoration: InputDecoration(
+        isDense: true,
         hintText: label,
         label: Text(label),
         border: OutlineInputBorder(),
