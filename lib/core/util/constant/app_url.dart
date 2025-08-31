@@ -8,4 +8,5 @@ class AppUrl{
   static final String fetchProduct='product';
   static final String cart='cart';
   static final String fetchCategory='category';
+  static final String createOrder='order';
 }

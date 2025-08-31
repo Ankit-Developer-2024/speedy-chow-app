@@ -149,6 +149,9 @@ mixin AppLocal{
   static const String  selectDeliveryAddress='selectDeliveryAddress';
   static const String  allAddresses='allAddresses';
   static const String  or='or';
+  static const String  placeYourOrder='placeYourOrder';
+  static const String  payingWith='payingWith';
+  static const String  changePaymentMethod='changePaymentMethod';
 
 
    static const Map<String, dynamic> EN = {
@@ -300,5 +303,8 @@ mixin AppLocal{
      selectDeliveryAddress: "Select a delivery address",
      allAddresses: "All addresses",
      or: "or",
+     placeYourOrder: "Place your order",
+     payingWith: "Paying with",
+     changePaymentMethod: "Change payment method",
 };
 }

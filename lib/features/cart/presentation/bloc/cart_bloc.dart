@@ -2,11 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
+import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
-import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
-import 'package:speedy_chow/features/payment_method/domain/use_case/update_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 
 part 'cart_event.dart';
@@ -42,7 +41,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ApiResponse? response=await fetchCartProductsUseCase(NoParams());
 
       if(response?.success==true){
-        totalPrice= _totalPrice(response?.data);
+        totalPrice= calTotalPrice(response?.data);
         items=response?.data ?? [];
         emit(CartFetchUserCartState(
             msg: response?.message ?? "Cart fetched ",
@@ -79,7 +78,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       if(response?.success==true){
         int index = items.indexOf(event.cart);
         items[index]=response?.data as Cart;
-        totalPrice=_totalPrice(items);
+        totalPrice=calTotalPrice(items);
         emit(UpdateCartState(msg: response?.message.toString() ?? "Item updated successfully", loading: false, success: true));
       }else{
         emit(UpdateCartState(msg: response?.message.toString() ?? "Item Not Updated", loading: false, success: false));
@@ -96,7 +95,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ApiResponse? response=await deleteCartUseCase(DeleteCartParam(cartId: event.cart.id.toString()));
       if(response?.success==true){
         items.remove(event.cart);
-        totalPrice=_totalPrice(items);
+        totalPrice=calTotalPrice(items);
         emit(DeleteCartState(msg: response?.message.toString() ?? "Item deleted successfully", loading: false, success: true));
       }else{
         emit(DeleteCartState(msg: response?.message.toString() ?? "Item Not deleted", loading: false, success: false));
@@ -107,15 +106,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   }
 }
 
-int _totalPrice(List<Cart> items){
 
-  if(items.isEmpty){return 0;}
-
-  int price=0;
-  for(int i=0;i<items.length;i++){
-    price+=items[i].quantity! * items[i].product!.discountedPrice!;
-  }
-  return price;
-}
 
 

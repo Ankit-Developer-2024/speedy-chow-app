@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
+import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
 
 String getLocalJpeg(String imgName){
   return "assets/jpeg_and_jpg/$imgName.jpeg";
@@ -24,6 +25,17 @@ void appLog(dynamic text){
 
 int discountPrice(int price , int discountPercentage){
   return (price-(price*(discountPercentage/100))).round();
+}
+
+int calTotalPrice(List<Cart> items){
+
+  if(items.isEmpty){return 0;}
+
+  int price=0;
+  for(int i=0;i<items.length;i++){
+    price+=items[i].quantity! * items[i].product!.discountedPrice!;
+  }
+  return price;
 }
 
 String getProperDate(String? time){

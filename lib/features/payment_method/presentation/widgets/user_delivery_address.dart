@@ -11,6 +11,7 @@ import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_me
 import 'package:speedy_chow/features/payment_method/presentation/widgets/address_bottom_sheet.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/change_address_bottom_sheet.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/get_address.dart';
+import 'package:speedy_chow/features/payment_method/presentation/widgets/h_axis_line.dart';
 
 class UserDeliveryAddress extends StatelessWidget {
   const UserDeliveryAddress({super.key});
@@ -20,6 +21,7 @@ class UserDeliveryAddress extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: AppDimensions.spacing_10,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Text(
           "${AppLocal.deliveryTo.getString(context)} ${context.read<AuthBloc>().userModel?.name != null ? context.read<AuthBloc>().userModel?.name.toString() : ""}",
@@ -28,6 +30,7 @@ class UserDeliveryAddress extends StatelessWidget {
 
        (context.read<PaymentMethodBloc>().addressModel!=null )
         ? BlocBuilder<PaymentMethodBloc, PaymentMethodState>(
+         buildWhen: (prev,curr)=>curr is SelectDeliveryAddressState,
          builder: (context, state) {
                  return GetAddress(address: context.read<PaymentMethodBloc>().addressModel!,textStyle: null,);
              },
@@ -57,13 +60,7 @@ class UserDeliveryAddress extends StatelessWidget {
             ),
             child: Text(AppLocal.changeDeliveryAddress.getString(context),style: AppTextStyles.medium14P(color: AppColors.darkOrange),)
         ),
-        Container(
-          height: AppDimensions.size_1,
-          decoration: BoxDecoration(
-              color: AppColors.grey300,
-              borderRadius: BorderRadius.circular(AppDimensions.radius_100)
-          ),
-        )
+       HAxisLine(),
       ],
     );
   }

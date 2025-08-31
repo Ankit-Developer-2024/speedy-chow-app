@@ -1,6 +1,5 @@
 part of 'payment_method_bloc.dart';
 
-@immutable
 sealed class PaymentMethodState extends Equatable {}
 
 final class PaymentMethodInitial extends PaymentMethodState {
@@ -32,3 +31,46 @@ final class SelectDeliveryAddressState extends PaymentMethodState{
   List<Object?> get props => [dateTime];
 }
 
+
+
+final class IsPaymentMethodErrorVisibleState extends PaymentMethodState{
+  final bool isErrorVisible;
+
+  IsPaymentMethodErrorVisibleState({required this.isErrorVisible});
+  @override
+  List<Object?> get props => [isErrorVisible];
+}
+
+final class SelectPaymentMethodState extends PaymentMethodState{
+  final DateTime dateTime=DateTime.now();
+  @override
+  List<Object?> get props => [dateTime];
+}
+
+final class FetchCartState extends PaymentMethodState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final int totalPrice;
+  final List<Cart> data ;
+
+  FetchCartState({required this.msg, required this.loading, required this.success,required this.totalPrice, required this.data});
+
+
+  @override
+  List<Object?> get props => [msg,loading,success,totalPrice,data];
+}
+
+
+final class CreateOrderState extends PaymentMethodState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final CreateOrder createOrder;
+
+  CreateOrderState({required this.msg, required this.loading, required this.success, required this.createOrder});
+
+  @override
+  List<Object?> get props => [];
+
+}

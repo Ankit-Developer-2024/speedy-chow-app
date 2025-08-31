@@ -9,6 +9,7 @@ import 'package:speedy_chow/features/auth/presentation/views/reset_password_view
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
+import 'package:speedy_chow/features/payment_method/presentation/view/create_order_view.dart';
 import 'package:speedy_chow/features/payment_method/presentation/view/payment_method_view.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/view/home_main_navigation_view.dart';
@@ -155,6 +156,17 @@ class AppPages {
           child: PaymentMethodView(),
         ),
       ),
+
+      GoRoute(
+        name: AppRoutes.createOrder,
+        path: '/${AppRoutes.createOrder}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as PaymentMethodBloc,
+          child: CreateOrderView(),
+        ),
+      ),
+
+
     ],
     errorBuilder: (context, state) => LoginView(),
   );
