@@ -28,6 +28,22 @@ class ProductModel extends Product {
         quantity: json["totalQuantity"]);
   }
 
+  Map<String,dynamic> toJson(){
+    return {
+      "id":id,
+      "name":name,
+      "description":description,
+      "image":img,
+      "category":category,
+      "price":price,
+      "discountPercentage":discountPercentage,
+      "discountedPrice":discountedPrice,
+      "rating":rating,
+      "totalQuantity":quantity
+
+    };
+  }
+
   static List<ProductModel> createResponseModel(List<dynamic> json){
     List<ProductModel> products=(json).map((product) {
       return ProductModel.fromJson(product);

@@ -8,7 +8,7 @@ class CreateOrderRemoteSourceImpl implements CreateOrderRemoteSource{
 
   @override
   Future<ApiResponse?> createOrder({required Map<String,dynamic> data})async{
-    ApiResponse? response= await DioRequest.post(AppUrl.createOrder, createResponseModel: CreateOrderModel.createResponseModel);
+    ApiResponse? response= await DioRequest.post(AppUrl.createOrder,data: data ,createResponseModel: CreateOrderModel.createResponseModel);
      return response;
   }
 }

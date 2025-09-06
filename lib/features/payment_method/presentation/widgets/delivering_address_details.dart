@@ -27,7 +27,7 @@ class DeliveringAddressDetails extends StatelessWidget {
         BlocBuilder<PaymentMethodBloc, PaymentMethodState>(
           buildWhen: (prev,curr)=>curr is SelectDeliveryAddressState,
           builder: (context, state) {
-            return GetAddress(address: context.read<PaymentMethodBloc>().addressModel!,textStyle: null,);
+            return GetAddress(address: context.read<PaymentMethodBloc>().selectedAddressModel,textStyle: null,);
           },
         ),
         TextButton(onPressed: (){

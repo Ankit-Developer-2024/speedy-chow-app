@@ -13,6 +13,14 @@ class CartModel extends Cart {
     );
   }
 
+  Map<String,dynamic> toJson(){
+    return {
+      "id":id,
+      "quantity":quantity,
+      "product": product?.toJson()
+    };
+  }
+
   static List<CartModel> createResponseModelWithList(List<dynamic> json){
     List<CartModel> cartModels=(json).map((item)=>CartModel.fromJson(item)).toList();
     return cartModels;

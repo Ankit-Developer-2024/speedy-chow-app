@@ -88,8 +88,8 @@ class _CustomChangeAddressBottomSheet extends State<CustomChangeAddressBottomShe
                         physics: NeverScrollableScrollPhysics(),
                         scrollDirection: Axis.vertical,
                         itemBuilder: (context,index){
-                          Address? address=context.read<PaymentMethodBloc>().userModel!.addresses?[index];
-                          Address? selectedAddress=context.read<PaymentMethodBloc>().addressModel;
+                          AddressModel? address=context.read<PaymentMethodBloc>().userModel!.addresses?[index];
+                          AddressModel? selectedAddress=context.read<PaymentMethodBloc>().selectedAddressModel;
                         return Container(
                           padding: EdgeInsets.all(AppDimensions.spacing_14),
                           decoration: BoxDecoration(

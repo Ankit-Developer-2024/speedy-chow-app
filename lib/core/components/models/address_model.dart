@@ -25,6 +25,18 @@ class AddressModel extends Address{
         country: json["country"]??"",
         isDefault: json["isDefault"]??false
     );
+  }
 
+  Map<String,dynamic> toJson(){
+    return {
+      "houseNo":houseNo,
+      "street":street,
+      "city":city,
+      "landMark":landMark,
+      "state":state,
+      "zipCode":zipCode,
+      "country":country,
+      "isDefault":isDefault,
+    };
   }
 }

@@ -52,7 +52,7 @@ final class FetchCartState extends PaymentMethodState{
   final bool loading;
   final bool success;
   final int totalPrice;
-  final List<Cart> data ;
+  final List<CartModel> data ;
 
   FetchCartState({required this.msg, required this.loading, required this.success,required this.totalPrice, required this.data});
 
@@ -71,6 +71,6 @@ final class CreateOrderState extends PaymentMethodState{
   CreateOrderState({required this.msg, required this.loading, required this.success, required this.createOrder});
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [msg,loading,success,createOrder];
 
 }

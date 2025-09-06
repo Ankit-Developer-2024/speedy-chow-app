@@ -152,6 +152,10 @@ mixin AppLocal{
   static const String  placeYourOrder='placeYourOrder';
   static const String  payingWith='payingWith';
   static const String  changePaymentMethod='changePaymentMethod';
+  static const String  orderedPlaced='orderedPlaced';
+  static const String  confirmationSentToEmail='confirmationSentToEmail';
+  static const String  shippingTo='shippingTo';
+  static const String  backToCart='backToCart';
 
 
    static const Map<String, dynamic> EN = {
@@ -306,5 +310,9 @@ mixin AppLocal{
      placeYourOrder: "Place your order",
      payingWith: "Paying with",
      changePaymentMethod: "Change payment method",
+     orderedPlaced: "Order placed, thank you!",
+     confirmationSentToEmail: "Confirmation will be sent to your email.",
+     shippingTo: "Shipping to",
+     backToCart: "Back To Cart",
 };
 }

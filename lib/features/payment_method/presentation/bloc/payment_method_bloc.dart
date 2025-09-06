@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
-import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 import 'package:speedy_chow/features/payment_method/domain/enitites/create_order.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/create_order_usecase.dart';
@@ -18,8 +18,9 @@ part 'payment_method_state.dart';
 class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
 
   UserModel? userModel;
-  Address? addressModel;
+  AddressModel? selectedAddressModel;
   String paymentMethod="";
+  List<CartModel> items=[];
   int totalPrice=0;
 
   final UpdateAddressUseCase updateAddressUseCase;
@@ -50,8 +51,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
       ApiResponse? response=await addAddressUseCase(AddAddressParams(data: event.data));
       if(response?.success==true){
         userModel=response?.data;
-        List<Address> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
-        addressModel=address[0];
+        List<AddressModel> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
+        selectedAddressModel=address[0];
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address added successfully", loading: false, success: true,user: response?.data));
       }else{
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address not added successfully", loading: false, success: false,user: event.user));
@@ -68,8 +69,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
       ApiResponse? response=await updateAddressUseCase(UpdateAddressParams(id:event.id,data: event.data));
       if(response?.success==true){
         userModel=response?.data;
-        List<Address> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
-        addressModel=address[0];
+        List<AddressModel> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
+        selectedAddressModel=address[0];
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address Updated successfully", loading: false, success: true,user: response?.data));
       }else{
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address not Updated successfully", loading: false, success: false,user: event.user));
@@ -85,7 +86,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   }
 
   void _selectAddress(SelectDeliveryAddressEvent event,Emitter<PaymentMethodState> emit){
-    addressModel=event.address;
+    selectedAddressModel=event.address;
     emit(SelectDeliveryAddressState());
   }
 
@@ -110,6 +111,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
 
       if(response?.success==true){
         totalPrice= calTotalPrice(response?.data);
+        items=response?.data ?? [];
         emit(FetchCartState(
             msg: response?.message ?? "Cart fetched ",
             loading: false,
@@ -144,7 +146,6 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
 
       ApiResponse? response = await createOrderUseCase(
           CreateOrderUseCaseParams(
-          user: event.user,
           items: event.items,
           totalAmount: event.totalAmount,
           totalItems: event.totalItems,
@@ -155,7 +156,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
         emit(CreateOrderState(msg: response?.message.toString() ?? "Order created successfully.", loading: false, success: true, createOrder: response?.data));
       }else{
         emit(CreateOrderState(msg: response?.message.toString() ?? "Order not created.", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
-      }
+     }
     }catch(e){
       emit(CreateOrderState(msg: "", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
     }

@@ -40,6 +40,7 @@ class TokenInterceptor implements Interceptor{
        }
        return handler.next(err);
      }
+     return handler.next(err);
    }catch(err){
      debugPrint('TokenInterceptor error: $err');
    }
@@ -61,7 +62,6 @@ class TokenInterceptor implements Interceptor{
             options.headers["authorization"]="Bearer $accessToken";
           }
 
-
           handler.next(options);
         }
 
@@ -78,6 +78,7 @@ class TokenInterceptor implements Interceptor{
       handler.next(response);
       return ;
     }
+
      String? accessToken=  response.data["accessToken"];
      String? refreshToken=  response.data["refreshToken"];
      if(accessToken!=null){

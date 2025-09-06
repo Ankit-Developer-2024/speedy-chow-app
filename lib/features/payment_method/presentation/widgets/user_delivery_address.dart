@@ -28,11 +28,11 @@ class UserDeliveryAddress extends StatelessWidget {
           style: AppTextStyles.semibold18P(),
         ),
 
-       (context.read<PaymentMethodBloc>().addressModel!=null )
+       (context.read<PaymentMethodBloc>().selectedAddressModel!=null )
         ? BlocBuilder<PaymentMethodBloc, PaymentMethodState>(
          buildWhen: (prev,curr)=>curr is SelectDeliveryAddressState,
          builder: (context, state) {
-                 return GetAddress(address: context.read<PaymentMethodBloc>().addressModel!,textStyle: null,);
+                 return GetAddress(address: context.read<PaymentMethodBloc>().selectedAddressModel!,textStyle: null,);
              },
           )
           : InkWell(

@@ -32,7 +32,7 @@ final class UpdateAddressPaymentMethodEvent extends PaymentMethodEvent{
 
 
 final class SelectDeliveryAddressEvent extends PaymentMethodEvent{
-  final Address address;
+  final AddressModel address;
 
   SelectDeliveryAddressEvent({required this.address});
   @override
@@ -63,15 +63,14 @@ final class FetchCartEvent extends PaymentMethodEvent{
 }
 
 final class CreateOrderEvent extends PaymentMethodEvent{
-  final String user;
   final List<Map<String,dynamic>> items;
   final int totalAmount;
   final int totalItems;
   final String paymentMethod;
   final Map<String,dynamic> selectedAddress;
 
-  CreateOrderEvent({required this.user, required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
+  CreateOrderEvent({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
   @override
-  List<Object?> get props => [user,items,totalAmount,totalItems,paymentMethod,selectedAddress];
+  List<Object?> get props => [items,totalAmount,totalItems,paymentMethod,selectedAddress];
 
 }

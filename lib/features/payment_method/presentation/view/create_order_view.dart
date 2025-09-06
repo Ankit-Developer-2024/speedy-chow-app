@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
+import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/primary_button.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
+import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
@@ -58,7 +61,15 @@ class _CreateOrderViewState extends State<CreateOrderView> {
            children: [
              PrimaryButton(
                onPress: (){
-
+                 context.read<PaymentMethodBloc>().add(CreateOrderEvent(
+                     items: context.read<PaymentMethodBloc>().items.map((item)=>item.toJson()).toList(),
+                     totalAmount: context.read<PaymentMethodBloc>().totalPrice,
+                     totalItems: context.read<PaymentMethodBloc>().items.length,
+                     paymentMethod: context.read<PaymentMethodBloc>().paymentMethod,
+                     selectedAddress:context.read<PaymentMethodBloc>().selectedAddressModel == null
+                         ? {}
+                         : context.read<PaymentMethodBloc>().selectedAddressModel!.toJson()
+                 ));
                },
                title:AppLocal.placeYourOrder.getString(context),
                titleStyle: AppTextStyles.medium18P(color: AppColors.white),
@@ -72,13 +83,38 @@ class _CreateOrderViewState extends State<CreateOrderView> {
              HAxisLine(),
              ItemsDetails(),
              HAxisLine(),
-             PrimaryButton(
-               onPress: (){
-
+             BlocListener<PaymentMethodBloc, PaymentMethodState>(
+              listenWhen: (prev,curr)=>curr is CreateOrderState,
+              listener: (context, state) {
+                   if(state is CreateOrderState){
+                     if(state.loading==true){
+                       customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
+                     }else if(state.success==true){
+                       context.pop();
+                       context.pushReplacementNamed(AppRoutes.orderPlaced,extra: context.read<PaymentMethodBloc>());
+                     }else if(state.success==false){
+                       context.pop();
+                       customSnackBar(context, state.msg,bgColor: AppColors.red800);
+                     }
+                   }
                },
+              child: PrimaryButton(
+               onPress: (){
+                  context.read<PaymentMethodBloc>().add(CreateOrderEvent(
+                      items: context.read<PaymentMethodBloc>().items.map((item)=>item.toJson()).toList(),
+                      totalAmount: context.read<PaymentMethodBloc>().totalPrice,
+                      totalItems: context.read<PaymentMethodBloc>().items.length,
+                      paymentMethod: context.read<PaymentMethodBloc>().paymentMethod,
+                      selectedAddress:context.read<PaymentMethodBloc>().selectedAddressModel == null
+                          ? {}
+                          : context.read<PaymentMethodBloc>().selectedAddressModel!.toJson()
+                  ));
+
+             },
                title:AppLocal.placeYourOrder.getString(context),
                titleStyle: AppTextStyles.medium18P(color: AppColors.white),
-             ),
+               ),
+              ),
 
            ],
           ),

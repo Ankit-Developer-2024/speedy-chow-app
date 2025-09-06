@@ -15,4 +15,5 @@ class AppRoutes {
   static const requestAccountDeletion = 'requestAccountDeletion';
   static const paymentMethod = 'paymentMethod';
   static const createOrder = 'createOrder';
+  static const orderPlaced = 'orderPlaced';
 }
