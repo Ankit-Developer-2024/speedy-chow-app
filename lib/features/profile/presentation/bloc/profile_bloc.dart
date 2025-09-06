@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -36,6 +38,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<ProfileAccountDeletionCheckBoxEvent>(_accountDeletionCheckBox);
     on<ProfileAccountDeletionConfirmEvent>(_accountDeletionConfirm);
     on<ProfileSignOutConfirmEvent>(_signOutConfirm);
+    on<PersonalDataPickImageEvent>(_selectImage);
+  }
+
+  void _selectImage(PersonalDataPickImageEvent event ,Emitter<ProfileState> emit){
+    if(event.image!=null){
+      emit(PersonalDataPickImageState(image: event.image,error: false));
+    }else{
+      emit(PersonalDataPickImageState(image: null,error: true));
+    }
   }
 
   void _personalDataUpdate(PersonalDataUpdateProfileEvent event,Emitter<ProfileState> emit)async{

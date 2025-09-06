@@ -7,6 +7,7 @@ import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/custonConfirmationDialogBox.dart';
+import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
@@ -15,7 +16,8 @@ import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/user_image.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/user_image_editable_view.dart';
 
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
@@ -116,28 +118,24 @@ class _ProfileViewState extends State<ProfileView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           spacing: AppDimensions.spacing_20,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: AppDimensions.spacing_8,
-                children: [
-                  UserImageView(),
-                  Text(context.read<AuthBloc>().userModel!.name.toString(), style: AppTextStyles.semiBold18P()),
-                  Container(
-                    height: AppDimensions.size_4,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                        AppDimensions.radius_100,
-                      ),
-                      color: AppColors.grey50,
-                    ),
-                  ),
-                ],
-              ),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: AppDimensions.spacing_16,
+              children: [
+                UserImage(),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(context.read<AuthBloc>().userModel!.name.toString(), style: AppTextStyles.semiBold18P()),
+                    Text(context.read<AuthBloc>().userModel!.email.toString(), style: AppTextStyles.semiBold12P()),
+                    context.read<AuthBloc>().userModel!.phone != null ? Text(context.read<AuthBloc>().userModel!.phone.toString(), style: AppTextStyles.semiBold12P()) :SizedBox.shrink() ,
+
+                  ],
+                ),
+              ],
             ),
+            HAxisLine(),
             Text(
               AppLocal.profile.getString(context),
               style: AppTextStyles.medium20P(color: AppColors.grey60),

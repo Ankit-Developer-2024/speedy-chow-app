@@ -11,7 +11,7 @@ import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_me
 import 'package:speedy_chow/features/payment_method/presentation/widgets/address_bottom_sheet.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/change_address_bottom_sheet.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/get_address.dart';
-import 'package:speedy_chow/features/payment_method/presentation/widgets/h_axis_line.dart';
+import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
 
 class UserDeliveryAddress extends StatelessWidget {
   const UserDeliveryAddress({super.key});

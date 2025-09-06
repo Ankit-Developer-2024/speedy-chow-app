@@ -12,7 +12,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/delivering_address_details.dart';
-import 'package:speedy_chow/features/payment_method/presentation/widgets/h_axis_line.dart';
+import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/items_details.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/paying_method_details.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/total_rupee_details.dart';

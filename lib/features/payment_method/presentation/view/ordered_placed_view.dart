@@ -12,7 +12,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/get_address.dart';
-import 'package:speedy_chow/features/payment_method/presentation/widgets/h_axis_line.dart';
+import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
 
 class OrderedPlacedView extends StatelessWidget {
   const OrderedPlacedView({super.key});

@@ -199,6 +199,12 @@ class AppTextStyles {
       color: color??AppColors.justBlack
   );
 
+  static TextStyle medium30P({Color? color})=>GoogleFonts.poppins(
+      fontSize: 30,
+      fontWeight: FontWeight.w500,
+      color: color??AppColors.justBlack
+  );
+
   static TextStyle semiBold24P({Color? color})=>GoogleFonts.poppins(
       fontSize: 24,
       fontWeight: FontWeight.w600,

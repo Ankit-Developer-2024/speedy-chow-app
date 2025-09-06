@@ -3,6 +3,15 @@ part of 'profile_bloc.dart';
 @immutable
 sealed class ProfileEvent extends Equatable {}
 
+final class PersonalDataPickImageEvent extends ProfileEvent{
+  final File? image;
+
+  PersonalDataPickImageEvent({required this.image});
+  @override
+  List<Object?> get props =>[];
+
+}
+
 final class ProfileAccountDeletionCheckBoxEvent extends ProfileEvent{
 
   final bool isCheck;

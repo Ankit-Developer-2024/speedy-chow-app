@@ -21,7 +21,7 @@ import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/u
 import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
 import 'package:speedy_chow/core/components/widgets/text_field_widget.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/user_image_view.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/user_image_editable_view.dart';
 
 class PersonalDataView extends StatefulWidget {
   const PersonalDataView({super.key});
@@ -79,7 +79,7 @@ class _PersonalDataViewState extends State<PersonalDataView> {
               bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Column(
             children: [
-              UserImageView(),
+              UserImageEditableView(),
               
               //user info
               BlocConsumer<ProfileBloc, ProfileState>(
