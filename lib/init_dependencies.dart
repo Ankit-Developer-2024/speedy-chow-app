@@ -17,6 +17,17 @@ import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.d
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_order_details_remote_source.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_order_details_remote_source_impl.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_orders_remote_source.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_orders_remote_source_impl.dart';
+import 'package:speedy_chow/features/order/data/repositories/fetch_order_details_repo_impl.dart';
+import 'package:speedy_chow/features/order/data/repositories/fetch_order_repo_impl.dart';
+import 'package:speedy_chow/features/order/domain/repositories/fetch_order_details_repo.dart';
+import 'package:speedy_chow/features/order/domain/repositories/fetch_order_repo.dart';
+import 'package:speedy_chow/features/order/domain/use_case/fetch_order_details_usecase.dart';
+import 'package:speedy_chow/features/order/domain/use_case/fetch_order_usecase.dart';
+import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source.dart';
 import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source.dart';
@@ -136,6 +147,9 @@ Future<void> initDependencies() async{
     //cart
    _initCartBloc();
 
+   //order
+   _initOrderBloc();
+
    //paymentMethod
    _paymentMethod();
 
@@ -238,6 +252,19 @@ void _initCartBloc(){
       deleteCartUseCase:getIt<DeleteCartUseCase>()
   ));
 
+}
+
+void _initOrderBloc(){
+  getIt..registerFactory<FetchOrderRemoteSource>(()=> FetchOrderRemoteSourceImpl())
+  ..registerFactory<FetchOrderDetailsRemoteSource>(()=> FetchOrderDetailsRemoteSourceImpl())
+
+  ..registerFactory<FetchOrderRepo>(()=> FetchOrderRepoImpl(fetchOrderRemoteSource: getIt<FetchOrderRemoteSource>()))
+  ..registerFactory<FetchOrderDetailsRepo>(()=> FetchOrderDetailsRepoImpl(fetchOrderDetailsRemoteSource: getIt<FetchOrderDetailsRemoteSource>()))
+
+  ..registerFactory<FetchOrderUseCase>(()=>FetchOrderUseCase(fetchOrderRepo: getIt<FetchOrderRepo>()))
+  ..registerFactory<FetchOrderDetailsUseCase>(()=>FetchOrderDetailsUseCase(fetchOrderDetailsRepo: getIt<FetchOrderDetailsRepo>()))
+
+  ..registerFactory<OrderBloc>(()=>OrderBloc(fetchOrderUseCase: getIt<FetchOrderUseCase>(),fetchOrderDetailsUseCase: getIt<FetchOrderDetailsUseCase>()));
 }
 
 void _paymentMethod(){

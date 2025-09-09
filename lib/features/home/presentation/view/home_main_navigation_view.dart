@@ -31,8 +31,15 @@ class HomeMainNavigationView extends StatelessWidget {
                 statusBarIconBrightness: Brightness.light,
               ),
             ),
+
             bottomNavigationBar: BottomNavigationBar(
-              showUnselectedLabels: false,
+              selectedItemColor: AppColors.darkOrange,
+              showUnselectedLabels: true,
+              selectedLabelStyle: AppTextStyles.medium12P(color: AppColors.black),
+              unselectedLabelStyle: AppTextStyles.medium12P(color: AppColors.black),
+              unselectedIconTheme: IconThemeData(color: AppColors.grey500),
+              unselectedItemColor: AppColors.grey500,
+              elevation: 50,
               items: [
                 BottomNavigationBarItem(
                     icon: Icon(Icons.home),
@@ -41,6 +48,10 @@ class HomeMainNavigationView extends StatelessWidget {
                 BottomNavigationBarItem(
                   icon: Icon(Icons.shopping_cart),
                   label: 'Cart',
+                ),
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.receipt_long_sharp),
+                  label: 'Order',
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person_2_rounded),
@@ -66,7 +77,12 @@ class HomeMainNavigationView extends StatelessWidget {
           ),
           bottomNavigationBar: BottomNavigationBar(
             showUnselectedLabels: false,
-            selectedLabelStyle: AppTextStyles.medium14P(),
+            selectedItemColor: AppColors.darkOrange,
+            selectedLabelStyle: AppTextStyles.medium12P(color: AppColors.black),
+            unselectedLabelStyle: AppTextStyles.medium12P(color: AppColors.grey500),
+            unselectedIconTheme: IconThemeData(color: AppColors.grey500),
+            unselectedItemColor: AppColors.grey500,
+            elevation: 50,
             items: [
               BottomNavigationBarItem(
                   icon: Icon(Icons.home),
@@ -75,6 +91,10 @@ class HomeMainNavigationView extends StatelessWidget {
               BottomNavigationBarItem(
                 icon: Icon(Icons.shopping_cart),
                 label: 'Cart',
+              ),
+               BottomNavigationBarItem(
+                icon: Icon(Icons.receipt_long_sharp),
+                label: 'Order',
               ),
               BottomNavigationBarItem(
                 icon: Icon(Icons.person_2_rounded),

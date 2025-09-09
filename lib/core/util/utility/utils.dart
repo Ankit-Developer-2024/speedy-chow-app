@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/cart/domain/entities/cart.dart';
 
 String getLocalJpeg(String imgName){
   return "assets/jpeg_and_jpg/$imgName.jpeg";

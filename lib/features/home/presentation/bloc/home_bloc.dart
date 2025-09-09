@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
-import 'package:speedy_chow/features/home/domain/enitites/category.dart';
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
+import 'package:speedy_chow/features/home/domain/entities/category.dart';
+import 'package:speedy_chow/features/home/domain/entities/product.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_category.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.dart';
 

@@ -7,6 +7,7 @@ class AppRoutes {
   static const homeMainNavigation = 'homeMainNavigation';
   static const home = 'home';
   static const cart = 'cart';
+  static const order = 'order';
   static const profile = 'profile';
   static const productDetails = 'product-details';
   static const personalData = 'personalData';
@@ -16,4 +17,5 @@ class AppRoutes {
   static const paymentMethod = 'paymentMethod';
   static const createOrder = 'createOrder';
   static const orderPlaced = 'orderPlaced';
+  static const orderDetails = 'orderDetails/:id';
 }

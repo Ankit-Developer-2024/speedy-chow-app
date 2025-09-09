@@ -6,9 +6,8 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/cart/domain/entities/cart.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 
 class CartItem extends StatelessWidget {
   const CartItem({super.key});

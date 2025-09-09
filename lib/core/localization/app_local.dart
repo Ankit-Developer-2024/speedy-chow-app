@@ -63,6 +63,7 @@ mixin AppLocal{
   static const String description='description';
   static const String addToCart='addToCart';
   static const String myCart='myCart';
+  static const String myOrder='myOrder';
   static const String subTotal='subTotal';
   static const String items='items';
   static const String delivery='delivery';
@@ -155,7 +156,14 @@ mixin AppLocal{
   static const String  orderedPlaced='orderedPlaced';
   static const String  confirmationSentToEmail='confirmationSentToEmail';
   static const String  shippingTo='shippingTo';
+  static const String  shippingAddress='shippingAddress';
   static const String  backToCart='backToCart';
+  static const String  buyAgain='buyAgain';
+  static const String  cancelOrder='cancelOrder';
+  static const String  arriving='arriving';
+  static const String  cancelled='cancelled';
+  static const String  seeAllOrders='seeAllOrders';
+  static const String  orderedStatus='orderedStatus';
 
 
    static const Map<String, dynamic> EN = {
@@ -221,6 +229,7 @@ mixin AppLocal{
     description: "Description",
     addToCart: "Add to Cart",
     myCart: "My Cart",
+    myOrder: "My Order",
     subTotal: "Subtotal",
      items: "Items",
      delivery: "Delivery:",
@@ -313,6 +322,13 @@ mixin AppLocal{
      orderedPlaced: "Order placed, thank you!",
      confirmationSentToEmail: "Confirmation will be sent to your email.",
      shippingTo: "Shipping to",
+     shippingAddress: "Shipping Address",
      backToCart: "Back To Cart",
+     buyAgain: "Buy Again",
+     cancelOrder: "Cancel Order",
+     arriving: "Arriving",
+     cancelled: "Cancelled",
+     seeAllOrders: "See all orders",
+     orderedStatus: "Ordered Status: ",
 };
 }

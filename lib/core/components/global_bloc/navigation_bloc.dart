@@ -27,6 +27,8 @@ String _mapIndexToRoute(int index){
     case 1:
       return AppRoutes.cart;
     case 2:
+      return AppRoutes.order;
+    case 3:
       return AppRoutes.profile;
     default:
       return AppRoutes.home;

@@ -1,4 +1,4 @@
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
+import 'package:speedy_chow/features/home/domain/entities/product.dart';
 
 class ProductModel extends Product {
   ProductModel(

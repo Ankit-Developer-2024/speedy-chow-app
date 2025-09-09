@@ -8,7 +8,7 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
+import 'package:speedy_chow/features/home/domain/entities/product.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/product_details/presentation/widgets/add_to_cart_btn.dart';

@@ -1,4 +1,4 @@
-import 'package:speedy_chow/features/home/domain/enitites/category.dart';
+import 'package:speedy_chow/features/home/domain/entities/category.dart';
 
 class CategoryModel extends Category {
   CategoryModel(

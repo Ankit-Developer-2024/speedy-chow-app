@@ -8,6 +8,9 @@ import 'package:speedy_chow/features/auth/presentation/views/register_view.dart'
 import 'package:speedy_chow/features/auth/presentation/views/reset_password_view.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
+import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
+import 'package:speedy_chow/features/order/presentation/view/order_details_view.dart';
+import 'package:speedy_chow/features/order/presentation/view/order_view.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/view/create_order_view.dart';
 import 'package:speedy_chow/features/payment_method/presentation/view/ordered_placed_view.dart';
@@ -93,6 +96,14 @@ class AppPages {
             ),
           ),
           GoRoute(
+            name: AppRoutes.order,
+            path: '/${AppRoutes.order}',
+            builder: (context, state) => BlocProvider(
+              create: (context) => getIt<OrderBloc>(),
+              child: OrderView(),
+            ),
+          ),
+          GoRoute(
             name: AppRoutes.profile,
             path: '/${AppRoutes.profile}',
             builder: (context, state) => BlocProvider(
@@ -173,6 +184,15 @@ class AppPages {
         builder: (context, state) => BlocProvider.value(
           value: state.extra as PaymentMethodBloc,
           child: OrderedPlacedView(),
+        ),
+      ),
+
+      GoRoute(
+        name: AppRoutes.orderDetails,
+        path: '/${AppRoutes.orderDetails}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as OrderBloc,
+          child: OrderDetailsView(),
         ),
       ),
 

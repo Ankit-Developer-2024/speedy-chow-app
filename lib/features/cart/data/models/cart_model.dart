@@ -1,6 +1,5 @@
-import 'package:speedy_chow/features/cart/domain/enitites/cart.dart';
+import 'package:speedy_chow/features/cart/domain/entities/cart.dart';
 import 'package:speedy_chow/features/home/data/models/product_model.dart';
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 
 class CartModel extends Cart {
   CartModel({required super.id,required super.quantity ,required super.product});

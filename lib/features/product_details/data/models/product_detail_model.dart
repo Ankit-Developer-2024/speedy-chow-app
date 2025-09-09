@@ -1,4 +1,3 @@
-import 'package:speedy_chow/features/home/domain/enitites/product.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 
 class ProductDetailModel extends ProductDetails {
