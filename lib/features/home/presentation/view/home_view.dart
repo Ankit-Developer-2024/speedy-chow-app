@@ -35,6 +35,7 @@ class _HomeViewState extends State<HomeView> {
         onRefresh: ()async{
           context.read<HomeBloc>().add(HomeFetchAllProductEvent());
           context.read<AuthBloc>().add(AuthUserEvent());
+          context.read<HomeBloc>().add(HomeFetchAllCategoryEvent());
         },
         child: CustomScrollView(
           slivers: [

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -10,6 +9,7 @@ import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/category_bottomSheet.dart';
+import 'package:speedy_chow/features/home/presentation/widgets/loader_category_effect.dart';
 
 class HomeCategoryView extends StatelessWidget {
   const HomeCategoryView({super.key});
@@ -41,7 +41,7 @@ class HomeCategoryView extends StatelessWidget {
           SizedBox(
             height: AppDimensions.size_89,
             child: BlocBuilder<HomeBloc, HomeState>(
-              buildWhen: (prev,curr)=>curr is HomeSelectAndUnselectCategoryState,
+              buildWhen: (prev,curr)=>curr is HomeSelectAndUnselectCategoryState || curr is HomeFetchAllCategoryState,
               builder: (context, state) {
                 if(state is HomeSelectAndUnselectCategoryState){
                   return ListView.separated(
@@ -105,7 +105,7 @@ class HomeCategoryView extends StatelessWidget {
                     },
                   );
                 }else{
-                  return Text("No Category found");
+                  return LoaderCategoryEffect();
                 }
 
               },

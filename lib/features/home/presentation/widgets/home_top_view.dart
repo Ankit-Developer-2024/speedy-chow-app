@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
@@ -46,7 +47,21 @@ class HomeTopView extends StatelessWidget {
                       buildWhen: (prev,curr)=>curr is AuthUserState,
                       builder: (context,state){
                          if(state is AuthUserState){
-                           if(state.isSuccess==true){
+                           if(state.isLoading){
+                             return Shimmer.fromColors(
+                                 baseColor: AppColors.transparent,
+                                 highlightColor: AppColors.white,
+                                 child: Container(
+                                   width: AppDimensions.size_100,
+                                   height: AppDimensions.size_20,
+                                   decoration: BoxDecoration(
+                                       color: AppColors.grey50,
+                                       borderRadius: BorderRadius.circular(AppDimensions.radiusSmall),
+                                   ),
+                                 )
+                             );
+                           }
+                            if(state.isSuccess==true){
                              return Text(context.read<AuthBloc>().userModel!.name.toString(),style: AppTextStyles.medium16P(color: AppColors.white),);
                            }else{
                             return SizedBox.shrink();
@@ -76,21 +91,6 @@ class HomeTopView extends StatelessWidget {
                     ),
                     icon: Icon(
                       Icons.search_rounded,
-                      color: AppColors.white,
-                      size: AppDimensions.size_20,
-                    ),
-                  ),
-                  IconButton.outlined(
-                    onPressed: () {},
-                    style: ButtonStyle(
-                      padding:WidgetStateProperty.all(EdgeInsets.zero) ,
-                      minimumSize:WidgetStateProperty.all(Size(32, 32)) ,
-                      side: WidgetStateProperty.all(
-                        BorderSide(color: AppColors.white),
-                      ),
-                    ),
-                    icon: Icon(
-                      Icons.notifications,
                       color: AppColors.white,
                       size: AppDimensions.size_20,
                     ),
@@ -126,7 +126,21 @@ class HomeTopView extends StatelessWidget {
                   buildWhen: (prev,curr)=>curr is AuthUserState,
                   builder: (context, state) {
                     if(state is AuthUserState){
-                      if(state.isSuccess){
+                      if(state.isLoading){
+                        return Shimmer.fromColors(
+                            baseColor: AppColors.transparent,
+                            highlightColor: AppColors.white,
+                            child: Container(
+                              width: MediaQuery.sizeOf(context).width-100,
+                              height: AppDimensions.size_55,
+                              decoration: BoxDecoration(
+                                  color: AppColors.black,
+                                  borderRadius: BorderRadius.circular(AppDimensions.radius_8)
+                              ),
+                            )
+                        );
+                      }
+                      else if(state.isSuccess){
                         return  context.read<AuthBloc>().defaultAddress!=null
                             ? Expanded(child: GetAddress(address:context.read<AuthBloc>().defaultAddress,textStyle: AppTextStyles.medium16P(color: AppColors.white),maxLines: 2,overFlow: TextOverflow.ellipsis,))
                             : SizedBox.shrink();
