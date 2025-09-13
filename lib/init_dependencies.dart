@@ -12,8 +12,10 @@ import 'package:speedy_chow/features/auth/data/repositories/auth_login_repo_impl
 import 'package:speedy_chow/features/auth/data/repositories/user_repo_impl.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/auth_login_repo.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/user_repo.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
@@ -28,29 +30,29 @@ import 'package:speedy_chow/features/order/domain/repositories/fetch_order_repo.
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_details_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_usecase.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
-import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source.dart';
-import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/add_address_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/add_address_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/add_address_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/delete_cart_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/fetch_cart_products_remote_source_impl.dart';
 import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/create_order_remote_source.dart';
 import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/create_order_remote_source_impl.dart';
-import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/update_address_remote_source.dart';
-import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/update_address_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/update_address_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/update_address_remote_source_impl.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_cart_remote_source_impl.dart';
-import 'package:speedy_chow/features/payment_method/data/repositories/add_address_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/add_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/delete_cart_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/fetch_cart_products_repo_impl.dart';
 import 'package:speedy_chow/features/payment_method/data/repositories/create_order_repo_impl.dart';
-import 'package:speedy_chow/features/payment_method/data/repositories/update_address_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/update_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/update_cart_repo_impl.dart';
-import 'package:speedy_chow/features/payment_method/domain/repostories/add_address_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/add_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/delete_cart_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/fetch_cart_products_repo.dart';
 import 'package:speedy_chow/features/payment_method/domain/repostories/create_order_repo.dart';
-import 'package:speedy_chow/features/payment_method/domain/repostories/update_address_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/update_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/update_cart_repo.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
@@ -176,14 +178,26 @@ void _initNavigationBloc(){
 void _initAuthBloc(){
   getIt..registerFactory<AuthRemoteSource>(()=>AuthRemoteSourceImpl())
   ..registerFactory<UserRemoteSource>(()=>UserRemoteSourceImpl())
+  ..registerFactory<UpdateAddressRemoteSource>(()=>UpdateAddressRemoteSourceImpl())
+  ..registerFactory<AddAddressRemoteSource>(()=>AddAddressRemoteSourceImpl())
 
   ..registerFactory<AuthLoginRepo>(()=>AuthLoginRepoImpl(authRemoteSource: getIt<AuthRemoteSource>()))
   ..registerFactory<UserRepo>(()=>UserRepoImpl(userRemoteSource: getIt<UserRemoteSource>()))
+  ..registerFactory<UpdateAddressRepo>(()=>UpdateAddressRepoImpl(updateAddressRemoteSource: getIt<UpdateAddressRemoteSource>()))
+  ..registerFactory<AddAddressRepo>(()=>AddAddressRepoImpl(addAddressRemoteSource: getIt<AddAddressRemoteSource>()))
 
   ..registerFactory<AuthLoginUseCase>(()=>AuthLoginUseCase(authLoginRepo: getIt<AuthLoginRepo>()))
   ..registerFactory<FetchUserUseCase>(()=>FetchUserUseCase(userRepo: getIt<UserRepo>()))
+  ..registerFactory<UpdateAddressAuthUseCase>(()=>UpdateAddressAuthUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
+  ..registerFactory<AddAddressAuthUseCase>(()=>AddAddressAuthUseCase(addAddressRepo: getIt<AddAddressRepo>()))
 
-  ..registerSingleton(AuthBloc(authLoginUseCase: getIt<AuthLoginUseCase>(),fetchUserUseCase: getIt<FetchUserUseCase>()));
+
+  ..registerSingleton(AuthBloc(
+      authLoginUseCase: getIt<AuthLoginUseCase>(),
+      fetchUserUseCase: getIt<FetchUserUseCase>(),
+      updateAddressAuthUseCase: getIt<UpdateAddressAuthUseCase>(),
+      addressAuthUseCase: getIt<AddAddressAuthUseCase>()
+  ));
 }
 
 void _initHomeBloc(){
@@ -269,15 +283,11 @@ void _initOrderBloc(){
 
 void _paymentMethod(){
 
-  getIt..registerFactory<UpdateAddressRemoteSource>(()=>UpdateAddressRemoteSourceImpl())
-  ..registerFactory<AddAddressRemoteSource>(()=>AddAddressRemoteSourceImpl())
-  ..registerFactory<CreateOrderRemoteSource>(()=>CreateOrderRemoteSourceImpl())
+  getIt..registerFactory<CreateOrderRemoteSource>(()=>CreateOrderRemoteSourceImpl())
 
-  ..registerFactory<UpdateAddressRepo>(()=>UpdateAddressRepoImpl(updateAddressRemoteSource: getIt<UpdateAddressRemoteSource>()))
-  ..registerFactory<AddAddressRepo>(()=>AddAddressRepoImpl(addAddressRemoteSource: getIt<AddAddressRemoteSource>()))
-  ..registerFactory<CreateOrderRepo>(()=>CreateOrderRepoImpl(createOrderRemoteSource: getIt<CreateOrderRemoteSource>()))
+ ..registerFactory<CreateOrderRepo>(()=>CreateOrderRepoImpl(createOrderRemoteSource: getIt<CreateOrderRemoteSource>()))
 
-    ..registerFactory<UpdateAddressUseCase>(()=>UpdateAddressUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
+  ..registerFactory<UpdateAddressUseCase>(()=>UpdateAddressUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
   ..registerFactory<AddAddressUseCase>(()=>AddAddressUseCase(addAddressRepo: getIt<AddAddressRepo>()))
   ..registerFactory<CreateOrderUseCase>(()=>CreateOrderUseCase(createOrderRepo: getIt<CreateOrderRepo>()))
   ..registerFactory<FetchCartItemsUseCase>(()=>FetchCartItemsUseCase(fetchCartProductsRepo: getIt<FetchCartProductsRepo>()))

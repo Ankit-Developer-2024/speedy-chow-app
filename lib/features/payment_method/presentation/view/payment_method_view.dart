@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/payment_methods.dart';
@@ -23,9 +22,8 @@ class _PaymentMethodViewState extends State<PaymentMethodView> {
   void initState() {
     super.initState();
     context.read<PaymentMethodBloc>().userModel = context.read<AuthBloc>().userModel;
-    if(context.read<PaymentMethodBloc>().userModel!=null){
-      List<AddressModel> address=context.read<PaymentMethodBloc>().userModel!.addresses!.where((item)=>item.isDefault==true).toList();
-      if(address.isNotEmpty)  context.read<PaymentMethodBloc>().selectedAddressModel=address[0];
+    if(context.read<AuthBloc>().defaultAddress!=null){
+       context.read<PaymentMethodBloc>().selectedAddressModel=context.read<AuthBloc>().defaultAddress;
     }
   }
 

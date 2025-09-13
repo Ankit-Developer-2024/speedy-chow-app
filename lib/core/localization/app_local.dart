@@ -164,6 +164,13 @@ mixin AppLocal{
   static const String  cancelled='cancelled';
   static const String  seeAllOrders='seeAllOrders';
   static const String  orderedStatus='orderedStatus';
+  static const String  noOrderFound='noOrderFound';
+  static const String  noOrderYet='noOrderYet';
+  static const String  backToHome='backToHome';
+  static const String  chooseYourLocation='chooseYourLocation';
+  static const String  noAddressAvailable='noAddressAvailable';
+  static const String  addAddressOrPickUpPoint='addAddressOrPickUpPoint';
+  static const String  defaultAddress='defaultAddress';
 
 
    static const Map<String, dynamic> EN = {
@@ -330,5 +337,12 @@ mixin AppLocal{
      cancelled: "Cancelled",
      seeAllOrders: "See all orders",
      orderedStatus: "Ordered Status: ",
+     noOrderFound: "NO ORDER FOUND",
+     noOrderYet: "Look like you have not made your order yet!",
+     backToHome: "Back to Home",
+     chooseYourLocation: "Choose your location",
+     noAddressAvailable: "No Address Available",
+     addAddressOrPickUpPoint: "Add an address or pick-up point",
+     defaultAddress: "Default address",
 };
 }

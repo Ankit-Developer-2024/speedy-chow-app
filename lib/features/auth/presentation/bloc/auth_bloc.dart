@@ -3,13 +3,16 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -20,10 +23,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   String email ='';
   Timer? _otpTimer;
   UserModel? userModel;
+  AddressModel? defaultAddress;
   final AuthLoginUseCase authLoginUseCase;
   final FetchUserUseCase fetchUserUseCase;
+  final UpdateAddressAuthUseCase updateAddressAuthUseCase;
+  final AddAddressAuthUseCase addressAuthUseCase;
 
-  AuthBloc({required this.authLoginUseCase,required this.fetchUserUseCase}) : super(AuthInitial()) {
+  AuthBloc({
+    required this.authLoginUseCase,
+    required this.fetchUserUseCase,
+    required this.updateAddressAuthUseCase,
+    required this.addressAuthUseCase,
+  }) : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
     on<AuthLoginEvent>(_login);
     on<AuthOpenRegisterViewEvent>(_openRegisterView);
@@ -37,6 +48,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthTickOtpTimerEvent>(_tickOtpTimer);
     on<AuthResetPasswordEvent>(_resetPassword);
     on<AuthUserEvent>(_fetchUser);
+    on<SelectDefaultAddressAuthEvent>(_selectDefaultAddress);
+    on<AddAddressAuthEvent>(_addAddress);
+    on<FormIsDefaultAddressAuthEvent>(_formIsDefaultAddress);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -173,6 +187,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         ApiResponse? response= await fetchUserUseCase(NoParams());
         if(response?.success==true){
           userModel=response?.data;
+          if(userModel?.addresses!=null && userModel!.addresses!.isNotEmpty){
+            List<AddressModel> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
+            defaultAddress=address[0];
+          }
           emit(AuthUserState(isLoading: false, isSuccess: true, message: response!.message.toString()));
         }else{
           emit(AuthUserState(isLoading: false, isSuccess: false, message: response!.message.toString()));
@@ -183,11 +201,46 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   }
 
-  void _updateUser(AuthUpdateUserEvent event , Emitter<AuthState> emit){
-    userModel=event.user;
-    emit(AuthUpdateUserState());
+  void _selectDefaultAddress(SelectDefaultAddressAuthEvent event , Emitter<AuthState> emit)async{
+    try{
+      emit(SelectDefaultAddressAuthState(isLoading: true, isSuccess: false, message: "",showAnimationIndex:event.showAnimationIndex));
+      event.data['isDefault']=true;
+      ApiResponse? response=await updateAddressAuthUseCase(UpdateAddressAuthParams(id:event.id,data: {'addresses':event.data}));
+      if(response?.success==true){
+        userModel=response?.data;
+        List<AddressModel> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
+        defaultAddress=address[0];
+        emit(SelectDefaultAddressAuthState(message: response?.message.toString() ?? "Address Updated successfully", isLoading: false,showAnimationIndex: -1, isSuccess: true));
+      }else{
+        emit(SelectDefaultAddressAuthState(message: response?.message.toString() ?? "Address not Updated successfully", isLoading: false,showAnimationIndex: -1, isSuccess: false));
+      }
+    }catch(e,stack){
+      emit(SelectDefaultAddressAuthState(isLoading: false,showAnimationIndex: -1, isSuccess: false, message: e.toString()));
+    }
   }
 
+
+  void _addAddress(AddAddressAuthEvent event , Emitter<AuthState> emit)async{
+    try{
+      emit(AddAddressAuthState(message: "", isLoading: true, isSuccess: false));
+
+      ApiResponse? response=await addressAuthUseCase(AddAddressAuthParams(data: event.data));
+      if(response?.success==true){
+        userModel=response?.data;
+        List<AddressModel> address=userModel!.addresses!.where((item)=>item.isDefault==true).toList();
+        defaultAddress=address[0];
+        emit(AddAddressAuthState(message: response?.message.toString() ?? "Address added successfully", isLoading: false, isSuccess: true));
+      }else{
+        emit(AddAddressAuthState(message: response?.message.toString() ?? "Address not added successfully", isLoading: false, isSuccess: false));
+      }
+    }catch(e){
+      emit(AddAddressAuthState(message: e.toString(), isLoading: true, isSuccess: false)); }
+  }
+
+
+  void _formIsDefaultAddress(FormIsDefaultAddressAuthEvent event,Emitter<AuthState> emit){
+    emit(FormIsDefaultAddressAuthState());
+  }
 
 
 

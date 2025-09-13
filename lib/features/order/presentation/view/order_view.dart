@@ -10,6 +10,7 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/empty_order.dart';
 import 'package:speedy_chow/features/order/presentation/widgets/order_item.dart';
 
 class OrderView extends StatefulWidget {
@@ -84,12 +85,12 @@ class _OrderViewState extends State<OrderView> {
                       },
                       );
                 }else if(state.success==true && state.orders.isEmpty){
-                  return Center(child: Text("No order yet"));
+                  return EmptyOrder();
                 }else{
                   return Center(child: Text(state.message),);
                 }
              }else{
-               return Center(child: Text("no order yet"),);
+               return Center(child: Text(AppLocal.loading.getString(context)),);
              }
           },
         ),

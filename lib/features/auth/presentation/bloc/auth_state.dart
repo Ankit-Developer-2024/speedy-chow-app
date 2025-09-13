@@ -187,10 +187,32 @@ final class AuthUserState extends AuthState{
   List<Object?> get props =>[isLoading,isSuccess,message];
 }
 
-final class AuthUpdateUserState extends AuthState{
-  final DateTime timestamp;
-  AuthUpdateUserState() : timestamp = DateTime.now();
-  @override
-  List<Object?> get props => [timestamp];
+final class AddAddressAuthState extends AuthState{
+  final bool isLoading;
+  final bool isSuccess;
+  final String message;
 
+  AddAddressAuthState({required this.isLoading, required this.isSuccess, required this.message});
+
+  @override
+  List<Object?> get props => [isLoading,isSuccess,message];
+
+}
+
+final class SelectDefaultAddressAuthState extends AuthState{
+  final bool isLoading;
+  final bool isSuccess;
+  final String message;
+  final int showAnimationIndex;
+
+  SelectDefaultAddressAuthState({required this.isLoading, required this.isSuccess, required this.message,required this.showAnimationIndex});
+
+  @override
+  List<Object?> get props => [isLoading,isSuccess,message,showAnimationIndex];
+}
+
+final class FormIsDefaultAddressAuthState extends AuthState{
+  final DateTime dateTime=DateTime.now();
+  @override
+  List<Object?> get props => [dateTime];
 }

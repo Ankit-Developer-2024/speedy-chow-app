@@ -8,6 +8,8 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:speedy_chow/core/components/widgets/get_address.dart';
+import 'package:speedy_chow/features/home/presentation/widgets/change_default_address_bottom_sheet.dart';
 
 class HomeTopView extends StatelessWidget {
   const HomeTopView({super.key});
@@ -39,6 +41,20 @@ class HomeTopView extends StatelessWidget {
                       color: AppColors.white,
                     ),
                   ),
+                  SizedBox(width: AppDimensions.spacing_6,),
+                  BlocBuilder<AuthBloc,AuthState>(
+                      buildWhen: (prev,curr)=>curr is AuthUserState,
+                      builder: (context,state){
+                         if(state is AuthUserState){
+                           if(state.isSuccess==true){
+                             return Text(context.read<AuthBloc>().userModel!.name.toString(),style: AppTextStyles.medium16P(color: AppColors.white),);
+                           }else{
+                            return SizedBox.shrink();
+                           }
+                         }else{
+                           return SizedBox.shrink();
+                         }
+                  }),
                   Icon(
                     Icons.arrow_drop_down_outlined,
                     color: AppColors.white,
@@ -84,7 +100,9 @@ class HomeTopView extends StatelessWidget {
             ],
           ),
           GestureDetector(
-            onTap: (){},
+            onTap: (){
+              changeDefaultAddressBottomSheet(context);
+            },
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.start,
@@ -96,44 +114,31 @@ class HomeTopView extends StatelessWidget {
                   color: AppColors.white,
                   size: AppDimensions.size_24,
                 ),
-                ConstrainedBox(
-                  constraints: BoxConstraints(
-                    maxWidth:
-                    MediaQuery.sizeOf(context).width / 2 - 24,
-                    minWidth:
-                    MediaQuery.sizeOf(context).width / 2 - 24,
-                  ),
-                  child: BlocConsumer<AuthBloc, AuthState>(
-                    listenWhen: (prev,curr)=>curr is AuthUserState,
-                    listener: (context,state){
-                       if(state is AuthUserState){
-                         if(state.isSuccess==false && state.isLoading==false){
-                           customSnackBar(context, state.message,bgColor: AppColors.red800);
-                         }
+                BlocConsumer<AuthBloc, AuthState>(
+                  listenWhen: (prev,curr)=>curr is AuthUserState,
+                  listener: (context,state){
+                     if(state is AuthUserState){
+                       if(state.isSuccess==false && state.isLoading==false){
+                         customSnackBar(context, state.message,bgColor: AppColors.red800);
                        }
-                    },
-                    buildWhen: (prev,curr)=>curr is AuthUserState,
-                    builder: (context, state) {
-                      if(state is AuthUserState){
+                     }
+                  },
+                  buildWhen: (prev,curr)=>curr is AuthUserState,
+                  builder: (context, state) {
+                    if(state is AuthUserState){
+                      if(state.isSuccess){
+                        return  context.read<AuthBloc>().defaultAddress!=null
+                            ? Expanded(child: GetAddress(address:context.read<AuthBloc>().defaultAddress,textStyle: AppTextStyles.medium16P(color: AppColors.white),maxLines: 2,overFlow: TextOverflow.ellipsis,))
+                            : SizedBox.shrink();
 
-                        if(state.isSuccess){
-                          return Text(
-                            context.read<AuthBloc>().userModel!=null ? context.read<AuthBloc>().userModel!.email.toString() : "",
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: AppTextStyles.medium16P(
-                              color: AppColors.white,
-                            ),
-                          );
-                        }else{
-                          return Text("null yy");
-                        }
-                      }else{
-                        return Text("null");
+                    }else{
+                        return SizedBox.shrink();
                       }
+                    }else{
+                      return Text(AppLocal.noAddressAvailable.getString(context),style: AppTextStyles.medium16P(color: AppColors.white),);
+                    }
 
-  },
-),
+                  },
                 ),
               ],
             ),

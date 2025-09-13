@@ -12,7 +12,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
-import 'package:speedy_chow/features/payment_method/presentation/widgets/get_address.dart';
+import 'package:speedy_chow/core/components/widgets/get_address.dart';
 
 class OrderDetailsView extends StatefulWidget {
   const OrderDetailsView({super.key});

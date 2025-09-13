@@ -8,10 +8,9 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/address_bottom_sheet.dart';
-import 'package:speedy_chow/features/payment_method/presentation/widgets/get_address.dart';
+import 'package:speedy_chow/core/components/widgets/get_address.dart';
 
 Future<dynamic> changeAddressBottomSheet(BuildContext context,{AddressModel? address}) {
   return showModalBottomSheet(
@@ -24,15 +23,14 @@ Future<dynamic> changeAddressBottomSheet(BuildContext context,{AddressModel? add
     builder: (_) {
       return BlocProvider.value(
         value: context.read<PaymentMethodBloc>(),
-        child: CustomChangeAddressBottomSheet(address: address,),
+        child: CustomChangeAddressBottomSheet(),
       );
     },
   );
 }
 
 class CustomChangeAddressBottomSheet extends StatefulWidget {
-  const CustomChangeAddressBottomSheet({super.key,this.address});
-  final AddressModel? address;
+  const CustomChangeAddressBottomSheet({super.key});
   @override
   State<CustomChangeAddressBottomSheet> createState() => _CustomChangeAddressBottomSheet();
 }

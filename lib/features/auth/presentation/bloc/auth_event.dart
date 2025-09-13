@@ -117,11 +117,27 @@ final class AuthUserEvent extends AuthEvent{
 
 }
 
-final class AuthUpdateUserEvent extends AuthEvent{
-  final UserModel user;
+final class AddAddressAuthEvent extends AuthEvent{
+  final Map<String,dynamic> data;
 
-  AuthUpdateUserEvent({required this.user});
+  AddAddressAuthEvent({required this.data});
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [data];
 
+}
+
+final class SelectDefaultAddressAuthEvent extends AuthEvent{
+  final Map<String,dynamic> data;
+  final String id;
+  final int showAnimationIndex;
+
+  SelectDefaultAddressAuthEvent({required this.data,required this.id,required this.showAnimationIndex});
+  @override
+  List<Object?> get props => [data,id,showAnimationIndex];
+}
+
+final class FormIsDefaultAddressAuthEvent extends AuthEvent{
+  final DateTime dateTime=DateTime.now();
+  @override
+  List<Object?> get props => [dateTime];
 }
