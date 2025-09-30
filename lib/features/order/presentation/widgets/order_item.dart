@@ -37,7 +37,17 @@ class OrderItem extends StatelessWidget {
                 ClipRRect(
                     borderRadius:
                         BorderRadiusGeometry.circular(AppDimensions.radius_8),
-                    child: Image.asset(
+                    child:order.items?[0].product?.img != null ?
+                       ClipRRect(
+                        borderRadius: BorderRadiusGeometry
+                            .circular(
+                            AppDimensions.radius_8),
+                        child: Image.memory(
+                            order.items![0].product!.img!,
+                            fit: BoxFit.cover,
+                            width: MediaQuery.sizeOf(context).width / 2 - 45,
+                        ))
+                        : Image.asset(
                       getLocalJpeg("burger"),
                       width: MediaQuery.sizeOf(context).width / 2 - 45,
                     )),

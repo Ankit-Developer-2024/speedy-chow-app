@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/primary_button.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
@@ -45,7 +46,12 @@ class PaymentMethods extends StatelessWidget {
               context.read<PaymentMethodBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: true));
             }else{
               context.read<PaymentMethodBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
-              context.pushNamed(AppRoutes.createOrder,extra: context.read<PaymentMethodBloc>());
+              if(context.read<PaymentMethodBloc>().paymentMethod=='COD'){
+                context.pushNamed(AppRoutes.createOrder,extra: context.read<PaymentMethodBloc>());
+              }else{
+                customSnackBar(context, "UPI payment method not active we are currently working on this.",bgColor: AppColors.yellow800);
+              }
+
             }
 
           },

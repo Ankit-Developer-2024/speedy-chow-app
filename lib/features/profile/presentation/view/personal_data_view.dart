@@ -2,23 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
-import 'package:speedy_chow/core/components/widgets/custonConfirmationDialogBox.dart';
-import 'package:speedy_chow/core/components/widgets/loader.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
-import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/dialog_boxes/user_data_change_dialog_dropdown.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
 import 'package:speedy_chow/core/components/widgets/text_field_widget.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image_editable_view.dart';
@@ -327,10 +321,14 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                                   },
                                   rightOnPress: (){
                                     if(phoneController.text.isEmpty){
-                                      customSnackBar(context, AppLocal.phoneNumberRequired.getString(context));
+                                      WidgetsBinding.instance.addPostFrameCallback((_){
+                                        customSnackBar(context, AppLocal.phoneNumberRequired.getString(context));
+                                      });
                                     }
                                     else if(phoneController.text.length!=10){
-                                      customSnackBar(context, AppLocal.validPhoneNumber.getString(context));
+                                      WidgetsBinding.instance.addPostFrameCallback((_){
+                                        customSnackBar(context, AppLocal.validPhoneNumber.getString(context));
+                                      });
                                     }else if(phoneController.text.length==10){
                                       context.read<ProfileBloc>().add(PersonalDataUpdateProfileEvent(data: {"phone":phoneController.text}, user: userModel!));
                                       context.pop();

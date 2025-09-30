@@ -115,7 +115,7 @@ class _CreateOrderViewState extends State<CreateOrderView> {
                titleStyle: AppTextStyles.medium18P(color: AppColors.white),
                ),
               ),
-
+             SizedBox(height: AppDimensions.spacing_4,)
            ],
           ),
         ),

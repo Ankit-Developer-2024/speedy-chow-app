@@ -171,11 +171,16 @@ mixin AppLocal{
   static const String  noAddressAvailable='noAddressAvailable';
   static const String  addAddressOrPickUpPoint='addAddressOrPickUpPoint';
   static const String  defaultAddress='defaultAddress';
+  static const String  totalAmount='totalAmount';
+  static const String  phoneNumber='phoneNumber';
+  static const String  areYouSureBuyAgain='areYouSureBuyAgain';
+  static const String  selectAddress='selectAddress';
+  static const String  back='back';
 
 
    static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
-     loading: 'Loading...',
+    loading: 'Loading...',
     whatWeServe: 'We serve incomparable delicacies',
     whatWeServeDesc: 'All the best restaurants with their top menu waiting for you, they cant’t wait for your order!!',
     skip: 'Skip',
@@ -329,7 +334,7 @@ mixin AppLocal{
      orderedPlaced: "Order placed, thank you!",
      confirmationSentToEmail: "Confirmation will be sent to your email.",
      shippingTo: "Shipping to",
-     shippingAddress: "Shipping Address",
+     shippingAddress: "Shipping Address :",
      backToCart: "Back To Cart",
      buyAgain: "Buy Again",
      cancelOrder: "Cancel Order",
@@ -344,5 +349,10 @@ mixin AppLocal{
      noAddressAvailable: "No Address Available",
      addAddressOrPickUpPoint: "Add an address or pick-up point",
      defaultAddress: "Default address",
+     totalAmount: "Total Amount:",
+     phoneNumber: "Phone Number:",
+     selectAddress: "Select Address",
+     areYouSureBuyAgain: "Are you sure you buy again?",
+     back: "Back",
 };
 }

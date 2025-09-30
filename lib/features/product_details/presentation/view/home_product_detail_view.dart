@@ -41,6 +41,7 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(preferredSize: Size(0, 0), child: SizedBox(height: 10,)),
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         child: BlocConsumer<ProductDetailBloc, ProductDetailState>(
@@ -66,9 +67,18 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                     padding: EdgeInsets.only(top: AppDimensions.spacing_20),
                     width: MediaQuery.sizeOf(context).width,
                     height: MediaQuery.sizeOf(context).height / 2 - 70,
-                    child: Image.asset(
+                    child:
+                    product.img!=null ?  ClipRRect(
+                        borderRadius: BorderRadiusGeometry
+                            .circular(
+                            AppDimensions.radius_8),
+                        child: Image.memory(
+                          product.img!,
+                          fit: BoxFit.cover
+                        )):
+                    Image.asset(
                       getLocalJpeg("burger"),
-                      fit: BoxFit.fill,
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Padding(
@@ -76,21 +86,11 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                         top: AppDimensions.spacing_38,
                         left: AppDimensions.spacing_10,
                         right: AppDimensions.spacing_10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton.outlined(
-                            onPressed: () {
-                              context.pop();
-                            },
-                            icon: Icon(Icons.arrow_back_ios_outlined)),
-                        IconButton.outlined(
-                            onPressed: () {
-                              context.pop();
-                            },
-                            icon: Icon(Icons.favorite_outline_sharp))
-                      ],
-                    ),
+                    child: IconButton.outlined(
+                        onPressed: () {
+                          context.pop();
+                        },
+                        icon: Icon(Icons.arrow_back_ios_outlined,)),
                   ),
                   Align(
                     alignment: Alignment(0, 1),

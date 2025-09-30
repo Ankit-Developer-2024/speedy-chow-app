@@ -23,7 +23,7 @@ class TokenInterceptor implements Interceptor{
        await RefreshTokenHelper.refresh();
        String? newAccessToken=await AppSecureStorage.instance.getAccessToken();
        if(newAccessToken!=null && newAccessToken.isNotEmpty){
-         DioManager.httpDio.options.headers["Authorization"] = "Bearer $newAccessToken";
+         DioManager.httpDio.options.headers["authorization"] = "Bearer $newAccessToken";
          // Retry the failed request
          final RequestOptions options = err.requestOptions;
          final retryResponse = await DioManager.httpDio.request(
@@ -55,6 +55,7 @@ class TokenInterceptor implements Interceptor{
             options.headers["authorization"]="Bearer $refreshToken";
           }
           handler.next(options);
+          return ;
         }
         else{
           String? accessToken=  await AppSecureStorage.instance.getAccessToken();
@@ -63,6 +64,7 @@ class TokenInterceptor implements Interceptor{
           }
 
           handler.next(options);
+          return ;
         }
 
       }catch(err){

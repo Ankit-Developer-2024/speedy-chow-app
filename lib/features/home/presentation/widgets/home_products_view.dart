@@ -74,7 +74,22 @@ class HomeProductsView extends StatelessWidget {
                            crossAxisAlignment: CrossAxisAlignment.start,
                            spacing: AppDimensions.spacing_8,
                            children: [
-                             ClipRRect(
+                             state.data[index].img!=null ?  ClipRRect(
+                                 borderRadius: BorderRadiusGeometry
+                                     .circular(
+                                     AppDimensions.radius_8),
+                                 child: Image.memory(
+                                    state.data[index].img!,
+                                   fit: BoxFit.cover,
+                                   width:
+                                   MediaQuery
+                                       .sizeOf(context)
+                                       .width / 2 - 45,
+                                   height:
+                                   MediaQuery
+                                       .sizeOf(context)
+                                       .width / 2 - 94,
+                                 )) : ClipRRect(
                                  borderRadius: BorderRadiusGeometry
                                      .circular(
                                      AppDimensions.radius_8),
@@ -84,7 +99,10 @@ class HomeProductsView extends StatelessWidget {
                                    MediaQuery
                                        .sizeOf(context)
                                        .width / 2 - 45,
-                                 )),
+                                   height:  MediaQuery
+                                       .sizeOf(context)
+                                       .width / 2 - 94,
+                                 )) ,
                              Text(
                                state.data[index].name ?? '',
                                style: AppTextStyles.medium18P(),

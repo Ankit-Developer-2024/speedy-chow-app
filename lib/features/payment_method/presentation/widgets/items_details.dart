@@ -39,7 +39,10 @@ class ItemsDetails extends StatelessWidget {
                         height:MediaQuery.sizeOf(context).width/3,
                         child: ClipRRect(
                             borderRadius: BorderRadiusGeometry.circular(AppDimensions.radius_8),
-                            child: Image.asset(getLocalJpeg("burger"),fit: BoxFit.fill,)),
+                            child:
+                             item.product?.img!=null ? Image.memory(item.product!.img!,fit: BoxFit.cover,)
+                                 : Image.asset(getLocalJpeg("burger"),fit: BoxFit.cover,)
+                        ),
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

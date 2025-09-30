@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 
 import 'package:equatable/equatable.dart';
@@ -12,6 +13,7 @@ import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/register_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
 
 part 'auth_event.dart';
@@ -25,12 +27,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   UserModel? userModel;
   AddressModel? defaultAddress;
   final AuthLoginUseCase authLoginUseCase;
+  final RegisterUseCase registerUseCase;
   final FetchUserUseCase fetchUserUseCase;
   final UpdateAddressAuthUseCase updateAddressAuthUseCase;
   final AddAddressAuthUseCase addressAuthUseCase;
 
   AuthBloc({
     required this.authLoginUseCase,
+    required this.registerUseCase,
     required this.fetchUserUseCase,
     required this.updateAddressAuthUseCase,
     required this.addressAuthUseCase,
@@ -60,18 +64,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _login(AuthLoginEvent event, Emitter<AuthState> emit) async{
 
     try{
-
       emit(AuthLoginState(isLoading: true ,isSuccess: false,message: "",data: AuthModels(id: "", email: "", role: "")));
-      await Future.delayed(Duration(seconds: 1));
-
       ApiResponse? response=await authLoginUseCase(AuthLoginParam(email: event.email, password: event.password));
-      if(response?.success==true){
-        emit(AuthLoginState(isLoading: false, isSuccess: true, message: response!.message.toString(), data: response.data ?? AuthModels(id: "", email: "", role: "")));
-      }else{
-        emit(AuthLoginState(isLoading: false, isSuccess: false, message: response!.message.toString(), data: response.data ?? AuthModels(id: "", email: "", role: "")));
+
+      if( response!=null && response.success==true){
+        emit(AuthLoginState(isLoading: false, isSuccess: true, message: response.message.toString(), data: response.data ?? AuthModels(id: "", email: "", role: "")));
       }
-    }catch(err){
-      emit(AuthLoginState(isLoading: false, isSuccess: false, message: err.toString(), data: AuthModels(id: "", email: "", role: "")));
+      else{
+        emit(AuthLoginState(isLoading: false, isSuccess: false, message: response?.message ?? "Wrong credentials!", data: response?.data ?? AuthModels(id: "", email: "", role: "")));
+      }
+    }catch(err){ 
+      emit(AuthLoginState(isLoading: false, isSuccess: false, message: err.toString() ?? "Something went wrong!", data: AuthModels(id: "", email: "", role: "")));
     }
 
   }
@@ -87,18 +90,27 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _registerUser(AuthRegisterEvent event ,Emitter<AuthState> emit) async{
 
-    emit(AuthRegisterState(isLoading: true ,isSuccess: false, isAgree: isAgree));
-    await Future.delayed(Duration(seconds: 3));
-    //call api register user
-
-    if(event.userName!='' && event.email!='' && event.password!='' && isAgree){
-
-      emit(AuthRegisterState(isAgree: isAgree, isSuccess: true, isLoading: false));
-      //here if api resp is like failed then
-     // emit(AuthRegisterState(isAgree: isAgree, isSuccess: false, isLoading: false));
-    }else if(!isAgree){
-      emit(AuthRegisterState(isAgree: isAgree, isSuccess: false, isLoading: false));
+    try{
+      emit(AuthRegisterState(isLoading: true ,isSuccess: false,message: "", isAgree: isAgree));
+      ApiResponse? response = await registerUseCase(RegisterParam(data: {'email':event.email,'name':event.userName,'password':event.password}));
+      if(response!=null && response.success==true){
+        emit(AuthRegisterState(isLoading: false ,message: response.message ?? "User register successfully" ,isSuccess: true, isAgree: isAgree));
+      }else{
+        emit(AuthRegisterState(isLoading: false ,message: response?.message ?? "Something went wrong!" ,isSuccess: false, isAgree: isAgree));
+      }
+    }catch(e,stack){
+      emit(AuthRegisterState(isLoading: false ,message: e.toString() ?? "Something went wrong!" ,isSuccess: false, isAgree: isAgree));
     }
+
+
+    // if(event.userName!='' && event.email!='' && event.password!='' && isAgree){
+    //
+    //   emit(AuthRegisterState(isAgree: isAgree, isSuccess: true, isLoading: false));
+    //   //here if api resp is like failed then
+    //  // emit(AuthRegisterState(isAgree: isAgree, isSuccess: false, isLoading: false));
+    // }else if(!isAgree){
+    //   emit(AuthRegisterState(isAgree: isAgree, isSuccess: false, isLoading: false));
+    // }
   }
 
   void _isPolicy(AuthPolicyEvent event , Emitter<AuthState> emit){

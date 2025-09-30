@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
+import 'package:speedy_chow/core/components/widgets/primary_button.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/order/presentation/widgets/empty_order.dart';
 import 'package:speedy_chow/features/order/presentation/widgets/order_item.dart';
@@ -84,13 +87,26 @@ class _OrderViewState extends State<OrderView> {
                         return HAxisLine();
                       },
                       );
-                }else if(state.success==true && state.orders.isEmpty){
+                }
+                else if(state.success==true && state.orders.isEmpty){
                   return EmptyOrder();
                 }else{
-                  return Center(child: Text(state.message),);
+                  return Center(child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: AppDimensions.spacing_8,
+                    children: [
+                      SvgPicture.asset(getLocalSvg('cart_empty'),width: MediaQuery.sizeOf(context).width/2),
+                      Text(state.message,style: AppTextStyles.semiBold20P(),),
+                      PrimaryButton(onPress: (){
+                        context.read<OrderBloc>().add(FetchOrderEvent());
+                      },title:AppLocal.refresh.getString(context) ,titleStyle: AppTextStyles.medium16P(color: AppColors.white),)
+                    ],
+                  ),);
                 }
-             }else{
-               return Center(child: Text(AppLocal.loading.getString(context)),);
+             }
+             else{
+               return Center(child: Text(AppLocal.refresh.getString(context)),);
              }
           },
         ),

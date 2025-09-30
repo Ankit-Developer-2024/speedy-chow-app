@@ -1,8 +1,10 @@
+import 'dart:typed_data';
+
 class ProductDetails{
   final String? id;
   final String? name;
   final String? description;
-  final String? img;
+  final Uint8List? img;
   final String? category;
   final int? price;
   final int? discountPercentage;

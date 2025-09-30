@@ -6,15 +6,20 @@ import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/features/auth/data/data_source/aut_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/auth_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/register_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/register_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/data_source/user_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/user_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/auth_login_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/register_repo_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/user_repo_impl.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/auth_login_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/register_repo.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/user_repo.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/register_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
@@ -23,12 +28,18 @@ import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_order_details_remote_source_impl.dart';
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_orders_remote_source.dart';
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_orders_remote_source_impl.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/update_order_remote_source.dart';
+import 'package:speedy_chow/features/order/data/data_source/remote_source/update_order_remote_source_impl.dart';
 import 'package:speedy_chow/features/order/data/repositories/fetch_order_details_repo_impl.dart';
 import 'package:speedy_chow/features/order/data/repositories/fetch_order_repo_impl.dart';
+import 'package:speedy_chow/features/order/data/repositories/update_order_repo_impl.dart';
 import 'package:speedy_chow/features/order/domain/repositories/fetch_order_details_repo.dart';
 import 'package:speedy_chow/features/order/domain/repositories/fetch_order_repo.dart';
+import 'package:speedy_chow/features/order/domain/repositories/update_order_repo.dart';
+import 'package:speedy_chow/features/order/domain/use_case/create_order_buy_again_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_details_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_usecase.dart';
+import 'package:speedy_chow/features/order/domain/use_case/update_order_usecase.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/auth/data/data_source/add_address_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/add_address_remote_source_impl.dart';
@@ -177,16 +188,19 @@ void _initNavigationBloc(){
 
 void _initAuthBloc(){
   getIt..registerFactory<AuthRemoteSource>(()=>AuthRemoteSourceImpl())
+  ..registerFactory<RegisterRemoteSource>(()=>RegisterRemoteSourceImpl())
   ..registerFactory<UserRemoteSource>(()=>UserRemoteSourceImpl())
   ..registerFactory<UpdateAddressRemoteSource>(()=>UpdateAddressRemoteSourceImpl())
   ..registerFactory<AddAddressRemoteSource>(()=>AddAddressRemoteSourceImpl())
 
   ..registerFactory<AuthLoginRepo>(()=>AuthLoginRepoImpl(authRemoteSource: getIt<AuthRemoteSource>()))
+  ..registerFactory<RegisterRepo>(()=>RegisterRepoImpl(registerRemoteSource: getIt<RegisterRemoteSource>()))
   ..registerFactory<UserRepo>(()=>UserRepoImpl(userRemoteSource: getIt<UserRemoteSource>()))
   ..registerFactory<UpdateAddressRepo>(()=>UpdateAddressRepoImpl(updateAddressRemoteSource: getIt<UpdateAddressRemoteSource>()))
   ..registerFactory<AddAddressRepo>(()=>AddAddressRepoImpl(addAddressRemoteSource: getIt<AddAddressRemoteSource>()))
 
   ..registerFactory<AuthLoginUseCase>(()=>AuthLoginUseCase(authLoginRepo: getIt<AuthLoginRepo>()))
+  ..registerFactory<RegisterUseCase>(()=>RegisterUseCase(registerRepo: getIt<RegisterRepo>()))
   ..registerFactory<FetchUserUseCase>(()=>FetchUserUseCase(userRepo: getIt<UserRepo>()))
   ..registerFactory<UpdateAddressAuthUseCase>(()=>UpdateAddressAuthUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
   ..registerFactory<AddAddressAuthUseCase>(()=>AddAddressAuthUseCase(addAddressRepo: getIt<AddAddressRepo>()))
@@ -194,6 +208,7 @@ void _initAuthBloc(){
 
   ..registerSingleton(AuthBloc(
       authLoginUseCase: getIt<AuthLoginUseCase>(),
+      registerUseCase: getIt<RegisterUseCase>(),
       fetchUserUseCase: getIt<FetchUserUseCase>(),
       updateAddressAuthUseCase: getIt<UpdateAddressAuthUseCase>(),
       addressAuthUseCase: getIt<AddAddressAuthUseCase>()
@@ -271,14 +286,23 @@ void _initCartBloc(){
 void _initOrderBloc(){
   getIt..registerFactory<FetchOrderRemoteSource>(()=> FetchOrderRemoteSourceImpl())
   ..registerFactory<FetchOrderDetailsRemoteSource>(()=> FetchOrderDetailsRemoteSourceImpl())
+  ..registerFactory<UpdateOrderRemoteSource>(()=> UpdateOrderRemoteSourceImpl())
 
   ..registerFactory<FetchOrderRepo>(()=> FetchOrderRepoImpl(fetchOrderRemoteSource: getIt<FetchOrderRemoteSource>()))
   ..registerFactory<FetchOrderDetailsRepo>(()=> FetchOrderDetailsRepoImpl(fetchOrderDetailsRemoteSource: getIt<FetchOrderDetailsRemoteSource>()))
+  ..registerFactory<UpdateOrderRepo>(()=> UpdateOrderRepoImpl(updateOrderRemoteSource: getIt<UpdateOrderRemoteSource>()))
 
   ..registerFactory<FetchOrderUseCase>(()=>FetchOrderUseCase(fetchOrderRepo: getIt<FetchOrderRepo>()))
   ..registerFactory<FetchOrderDetailsUseCase>(()=>FetchOrderDetailsUseCase(fetchOrderDetailsRepo: getIt<FetchOrderDetailsRepo>()))
+  ..registerFactory<UpdateOrderUseCase>(()=>UpdateOrderUseCase(updateOrderRepo: getIt<UpdateOrderRepo>()))
+  ..registerFactory<CreateOrderBuyAgainUseCase>(()=>CreateOrderBuyAgainUseCase(createOrderRepo: getIt<CreateOrderRepo>()))
 
-  ..registerFactory<OrderBloc>(()=>OrderBloc(fetchOrderUseCase: getIt<FetchOrderUseCase>(),fetchOrderDetailsUseCase: getIt<FetchOrderDetailsUseCase>()));
+  ..registerFactory<OrderBloc>(()=>OrderBloc(
+      fetchOrderUseCase: getIt<FetchOrderUseCase>(),
+      fetchOrderDetailsUseCase: getIt<FetchOrderDetailsUseCase>(),
+      updateOrderUseCase: getIt<UpdateOrderUseCase>(),
+      createOrderBuyAgainUseCase: getIt<CreateOrderBuyAgainUseCase>(),
+  ));
 }
 
 void _paymentMethod(){

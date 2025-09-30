@@ -9,7 +9,7 @@ class ProductLocalSourceImpl implements ProductLocalSource {
 
     var data = [
     {
-      "name": "Paneer Pasta #1",
+      "name": "",
     "description": "Rich and creamy pasta made with succulent cubes of paneer, tossed in a flavorful white sauce with herbs and saut\u00e9ed vegetables.",
     "image": "https://example.com/images/paneer_pasta.jpg",
     "price": 180,
@@ -20,7 +20,7 @@ class ProductLocalSourceImpl implements ProductLocalSource {
     "rating": 3.1
   },
     {
-    "name": "Hakka Noodles #2",
+    "name": "Hakka Noodles Paneer Pasta #1#2",
     "description": "Stir-fried noodles with mixed vegetables, soy sauce, and garlic, offering a classic Indo-Chinese flavor.",
     "image": "https://example.com/images/hakka_noodles.jpg",
     "price": 130,

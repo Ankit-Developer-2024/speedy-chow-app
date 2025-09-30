@@ -38,3 +38,48 @@ final class FetchOrderDetailsState extends OrderState{
   List<Object?> get props => [loading,success,message,order];
 
 }
+
+final class UpdateOrderState extends OrderState{
+  final bool loading;
+  final bool success;
+  final String message;
+  final Order? order;
+
+  UpdateOrderState({
+    required this.loading,
+    required this.success,
+    required this.message,
+    required this.order
+  });
+
+  List<Object?> get props => [loading,success,message,order];
+}
+
+final class SelectedAddressState extends OrderState{
+  final DateTime date=DateTime.now();
+  List<Object?> get props => [];
+}
+
+final class SelectPaymentMethodState extends OrderState{
+  final DateTime date=DateTime.now();
+  List<Object?> get props => [];
+}
+
+final class IsPaymentMethodErrorVisibleState extends OrderState{
+  final bool isErrorVisible;
+
+  IsPaymentMethodErrorVisibleState({required this.isErrorVisible});
+  List<Object?> get props => [isErrorVisible];
+}
+
+final class CreateOrderState extends OrderState{
+  final String msg;
+  final bool loading;
+  final bool success;
+  final CreateOrder createOrder;
+
+  CreateOrderState({required this.msg, required this.loading, required this.success, required this.createOrder});
+
+  List<Object?> get props => [msg,loading,success,createOrder];
+
+}

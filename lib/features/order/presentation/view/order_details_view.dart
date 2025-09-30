@@ -1,18 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoader.dart';
 import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
+import 'package:speedy_chow/core/components/widgets/custonConfirmationDialogBox.dart';
 import 'package:speedy_chow/core/components/widgets/h_axis_line.dart';
+import 'package:speedy_chow/core/components/widgets/primary_button.dart';
 import 'package:speedy_chow/core/enum/enums.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
+import 'package:speedy_chow/features/order/data/models/order_model.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/get_address.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/buy_again_bottom_sheet.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/error_msg_widget.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/order_detail_info.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/order_detail_item.dart';
+import 'package:speedy_chow/features/order/presentation/widgets/order_details_button.dart';
 
 class OrderDetailsView extends StatefulWidget {
   const OrderDetailsView({super.key});
@@ -59,7 +70,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
             top: AppDimensions.spacing_10,
           ),
           child: BlocConsumer<OrderBloc, OrderState>(
-            listenWhen: (prev,curr)=> curr is FetchOrderDetailsState,
+            listenWhen: (prev,curr)=> curr is FetchOrderDetailsState || curr is UpdateOrderState ,
             listener: (context, state) {
               if(state is FetchOrderDetailsState){
                 if(state.loading==true){
@@ -69,15 +80,65 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   context.pop();
                 }
               }
+              if(state is UpdateOrderState){
+                if(state.loading==true){
+                  customLoader(context: context);
+                }
+                else {
+                  context.pop();
+                }
+              }
             },
-            buildWhen:(prev,curr)=> curr is FetchOrderDetailsState,
+            buildWhen:(prev,curr)=> curr is FetchOrderDetailsState || curr is UpdateOrderState ,
             builder: (context, state) {
               if(state is FetchOrderDetailsState){
                 if(state.loading==true){
                   return SizedBox.shrink();
                 }
                 else if(state.success==true && state.order!=null){
-                   return Column(
+                   return SingleChildScrollView(
+                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: AppDimensions.spacing_10,
+                      children: [
+                       Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              state.order!.status!=OrderStatus.cancelled ? AppLocal.arriving.getString(context) : AppLocal.cancelled.getString(context),
+                              style: AppTextStyles.semiBold18P(),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  context.pop();
+                                },
+                                child: Text(
+                                  AppLocal.seeAllOrders.getString(context),
+                                  style: AppTextStyles.medium14P(
+                                      color: AppColors.darkOrange),
+                                ))
+                          ],
+                        ),
+                       OrderDetailItem(items: state.order!.items!),
+                       HAxisLine(),
+                       OrderDetailInfo(order: state.order!),
+                        OrderDetailsButton(order: state.order!),
+                      ],
+                     ),
+                   );
+                }
+                else {
+                  return ErrorMsgWidget(msg: state.message);
+                }
+              }
+              else if(state is UpdateOrderState){
+                if(state.loading==true){
+                  return SizedBox.shrink();
+                }
+                else if(state.success==true && state.order!=null){
+                  return Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -101,88 +162,18 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                               ))
                         ],
                       ),
-                      ClipRRect(
-                          borderRadius:
-                          BorderRadiusGeometry.circular(AppDimensions.radius_8),
-                          child: Image.asset(
-                            getLocalJpeg("burger"),
-                            width: MediaQuery.sizeOf(context).width / 2,
-                          )),
+                      OrderDetailItem(items: state.order!.items!),
                       HAxisLine(),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              Text(
-                                AppLocal.orderedStatus.getString(context),
-                                style: AppTextStyles.semiBold20P(),
-                              ),
-                              Text(
-                                context.read<OrderBloc>().getOrderStatus(state.order!.status),
-                                style: AppTextStyles.semiBold20P(
-                                  color:context.read<OrderBloc>().getOrderStatusColor(state.order!.status)
-                                ),
-                              ),
-
-                            ],
-                          ),
-                          state.order?.status == OrderStatus.cancelled
-                              ? Text(
-                            state.order!.statusReason.toString(),
-                            style: AppTextStyles.medium16P(),
-                            maxLines: 4 ,
-                          )
-                              : SizedBox.shrink(),
-                        ],
-                      ),
-                      state.order?.status == OrderStatus.cancelled ? SizedBox(height: AppDimensions.spacing_10,) : SizedBox.shrink(),
-                      Text(
-                        AppLocal.shippingAddress.getString(context),
-                        style: AppTextStyles.semiBold20P(),
-                      ),
-                      GetAddress(address:state.order?.address, textStyle: null),
-
-                      SizedBox(
-                        height: 60,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          shrinkWrap: true,
-                          children: [
-                            Button(
-                                onTap: () {},
-                                width: 110,
-                                color: AppColors.primaryGreen,
-                                child: Center(
-                                    child: Text(
-                                      AppLocal.buyAgain.getString(context),
-                                      style: AppTextStyles.semiBold14P(
-                                          color: AppColors.white),
-                                    ))),
-                            SizedBox(
-                              width: AppDimensions.spacing_10,
-                            ),
-                            Button(
-                                onTap: () {},
-                                width: 110,
-                                color: AppColors.errorRed,
-                                child: Center(
-                                    child: Text(
-                                      AppLocal.cancelOrder.getString(context),
-                                      style: AppTextStyles.semiBold14P(
-                                          color: AppColors.white),
-                                    ))),
-                          ],
-                        ),
-                      )
+                      OrderDetailInfo(order: state.order!),
+                      OrderDetailsButton(order: state.order!),
                     ],
                   );
                 }
                 else {
-                  return Center(child:  Text(state.message),);
+                  return  ErrorMsgWidget(msg: state.message);
                 }
-              }else{
+              }
+              else{
                 return SizedBox.shrink();
               }
             },

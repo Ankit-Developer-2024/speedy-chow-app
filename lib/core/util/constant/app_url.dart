@@ -3,6 +3,7 @@ class AppUrl{
   static final String refresh='auth/refresh-token';
   static final String verify='auth/verify';
   static final String login='auth/login';
+  static final String signUp='auth/signUp';
   static final String user='user';
   static final String updateAddress='user/addresses';
   static final String fetchProduct='product';

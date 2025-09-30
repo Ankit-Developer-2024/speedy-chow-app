@@ -1,6 +1,5 @@
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/enum/enums.dart';
-import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 import 'package:speedy_chow/features/order/domain/entities/order.dart';
 
@@ -29,6 +28,17 @@ class OrderModel extends Order{
     );
   }
 
+  Map<String,dynamic> toJson(){
+    return {
+      'items':items?.map((item)=>(item as CartModel).toJson()).toList() ,
+      'totalAmount':totalAmount,
+      'totalItems':totalItems,
+      'paymentMethod':paymentMethod,
+      'selectedAddress': (address as AddressModel).toJson()
+
+    };
+  }
+
   static List<OrderModel> createResponseModelWithList(List<dynamic> json){
     List<OrderModel> orderModels=(json).map((item)=>OrderModel.fromJson(item)).toList();
     return orderModels;
@@ -55,6 +65,5 @@ class OrderModel extends Order{
         return OrderStatus.cancelled;
     }
   }
-
 
 }

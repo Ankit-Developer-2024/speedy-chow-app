@@ -47,18 +47,12 @@ final class AuthRegisterState extends AuthState{
   final bool isAgree;
   final bool isLoading;
   final bool isSuccess;
-  AuthRegisterState({required this.isAgree,required this.isSuccess,required this.isLoading});
+  final String message;
+  AuthRegisterState({required this.isAgree,required this.isSuccess,required this.message,required this.isLoading});
 
-  AuthRegisterState copyWith({bool? isLoading,bool? isSuccess,bool? isAgree}) {
-    return AuthRegisterState(
-        isLoading: isLoading ?? this.isLoading,
-        isSuccess: isSuccess ?? this.isSuccess,
-      isAgree: isAgree ?? this.isAgree
-    );
-  }
 
   @override
-  List<Object?> get props =>[isAgree,isLoading,isSuccess];
+  List<Object?> get props =>[isAgree,isLoading,isSuccess,message];
 
 }
 
