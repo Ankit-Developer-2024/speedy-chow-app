@@ -8,7 +8,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
-import 'package:speedy_chow/features/home/presentation/widgets/category_bottomSheet.dart';
+import 'package:speedy_chow/features/home/presentation/widgets/category_bottom_sheet.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/loader_category_effect.dart';
 
 class HomeCategoryView extends StatelessWidget {

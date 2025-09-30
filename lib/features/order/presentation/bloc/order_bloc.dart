@@ -12,7 +12,6 @@ import 'package:speedy_chow/features/order/domain/use_case/fetch_order_details_u
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/update_order_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/enitites/create_order.dart';
-import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 
 part 'order_event.dart';
 part 'order_state.dart';

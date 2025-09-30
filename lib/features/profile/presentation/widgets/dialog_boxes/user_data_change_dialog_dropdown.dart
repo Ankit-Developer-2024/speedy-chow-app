@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
-import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/personal_data_drop_down.dart';
-import 'package:speedy_chow/core/components/widgets/text_field_widget.dart';
 
 Future userDataChangeDialogDropDown({
   required BuildContext context,

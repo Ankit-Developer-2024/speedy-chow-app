@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:math';
-
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,7 +7,6 @@ import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/user.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';

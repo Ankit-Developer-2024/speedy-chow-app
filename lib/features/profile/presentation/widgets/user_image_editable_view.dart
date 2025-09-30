@@ -17,22 +17,24 @@ class UserImageEditableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  BlocConsumer<ProfileBloc , ProfileState>(
-      listenWhen: (prev,curr)=> curr is PersonalDataPickImageState,
-  listener: (context, state) {
-     if(state is PersonalDataPickImageState){
-       if(state.error==true){
-         customSnackBar(context,AppLocal.swtwr.getString(context));
-       }
-     }
-  },
-      buildWhen: (prev,curr)=> curr is PersonalDataPickImageState,
-  builder: (context, state) {
-        if(state is PersonalDataPickImageState && state.error==false){
+    return BlocConsumer<ProfileBloc, ProfileState>(
+      listenWhen: (prev, curr) => curr is PersonalDataPickImageState,
+      listener: (context, state) {
+        if (state is PersonalDataPickImageState) {
+          if (state.error == true) {
+            customSnackBar(context, AppLocal.swtwr.getString(context));
+          }
+        }
+      },
+      buildWhen: (prev, curr) => curr is PersonalDataPickImageState,
+      builder: (context, state) {
+        if (state is PersonalDataPickImageState && state.error == false) {
           return InkWell(
-            onTap:()async{
-              File? img=   await CameraHelper.pickImage(context: context);
-              context.read<ProfileBloc>().add(PersonalDataPickImageEvent(image: img));
+            onTap: () async {
+              File? img = await CameraHelper.pickImage(context: context);
+              context
+                  .read<ProfileBloc>()
+                  .add(PersonalDataPickImageEvent(image: img));
             },
             borderRadius: BorderRadius.circular(AppDimensions.radius_100),
             child: Padding(
@@ -43,26 +45,43 @@ class UserImageEditableView extends StatelessWidget {
                   CircleAvatar(
                     maxRadius: 70,
                     child: ClipRRect(
-                        borderRadius: BorderRadius.circular(AppDimensions.radius_100),
-                        child: Image.file(state.image!,fit: BoxFit.cover,alignment: Alignment.center,height: 139,width: 139,)),
+                        borderRadius:
+                            BorderRadius.circular(AppDimensions.radius_100),
+                        child: Image.file(
+                          state.image!,
+                          fit: BoxFit.cover,
+                          alignment: Alignment.center,
+                          height: 139,
+                          width: 139,
+                        )),
                   ),
                   Container(
                       padding: EdgeInsets.all(AppDimensions.spacing_10),
                       decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(AppDimensions.radius_100),
-                          border: BoxBorder.fromSTEB(bottom: BorderSide(color: AppColors.darkOrange,width: 0.5),end: BorderSide(color: AppColors.darkOrange,width: 0.5))
-                      ),
-                      child: Icon(Icons.camera_alt_outlined,color: AppColors.darkOrange,size: AppDimensions.size_32,)),
+                          borderRadius:
+                              BorderRadius.circular(AppDimensions.radius_100),
+                          border: BoxBorder.fromSTEB(
+                              bottom: BorderSide(
+                                  color: AppColors.darkOrange, width: 0.5),
+                              end: BorderSide(
+                                  color: AppColors.darkOrange, width: 0.5))),
+                      child: Icon(
+                        Icons.camera_alt_outlined,
+                        color: AppColors.darkOrange,
+                        size: AppDimensions.size_32,
+                      )),
                 ],
               ),
             ),
           );
-        }else{
-           return InkWell(
-            onTap:()async{
-              File? img=  await CameraHelper.pickImage(context: context);
-              context.read<ProfileBloc>().add(PersonalDataPickImageEvent(image: img));
+        } else {
+          return InkWell(
+            onTap: () async {
+              File? img = await CameraHelper.pickImage(context: context);
+              context
+                  .read<ProfileBloc>()
+                  .add(PersonalDataPickImageEvent(image: img));
             },
             borderRadius: BorderRadius.circular(AppDimensions.radius_100),
             child: Padding(
@@ -81,16 +100,19 @@ class UserImageEditableView extends StatelessWidget {
                       padding: EdgeInsets.all(AppDimensions.spacing_10),
                       decoration: BoxDecoration(
                           color: AppColors.white,
-                          borderRadius: BorderRadius.circular(AppDimensions.radius_100)
-                      ),
-                      child: Icon(Icons.camera_alt_outlined,color: AppColors.darkOrange,size: AppDimensions.size_32,)),
+                          borderRadius:
+                              BorderRadius.circular(AppDimensions.radius_100)),
+                      child: Icon(
+                        Icons.camera_alt_outlined,
+                        color: AppColors.darkOrange,
+                        size: AppDimensions.size_32,
+                      )),
                 ],
               ),
             ),
-          );; 
+          );
         }
-
-  },
-);
+      },
+    );
   }
 }

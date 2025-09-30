@@ -6,7 +6,6 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/address_bottom_sheet.dart';
 import 'package:speedy_chow/features/payment_method/presentation/widgets/change_address_bottom_sheet.dart';

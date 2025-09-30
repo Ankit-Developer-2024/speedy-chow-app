@@ -17,8 +17,6 @@ import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/user_image.dart';
-import 'package:speedy_chow/features/profile/presentation/widgets/user_image_editable_view.dart';
-
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 

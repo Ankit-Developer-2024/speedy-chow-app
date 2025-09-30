@@ -5,9 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
-import 'package:speedy_chow/features/home/presentation/view/home_view.dart';
-import 'package:speedy_chow/features/profile/presentation/view/profile_view.dart';
 
 class HomeMainNavigationView extends StatelessWidget {
   const HomeMainNavigationView({super.key,required this.child});

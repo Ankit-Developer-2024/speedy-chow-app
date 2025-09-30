@@ -8,11 +8,8 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/auth.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/auth/presentation/widgets/text_field_widget.dart';
-import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 
 Future<dynamic> addressAuthBottomSheet(BuildContext context) {
   return showModalBottomSheet(

@@ -72,7 +72,7 @@ class OneTimeUi extends StatelessWidget {
                                   itemCount: 3,
                                   scrollDirection: Axis.horizontal,
                                   shrinkWrap: true,
-                                  itemBuilder: (context, int) {
+                                  itemBuilder: (context, index) {
                                     return BlocConsumer<SplashBloc, SplashState>(
                                       listenWhen: (pre,curr)=> curr is SplashOneTimeUiCompleteState ,
                                       listener: (context,state){

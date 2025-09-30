@@ -1,6 +1,6 @@
 part of 'profile_bloc.dart';
 
-@immutable
+
 sealed class ProfileEvent extends Equatable {}
 
 final class PersonalDataPickImageEvent extends ProfileEvent{
