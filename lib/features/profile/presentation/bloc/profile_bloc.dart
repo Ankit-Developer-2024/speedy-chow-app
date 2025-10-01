@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/services/preferences/app_secure_storage.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
+import 'package:speedy_chow/features/profile/domain/use_cases/update_image_usecase.dart';
 import 'package:speedy_chow/features/profile/domain/use_cases/update_user_use_case.dart';
 
 part 'profile_event.dart';
@@ -29,8 +30,12 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
 
   String? selectedAccountDeletionReason;
   final UpdateUserUseCase updateUserUseCase;
+  final UpdateUserImageUseCase updateUserImageUseCase;
 
-  ProfileBloc({required this.updateUserUseCase}) : super(ProfileInitial()) {
+  ProfileBloc({
+    required this.updateUserUseCase,
+    required this.updateUserImageUseCase
+  }) : super(ProfileInitial()) {
     on<PersonalDataUpdateProfileEvent>(_personalDataUpdate);
     on<ProfileAccountDeletionCheckBoxEvent>(_accountDeletionCheckBox);
     on<ProfileAccountDeletionConfirmEvent>(_accountDeletionConfirm);
@@ -38,11 +43,23 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     on<PersonalDataPickImageEvent>(_selectImage);
   }
 
-  void _selectImage(PersonalDataPickImageEvent event ,Emitter<ProfileState> emit){
-    if(event.image!=null){
-      emit(PersonalDataPickImageState(image: event.image,error: false));
+  void _selectImage(PersonalDataPickImageEvent event ,Emitter<ProfileState> emit)async{
+    final image = event.image;
+    if(image!=null){
+      try{
+        emit(PersonalDataPickImageState(loading:true,msg: "",success: false));
+        ApiResponse? response = await updateUserImageUseCase(UpdateUserImageParams(image: image));
+        if(response?.success==true){
+          userModel=response?.data;
+          emit(PersonalDataPickImageState(loading:false,msg:response!.message.toString(),success: true));
+        }else{
+          emit(PersonalDataPickImageState(loading:false,msg:response?.message.toString() ?? "Something went wrong",success: false));
+        }
+      }catch(err){
+
+      }
     }else{
-      emit(PersonalDataPickImageState(image: null,error: true));
+      emit(PersonalDataPickImageState(loading:false,msg: "Image not picked!",success: false));
     }
   }
 

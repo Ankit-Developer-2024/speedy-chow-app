@@ -5,6 +5,7 @@ class AppUrl{
   static final String login='auth/login';
   static final String signUp='auth/signUp';
   static final String user='user';
+  static final String userImage='user/image';
   static final String updateAddress='user/addresses';
   static final String fetchProduct='product';
   static final String cart='cart';

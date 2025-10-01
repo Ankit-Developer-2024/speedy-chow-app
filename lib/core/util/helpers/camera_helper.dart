@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:image_picker/image_picker.dart';
@@ -15,7 +15,7 @@ class CameraHelper{
 
     final XFile? image = await picker.pickImage(source: ImageSource.gallery,);
     if(image!=null){
-      return File(image.path);
+       return File(image.path);
     }
     return null;
   }
@@ -34,7 +34,7 @@ class CameraHelper{
        return true;
      }
    }catch(e){
-     print(e.toString());
+    // print(e.toString());
      return false;
    }
 

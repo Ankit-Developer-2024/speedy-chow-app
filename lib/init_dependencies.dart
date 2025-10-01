@@ -114,10 +114,15 @@ import 'package:speedy_chow/features/product_details/domain/use_case/product_det
 import 'package:speedy_chow/features/product_details/domain/use_case/update_cart_quantity_use_case.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/user_cart_product_quantity_use_case.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
+import 'package:speedy_chow/features/profile/data/data_source/remote_source/update_user_image_remote_source.dart';
+import 'package:speedy_chow/features/profile/data/data_source/remote_source/update_user_image_remote_source_impl.dart';
 import 'package:speedy_chow/features/profile/data/data_source/remote_source/update_user_remote_source.dart';
 import 'package:speedy_chow/features/profile/data/data_source/remote_source/update_user_remote_source_impl.dart';
+import 'package:speedy_chow/features/profile/data/repositories/update_user_image_repo_impl.dart';
 import 'package:speedy_chow/features/profile/data/repositories/update_user_repo_impl.dart';
+import 'package:speedy_chow/features/profile/domain/repositories/update_user_image_repo.dart';
 import 'package:speedy_chow/features/profile/domain/repositories/update_user_repo.dart';
+import 'package:speedy_chow/features/profile/domain/use_cases/update_image_usecase.dart';
 import 'package:speedy_chow/features/profile/domain/use_cases/update_user_use_case.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
 import 'package:speedy_chow/features/splash/data/data_source/verify_token_remote_source.dart';
@@ -327,12 +332,19 @@ void _paymentMethod(){
 void _initProfileBloc(){
   //data_source
   getIt..registerFactory<UpdateUserRemoteSource>(()=>UpdateUserRemoteSourceImpl())
+  ..registerFactory<UpdateUserImageRemoteSource>(()=>UpdateUserImageRemoteSourceImpl())
+
   //repositories
   ..registerFactory<UpdateUserRepo>(()=>UpdateUserRepoImpl(userRemoteSource: getIt<UpdateUserRemoteSource>()))
+  ..registerFactory<UpdateUserImageRepo>(()=>UpdateUserImageRepoImpl(updateUserImageRemoteSource: getIt<UpdateUserImageRemoteSource>()))
   //use_cases
   ..registerFactory<UpdateUserUseCase>(()=>UpdateUserUseCase(userRepo: getIt<UpdateUserRepo>()))
+  ..registerFactory<UpdateUserImageUseCase>(()=>UpdateUserImageUseCase(updateUserImageRepo: getIt<UpdateUserImageRepo>()))
   //bloc
-  ..registerFactory<ProfileBloc>(()=>ProfileBloc(updateUserUseCase: getIt<UpdateUserUseCase>()));
+  ..registerFactory<ProfileBloc>(()=>ProfileBloc(
+      updateUserUseCase: getIt<UpdateUserUseCase>(),
+      updateUserImageUseCase: getIt<UpdateUserImageUseCase>(),
+  ));
 }
 
 void initFlutterLocalization() {

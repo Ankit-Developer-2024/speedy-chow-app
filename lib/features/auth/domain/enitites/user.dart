@@ -1,5 +1,5 @@
+import 'dart:typed_data';
 import 'package:speedy_chow/core/components/models/address_model.dart';
-import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
 
 class User{
   String? id;
@@ -8,7 +8,7 @@ class User{
   String? gender;
   int? phone;
   String? dob;
-  String? image;
+  Uint8List? image;
   List<AddressModel>? addresses;
   String? role;
 

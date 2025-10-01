@@ -96,8 +96,8 @@ class _PersonalDataViewState extends State<PersonalDataView> {
                       nameController.text= userModel?.name ?? "";
                       dobController.text= getProperDate(userModel?.dob);
                       genderController.text= userModel?.gender ?? "";
-                        phoneController.text= userModel?.phone.toString() ?? "";
-                        emailController.text= userModel?.email ?? "";
+                      phoneController.text= userModel?.phone.toString() ?? "";
+                      emailController.text= userModel?.email ?? "";
                       return Column(
                         spacing: AppDimensions.spacing_10,
                         children: [

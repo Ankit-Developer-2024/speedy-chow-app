@@ -34,6 +34,13 @@ class AppTextStyles {
         color: color ?? AppColors.justBlack,
       );
 
+
+  static TextStyle regular70P({Color? color})=>GoogleFonts.poppins(
+      fontSize: 70,
+      fontWeight: FontWeight.w400,
+      color: color??AppColors.justBlack
+  );
+
   static TextStyle regular12I({Color? color}) => GoogleFonts.inter(
         fontSize: 12,
         fontWeight: FontWeight.w400,

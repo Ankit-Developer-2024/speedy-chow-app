@@ -9,12 +9,14 @@ final class ProfileInitial extends ProfileState {
 }
 
 final class PersonalDataPickImageState extends ProfileState{
-  final File? image;
-  final bool error;
+  final bool loading;
+  final bool success;
+  final String msg;
 
-  PersonalDataPickImageState({required this.image,required this.error});
+  PersonalDataPickImageState({required this.loading, required this.success, required this.msg});
+
   @override
-  List<Object?> get props =>[image,error];
+  List<Object?> get props =>[loading,success,msg];
 
 }
 

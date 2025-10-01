@@ -2,15 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_localization/flutter_localization.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/widgets/customLoader.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
-import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/util/helpers/camera_helper.dart';
-import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/profile/presentation/bloc/profile_bloc.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/user_image.dart';
 
 class UserImageEditableView extends StatelessWidget {
   const UserImageEditableView({super.key});
@@ -21,20 +20,25 @@ class UserImageEditableView extends StatelessWidget {
       listenWhen: (prev, curr) => curr is PersonalDataPickImageState,
       listener: (context, state) {
         if (state is PersonalDataPickImageState) {
-          if (state.error == true) {
-            customSnackBar(context, AppLocal.swtwr.getString(context));
+          if (state.loading == true) {
+              customLoader(context: context);
+          }else{
+            state.msg!="Image not picked!" ? context.pop() : null;
+            state.msg!="Image not picked!" ? customSnackBar(context, state.msg) : null;
           }
         }
       },
       buildWhen: (prev, curr) => curr is PersonalDataPickImageState,
       builder: (context, state) {
-        if (state is PersonalDataPickImageState && state.error == false) {
+        if (state is PersonalDataPickImageState && state.success == true) {
           return InkWell(
             onTap: () async {
-              File? img = await CameraHelper.pickImage(context: context);
-              context
-                  .read<ProfileBloc>()
-                  .add(PersonalDataPickImageEvent(image: img));
+              File? img = (await CameraHelper.pickImage(context: context)) ;
+              if(context.mounted){
+                context
+                    .read<ProfileBloc>()
+                    .add(PersonalDataPickImageEvent(image: img));
+              }
             },
             borderRadius: BorderRadius.circular(AppDimensions.radius_100),
             child: Padding(
@@ -42,19 +46,13 @@ class UserImageEditableView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  CircleAvatar(
-                    maxRadius: 70,
-                    child: ClipRRect(
-                        borderRadius:
-                            BorderRadius.circular(AppDimensions.radius_100),
-                        child: Image.file(
-                          state.image!,
-                          fit: BoxFit.cover,
-                          alignment: Alignment.center,
-                          height: 139,
-                          width: 139,
-                        )),
-                  ),
+                  context.read<ProfileBloc>().userModel!=null  && context.read<ProfileBloc>().userModel?.image!=null
+                      ? ClipRRect(
+                      borderRadius: BorderRadius.circular(AppDimensions.radius_100),
+                      child: Image.memory( context.read<ProfileBloc>().userModel!.image!,fit: BoxFit.cover,width: 139,height: 139,))
+                      : CircleAvatar(
+                      radius: 70,
+                      child: UserImage()),
                   Container(
                       padding: EdgeInsets.all(AppDimensions.spacing_10),
                       decoration: BoxDecoration(
@@ -78,10 +76,12 @@ class UserImageEditableView extends StatelessWidget {
         } else {
           return InkWell(
             onTap: () async {
-              File? img = await CameraHelper.pickImage(context: context);
-              context
-                  .read<ProfileBloc>()
-                  .add(PersonalDataPickImageEvent(image: img));
+              File? img = (await CameraHelper.pickImage(context: context)) ;
+              if(context.mounted){
+                context
+                    .read<ProfileBloc>()
+                    .add(PersonalDataPickImageEvent(image: img));
+              }
             },
             borderRadius: BorderRadius.circular(AppDimensions.radius_100),
             child: Padding(
@@ -89,13 +89,13 @@ class UserImageEditableView extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  CircleAvatar(
-                    maxRadius: 70,
-                    child: SvgPicture.asset(
-                      getLocalSvg("speedychow_logo"),
-                      fit: BoxFit.fill,
-                    ),
-                  ),
+                  context.read<ProfileBloc>().userModel!=null  && context.read<ProfileBloc>().userModel?.image!=null
+                      ? ClipRRect(
+                      borderRadius: BorderRadius.circular(AppDimensions.radius_100),
+                      child: Image.memory( context.read<ProfileBloc>().userModel!.image!,fit: BoxFit.cover,width: 139,height: 139,))
+                      : CircleAvatar(
+                      radius: 70,
+                      child: UserImage()),
                   Container(
                       padding: EdgeInsets.all(AppDimensions.spacing_10),
                       decoration: BoxDecoration(

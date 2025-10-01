@@ -121,8 +121,14 @@ class _ProfileViewState extends State<ProfileView> {
               mainAxisAlignment: MainAxisAlignment.start,
               spacing: AppDimensions.spacing_16,
               children: [
-                UserImage(),
-                Column(
+                  context.read<ProfileBloc>().userModel!=null  && context.read<ProfileBloc>().userModel?.image!=null
+                      ? ClipRRect(
+                      borderRadius: BorderRadius.circular(AppDimensions.radius_100),
+                      child: Image.memory( context.read<ProfileBloc>().userModel!.image!,fit: BoxFit.cover,width: 80,height: 80,))
+                      : CircleAvatar(
+                      radius: 40,
+                      child: UserImage()),
+                context.read<ProfileBloc>().userModel!=null ? Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(context.read<AuthBloc>().userModel!.name.toString(), style: AppTextStyles.semiBold18P()),
@@ -130,7 +136,7 @@ class _ProfileViewState extends State<ProfileView> {
                     context.read<AuthBloc>().userModel!.phone != null ? Text(context.read<AuthBloc>().userModel!.phone.toString(), style: AppTextStyles.semiBold12P()) :SizedBox.shrink() ,
 
                   ],
-                ),
+                ) : SizedBox.shrink(),
               ],
             ),
             HAxisLine(),

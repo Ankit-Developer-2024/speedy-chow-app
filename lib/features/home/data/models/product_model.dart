@@ -39,7 +39,7 @@ class ProductModel extends Product {
       "id":id,
       "name":name,
       "description":description,
-      "image":getImageBuffer(img,imgType),
+      "image":img,
       "imageType":imgType,
       "category":category,
       "price":price,
@@ -61,15 +61,6 @@ class ProductModel extends Product {
      }
     Uint8List bytes = Uint8List.fromList(List<int>.from(data));
     return bytes;
-  }
-
-  static Uint8List? getImageBuffer(Uint8List? data,String imgType){
-    if(data==null) return null;
-    return data;
-    // String base64String = base64Encode(data);
-    // String wrappedExpression= "Binary.createFromBase64($base64String)";
-
-
   }
 
   static List<ProductModel> createResponseModel(List<dynamic> json){
