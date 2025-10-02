@@ -1,11 +1,9 @@
-import 'dart:typed_data';
 
 class Product{
   final String? id;
   final String? name;
   final String? description;
-  final Uint8List? img;
-  final String imgType;
+  final String? img;
   final String? category;
   final int? price;
   final int? discountPercentage;
@@ -18,7 +16,6 @@ class Product{
     required this.name,
     required this.description,
     required this.img,
-    required this.imgType,
     required this.category,
     required this.price,
     required this.discountPercentage,

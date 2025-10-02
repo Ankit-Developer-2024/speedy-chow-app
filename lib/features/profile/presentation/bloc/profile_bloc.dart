@@ -56,7 +56,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
           emit(PersonalDataPickImageState(loading:false,msg:response?.message.toString() ?? "Something went wrong",success: false));
         }
       }catch(err){
-
+        emit(PersonalDataPickImageState(loading:false,msg:err.toString() ?? "Something went wrong",success: false));
       }
     }else{
       emit(PersonalDataPickImageState(loading:false,msg: "Image not picked!",success: false));

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -41,10 +42,12 @@ class OrderItem extends StatelessWidget {
                         borderRadius: BorderRadiusGeometry
                             .circular(
                             AppDimensions.radius_8),
-                        child: Image.memory(
-                            order.items![0].product!.img!,
-                            fit: BoxFit.cover,
-                            width: MediaQuery.sizeOf(context).width / 2 - 45,
+                        child: CachedNetworkImage(
+                          imageUrl:order.items![0].product!.img!,
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          width: MediaQuery .sizeOf(context) .width / 2 - 45,
+                          fit: BoxFit.cover,
                         ))
                         : Image.asset(
                       getLocalJpeg("burger"),

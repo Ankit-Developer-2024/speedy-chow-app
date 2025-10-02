@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
+import 'dart:typed_data';
 import 'package:speedy_chow/features/home/domain/entities/product.dart';
 
 class ProductModel extends Product {
@@ -11,7 +9,6 @@ class ProductModel extends Product {
       required super.name,
       required super.description,
       required super.img,
-      required super.imgType,
       required super.category,
       required super.price,
       required super.discountPercentage,
@@ -24,8 +21,7 @@ class ProductModel extends Product {
         id: json["id"],
         name: json["name"],
         description: json["description"],
-        img: getImageUint8List(json['image']),
-        imgType:json['imageType'] ??"",
+        img: json['image'],
         category: json["category"],
         price: json["price"],
         discountPercentage: json["discountPercentage"],
@@ -40,7 +36,6 @@ class ProductModel extends Product {
       "name":name,
       "description":description,
       "image":img,
-      "imageType":imgType,
       "category":category,
       "price":price,
       "discountPercentage":discountPercentage,

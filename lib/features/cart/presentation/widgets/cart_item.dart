@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -40,11 +41,14 @@ class CartItem extends StatelessWidget {
                     child: ClipRRect(
                         borderRadius: BorderRadiusGeometry.circular(AppDimensions.radius_8),
                         child:
-                        item.product?.img!=null ?  Image.memory(
-                          item.product!.img!,
+                        item.product?.img!=null ?
+                        CachedNetworkImage(
+                          imageUrl:item.product!.img!,
+                          placeholder: (context, url) => CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => Icon(Icons.error),
                           fit: BoxFit.cover,
-                        ):
-                        Image.asset(getLocalJpeg("burger"),fit: BoxFit.fill,)),
+                        )
+                        : Image.asset(getLocalJpeg("burger"),fit: BoxFit.fill,)),
                   ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -23,7 +23,7 @@ class UserModel extends User {
         gender: json["gender"]??"",
         phone: json["phone"]??0,
         dob: json["dob"]??"",
-        image: getUint8ListImage(json["image"]),
+        image:json["image"],
         addresses: json["addresses"]==null ? null : (json["addresses"] as List).map((val)=>AddressModel.fromJson(val)).toList(),
         role: json["role"]??"");
   }

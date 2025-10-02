@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -124,7 +125,12 @@ class _ProfileViewState extends State<ProfileView> {
                   context.read<ProfileBloc>().userModel!=null  && context.read<ProfileBloc>().userModel?.image!=null
                       ? ClipRRect(
                       borderRadius: BorderRadius.circular(AppDimensions.radius_100),
-                      child: Image.memory( context.read<ProfileBloc>().userModel!.image!,fit: BoxFit.cover,width: 80,height: 80,))
+                      child:CachedNetworkImage(
+                        imageUrl: context.read<ProfileBloc>().userModel!.image!,
+                        placeholder: (context, url) => CircularProgressIndicator(),
+                        errorWidget: (context, url, error) => Icon(Icons.error),
+                          fit: BoxFit.cover,width: AppDimensions.size_80,height: AppDimensions.size_80
+                      ))
                       : CircleAvatar(
                       radius: 40,
                       child: UserImage()),

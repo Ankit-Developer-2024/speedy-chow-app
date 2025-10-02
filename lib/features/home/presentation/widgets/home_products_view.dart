@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -77,18 +78,13 @@ class HomeProductsView extends StatelessWidget {
                                  borderRadius: BorderRadiusGeometry
                                      .circular(
                                      AppDimensions.radius_8),
-                                 child: Image.memory(
-                                    state.data[index].img!,
-                                   fit: BoxFit.cover,
-                                   width:
-                                   MediaQuery
-                                       .sizeOf(context)
-                                       .width / 2 - 45,
-                                   height:
-                                   MediaQuery
-                                       .sizeOf(context)
-                                       .width / 2 - 94,
-                                 )) : ClipRRect(
+                                 child: CachedNetworkImage(
+                                   imageUrl: state.data[index].img!,
+                                   placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                   errorWidget: (context, url, error) => Icon(Icons.error),
+                                   width: MediaQuery.sizeOf(context).width/2-45,
+                                   height: MediaQuery.sizeOf(context).width/2-94,
+                                 ),) : ClipRRect(
                                  borderRadius: BorderRadiusGeometry
                                      .circular(
                                      AppDimensions.radius_8),

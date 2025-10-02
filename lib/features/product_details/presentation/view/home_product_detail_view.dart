@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -30,10 +31,10 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
     if (!_isInit) {
       final product = GoRouterState.of(context).extra as Product;
       _productDetailBloc = context.read<ProductDetailBloc>();
-      _productDetailBloc..add(
-          ProductDetailFetchProductEvent(productId: product.id.toString()))
-      ..add(ProductQuantityUserCartFetchEvent(productId: product.id.toString()))
-      ;
+      _productDetailBloc
+        ..add(ProductDetailFetchProductEvent(productId: product.id.toString()))
+        ..add(ProductQuantityUserCartFetchEvent(
+            productId: product.id.toString()));
       _isInit = true;
     }
   }
@@ -41,7 +42,11 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(preferredSize: Size(0, 0), child: SizedBox(height: 10,)),
+      appBar: PreferredSize(
+          preferredSize: Size(0, 0),
+          child: SizedBox(
+            height: 10,
+          )),
       body: SizedBox(
         height: MediaQuery.sizeOf(context).height,
         child: BlocConsumer<ProductDetailBloc, ProductDetailState>(
@@ -49,7 +54,9 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
           listener: (context, state) {
             if (state is ProductDetailFetchProductState) {
               if (state.loading) {
-                customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
+                customLoaderDialog(
+                    context: context,
+                    title: AppLocal.loading.getString(context));
               } else if (state.success) {
                 context.pop();
               }
@@ -67,19 +74,21 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                     padding: EdgeInsets.only(top: AppDimensions.spacing_20),
                     width: MediaQuery.sizeOf(context).width,
                     height: MediaQuery.sizeOf(context).height / 2 - 70,
-                    child:
-                    product.img!=null ?  ClipRRect(
-                        borderRadius: BorderRadiusGeometry
-                            .circular(
-                            AppDimensions.radius_8),
-                        child: Image.memory(
-                          product.img!,
-                          fit: BoxFit.cover
-                        )):
-                    Image.asset(
-                      getLocalJpeg("burger"),
-                      fit: BoxFit.cover,
-                    ),
+                    child: product.img != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadiusGeometry.circular(
+                                AppDimensions.radius_8),
+                            child: CachedNetworkImage(
+                                imageUrl: product.img!,
+                                placeholder: (context, url) =>
+                                    Center(child: CircularProgressIndicator()),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                                fit: BoxFit.cover))
+                        : Image.asset(
+                            getLocalJpeg("burger"),
+                            fit: BoxFit.cover,
+                          ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(
@@ -90,7 +99,9 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                         onPressed: () {
                           context.pop();
                         },
-                        icon: Icon(Icons.arrow_back_ios_outlined,)),
+                        icon: Icon(
+                          Icons.arrow_back_ios_outlined,
+                        )),
                   ),
                   Align(
                     alignment: Alignment(0, 1),
@@ -125,14 +136,16 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                     style: AppTextStyles.medium20P(
                                         color: AppColors.darkOrange),
                                     children: [
-                                 product.discountPercentage==0 ? TextSpan() : TextSpan(
-                                      text:
-                                          "${String.fromCharCode(8377)} ${product.price.toString()}",
-                                      style: TextStyle(
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                          decorationThickness: 1.5,
-                                          color: AppColors.grey300)),
+                                  product.discountPercentage == 0
+                                      ? TextSpan()
+                                      : TextSpan(
+                                          text:
+                                              "${String.fromCharCode(8377)} ${product.price.toString()}",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.lineThrough,
+                                              decorationThickness: 1.5,
+                                              color: AppColors.grey300)),
                                   WidgetSpan(
                                       child: SizedBox(
                                     width: AppDimensions.spacing_10,
@@ -141,7 +154,17 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                       text:
                                           "${String.fromCharCode(8377)} ${product.discountedPrice.toString()}")
                                 ])),
-                            product.quantity!=null &&product.quantity!<=0 ? Text("Out of stock",style: AppTextStyles.medium16P(color: AppColors.errorRed),) : Text("In stock",style: AppTextStyles.medium16P(color: AppColors.primaryGreen),),
+                            product.quantity != null && product.quantity! <= 0
+                                ? Text(
+                                    "Out of stock",
+                                    style: AppTextStyles.medium16P(
+                                        color: AppColors.errorRed),
+                                  )
+                                : Text(
+                                    "In stock",
+                                    style: AppTextStyles.medium16P(
+                                        color: AppColors.primaryGreen),
+                                  ),
                             Container(
                               height: 50,
                               padding:

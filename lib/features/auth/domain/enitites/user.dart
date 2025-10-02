@@ -8,7 +8,7 @@ class User{
   String? gender;
   int? phone;
   String? dob;
-  Uint8List? image;
+  String? image;
   List<AddressModel>? addresses;
   String? role;
 

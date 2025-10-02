@@ -22,7 +22,7 @@ class ProductDetailModel extends ProductDetails {
         id: json["id"]??"",
         name: json["name"]??"",
         description: json["description"]??"",
-        img: getImageUint8List(json['image']),
+        img:json['image'],
         category: json["category"]??"",
         price: json["price"]??0,
         discountPercentage: json["discountPercentage"]??0,

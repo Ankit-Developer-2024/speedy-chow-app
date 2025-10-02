@@ -1,4 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
@@ -23,12 +25,12 @@ class OrderDetailItem extends StatelessWidget {
                 borderRadius:
                 BorderRadiusGeometry.circular(AppDimensions.radius_8),
                 child:items[index].product?.img != null ?
-                Image.memory(
-                   items[index].product!.img!,
-                  fit: BoxFit.cover,
-                  width: MediaQuery.sizeOf(context).width / 2 - 45,
-
-                )
+        CachedNetworkImage(
+        imageUrl: items[index].product!.img!,
+        placeholder: (context, url) => CircularProgressIndicator(),
+        errorWidget: (context, url, error) => Icon(Icons.error),
+        width: MediaQuery .sizeOf(context) .width / 2 - 45,
+        )
                     : Image.asset(
                   getLocalJpeg("burger"),
                   width: MediaQuery.sizeOf(context).width / 2,
