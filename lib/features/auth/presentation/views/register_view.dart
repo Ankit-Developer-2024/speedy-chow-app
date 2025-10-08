@@ -104,7 +104,9 @@ class _RegisterViewState extends State<RegisterView> {
                               controller: passwordController,
                               onValidate: (val) {
                                 if (val!.isEmpty) {
-                                  return AppLocal.validPassword.getString(context);
+                                  return AppLocal.passwordRequired.getString(context);
+                                }else if(!RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$').hasMatch(val)) {
+                                  return AppLocal.passwordType.getString(context);
                                 }
                                 return null;
                               },
@@ -122,7 +124,9 @@ class _RegisterViewState extends State<RegisterView> {
                               controller: passwordController,
                               onValidate: (val) {
                                 if (val!.isEmpty) {
-                                  return AppLocal.validPassword.getString(context);
+                                  return AppLocal.passwordRequired.getString(context);
+                                }else if(!RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$').hasMatch(val)) {
+                                  return AppLocal.passwordType.getString(context);
                                 }
                                 return null;
                               },

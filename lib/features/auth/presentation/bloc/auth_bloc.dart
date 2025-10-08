@@ -158,15 +158,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _isOtpValid(AuthIsOtpValidEvent event ,Emitter<AuthState> emit) async{
-   String otp= event.otp;
-   if(otp.length==4){
-     emit(AuthIsOtpValidState(isLoading: true, isSuccess: false));
-     await Future.delayed(Duration(seconds: 3));
-     //check with api otp is valid or not
-     emit(AuthIsOtpValidState(isLoading: false, isSuccess: true));
-     //emit(AuthIsOtpValidState(isLoading: false, isSuccess: false));
+    emit(AuthIsOtpValidState(isLoading: true, isSuccess: false,msg: ""));
+    if(event.otp.length==4){
+     try{
+       ApiResponse? response= await verifyOtpUseCase(VerifyOtpUseCaseParams(otp: event.otp,email: email));
+       if(response?.success==true){
+         emit(AuthIsOtpValidState(isLoading: false, isSuccess: true,msg: response?.message ?? "Otp Verified!" ));
+       }else{
+         emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: response?.message ?? "Wrong Otp!" ));
+       }
+     }catch(err){
+       emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: err.toString()));
+     }
    }else{
-     emit(AuthIsOtpValidState(isLoading: false, isSuccess: false));
+     emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: "Enter 4 digit otp."));
    }
 
   }
@@ -201,12 +206,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if(event.newPassword == event.newConfirmPassword){
       emit(AuthResetPasswordMatchState(isMatch: true));
-      emit(AuthResetPasswordState(isLoading: true, isSuccess: false));
-      //create new password api
-      //no error api
-      emit(AuthResetPasswordState(isLoading: false, isSuccess: true));
-      //error api
-    //  emit(AuthResetPasswordState(isLoading: false, isSuccess: false));
+      try{
+        emit(AuthResetPasswordState(isLoading: true, isSuccess: false,msg: ""));
+        ApiResponse? response=await resetPasswordUseCase(ResetPasswordUseCaseParams(email: email, password: event.newConfirmPassword));
+        if(response?.success==true){
+          emit(AuthResetPasswordState(isLoading: false, isSuccess: true,msg: response?.message ?? "Password Changed!"));
+        }else{
+          emit(AuthResetPasswordState(isLoading: false, isSuccess: false,msg: response?.message ?? "Something went wrong"));
+        }
+      }catch(err){
+        emit(AuthResetPasswordState(isLoading: false, isSuccess: false,msg: err.toString()));
+      }
+
     }else{
       emit(AuthResetPasswordMatchState(isMatch: false));
     }

@@ -91,18 +91,12 @@ final class AuthIsOtpValidState extends AuthState{
 
   final bool isLoading;
   final bool isSuccess;
+  final String msg;
 
-  AuthIsOtpValidState({required this.isLoading,required this.isSuccess});
-
-  AuthIsOtpValidState copyWith({bool? isLoading, bool? isSuccess}) {
-    return AuthIsOtpValidState(
-        isLoading: isLoading ?? this.isLoading,
-        isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  AuthIsOtpValidState({required this.isLoading,required this.isSuccess,required this.msg});
 
   @override
-  List<Object?> get props =>[isSuccess,isLoading];
+  List<Object?> get props =>[isSuccess,isLoading,msg];
 
 }
 
@@ -148,18 +142,12 @@ final class AuthResetPasswordState extends AuthState{
 
   final bool isLoading;
   final bool isSuccess;
+  final String msg;
 
-  AuthResetPasswordState({required this.isLoading,required this.isSuccess});
-
-  AuthResetPasswordState copyWith({bool? isLoading, bool? isSuccess}) {
-    return AuthResetPasswordState(
-        isLoading: isLoading ?? this.isLoading,
-        isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  AuthResetPasswordState({required this.isLoading,required this.isSuccess,required this.msg});
 
   @override
-  List<Object?> get props =>[isSuccess,isLoading];
+  List<Object?> get props =>[isSuccess,isLoading,msg];
 
 }
 

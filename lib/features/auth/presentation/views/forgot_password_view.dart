@@ -25,11 +25,13 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
 
   final TextEditingController emailController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _focusNode = FocusNode();
 
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
+    _focusNode.dispose();
   }
 
   @override
@@ -62,6 +64,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                 children: [
                   TextFieldWidget(
                     controller: emailController,
+                    focusNode: _focusNode,
                     onValidate: (val) {
                       if (val!.isEmpty) {
                         return AppLocal.emailRequired.getString(context);
@@ -102,6 +105,7 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
                   if (_formKey.currentState != null &&
                       _formKey.currentState!.validate()) {
                     FocusScope.of(context).unfocus();
+                    _focusNode.unfocus();
                     context.read<AuthBloc>().add(AuthEmailForgotPasswordEvent(email: emailController.text));
                   }
                 },

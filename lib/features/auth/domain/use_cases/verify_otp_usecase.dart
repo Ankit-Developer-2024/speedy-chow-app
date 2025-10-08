@@ -15,12 +15,14 @@ class VerifyOtpUseCase implements UseCase<ApiResponse,VerifyOtpUseCaseParams>{
 
 class VerifyOtpUseCaseParams{
   final String otp;
+  final String email;
 
-  VerifyOtpUseCaseParams({required this.otp});
+  VerifyOtpUseCaseParams({required this.otp,required this.email});
 
   Map<String,dynamic> toJson(){
     return {
       'otp':otp,
+      'email':email
     };
   }
 

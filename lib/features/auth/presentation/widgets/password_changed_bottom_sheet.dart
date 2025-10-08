@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
@@ -43,7 +44,7 @@ Future<dynamic> passwordChangedBottomSheet(BuildContext context) {
             SizedBox(height: AppDimensions.spacing_16,),
             Button(
               onTap: () {
-                 context.goNamed('login');
+                 context.goNamed(AppRoutes.login);
               },
               child: Text(
                 AppLocal.continueText.getString(context),

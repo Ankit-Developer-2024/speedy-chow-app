@@ -193,8 +193,7 @@ class _OtpSheetState extends State<OtpSheet> {
                       listenWhen: (prev, curr) => curr is AuthIsOtpValidState,
                       listener: (context, state) {
                         if (state is AuthIsOtpValidState) {
-                          if (state.isSuccess) {
-                            //go to next screen
+                          if (state.isSuccess && state.isLoading==false) {
                             context.pushNamed(AppRoutes.resetPassword);
                           }
                         }

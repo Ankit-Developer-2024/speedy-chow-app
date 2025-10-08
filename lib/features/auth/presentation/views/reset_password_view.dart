@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/loader.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
@@ -102,9 +104,11 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           controller: newPasswordController,
                           onValidate: (val) {
                             if (val!.isEmpty) {
-                              return AppLocal.validPassword.getString(
+                              return AppLocal.passwordRequired.getString(
                                 context,
                               );
+                            }else if(!RegExp(r'^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$').hasMatch(val)) {
+                              return AppLocal.passwordType.getString(context);
                             }
                             return null;
                           },
@@ -131,7 +135,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           controller: newPasswordConfirmController,
                           onValidate: (val) {
                             if (val!.isEmpty) {
-                              return AppLocal.validPassword.getString(
+                              return AppLocal.passwordRequired.getString(
                                 context,
                               );
                             }
@@ -149,13 +153,7 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
                           isObscureText: true,
                           icon: Icons.visibility_off,
                           controller: newPasswordConfirmController,
-                          onChange: (val){
-                            if(val!=newPasswordController.text){
-                              context.read<AuthBloc>().add(AuthResetPasswordEvent(newPassword: newPasswordController.text, newConfirmPassword: newPasswordConfirmController.text));
-                            }else{
-                              context.read<AuthBloc>().add(AuthResetPasswordEvent(newPassword: newPasswordController.text, newConfirmPassword: newPasswordConfirmController.text));
-                            }
-                          },
+                          onChange: (val){},
                           onValidate: (val) {
                             if (val!.isEmpty) {
                               return AppLocal.validPassword.getString(
@@ -183,62 +181,42 @@ class _ResetPasswordViewState extends State<ResetPasswordView> {
               },
             ),
             Spacer(),
-            BlocConsumer<AuthBloc, AuthState>(
+            BlocListener<AuthBloc, AuthState>(
               listenWhen: (prev, curr) => curr is AuthResetPasswordState,
               listener: (context, state) {
                 if (state is AuthResetPasswordState) {
-                  if (state.isSuccess && !state.isLoading) {
+                  if(state.isLoading==true){
+                    customLoaderDialog(context: context, title: AppLocal.loading);
+                  }
+                  else if (state.isSuccess && !state.isLoading) {
+                    context.pop();
                     passwordChangedBottomSheet(context);
                   } else if (!state.isSuccess && !state.isLoading) {
+                    context.pop();
                     customSnackBar(
                       context,
-                      AppLocal.swtwr.getString(context),
+                      state.msg,
                       bgColor: AppColors.red800,
                     );
                   }
                 }
               },
-              buildWhen: (prev, curr) => curr is AuthResetPasswordState,
-              builder: (context, state) {
-                if (state is AuthResetPasswordState) {
-                  return Button(
-                    onTap: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        FocusScope.of(context).unfocus();
-                        context.read<AuthBloc>().add(AuthResetPasswordEvent(newPassword: newPasswordController.text, newConfirmPassword: newPasswordConfirmController.text));
-                      }
-                    },
-                    child: state.isLoading
-                        ? Center(child: Loader())
-                        : Text(
-                      AppLocal.continueText.getString(context),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.medium20P(
-                        color: AppColors.white,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Button(
-                    onTap: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        FocusScope.of(context).unfocus();
-                        context.read<AuthBloc>().add(AuthResetPasswordEvent(newPassword: newPasswordController.text, newConfirmPassword: newPasswordConfirmController.text));
-
-                      }
-                    },
-                    child: Text(
-                      AppLocal.continueText.getString(context),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.medium20P(
-                        color: AppColors.white,
-                      ),
-                    ),
-                  );
-                }
-              },
+              child: Button(
+                onTap: () {
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    FocusScope.of(context).unfocus();
+                    context.read<AuthBloc>().add(AuthResetPasswordEvent(newPassword: newPasswordController.text, newConfirmPassword: newPasswordConfirmController.text));
+                  }
+                },
+                child:Text(
+                  AppLocal.continueText.getString(context),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.medium20P(
+                    color: AppColors.white,
+                  ),
+                ),
+              ),
             ),
 
 

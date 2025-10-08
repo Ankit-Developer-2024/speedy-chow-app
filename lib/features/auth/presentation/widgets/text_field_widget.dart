@@ -10,6 +10,7 @@ class TextFieldWidget extends StatelessWidget {
     this.icon,
     this.onValidate,
     this.onChange,
+    this.focusNode
   });
   final TextEditingController controller;
   final String label;
@@ -18,6 +19,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool? isObscureText;
   final FormFieldValidator<String>?  onValidate;
   final Function(String)? onChange;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +27,13 @@ class TextFieldWidget extends StatelessWidget {
       autovalidateMode: AutovalidateMode.onUserInteraction,
       controller: controller,
       obscureText: isObscureText ?? false,
+      focusNode: focusNode,
       decoration: InputDecoration(
         isDense: true,
         hintText: label,
         label: Text(label),
         border: OutlineInputBorder(),
+        errorMaxLines: 2,
         suffixIcon: icon != null
             ? IconButton(onPressed: onTap, icon: Icon(icon))
             : null,

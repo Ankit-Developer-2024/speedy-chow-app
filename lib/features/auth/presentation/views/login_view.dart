@@ -88,7 +88,7 @@ class _LoginViewState extends State<LoginView> {
                           controller: passwordController,
                           onValidate: (val) {
                             if (val!.isEmpty) {
-                              return AppLocal.validPassword.getString(
+                              return AppLocal.passwordRequired.getString(
                                 context,
                               );
                             }

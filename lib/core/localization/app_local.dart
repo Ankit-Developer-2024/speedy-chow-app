@@ -47,6 +47,7 @@ mixin AppLocal{
   static const String loginSuccess = 'loginSuccess';
   static const String userNameRequired = 'userNameRequired';
   static const String passwordRequired = 'passwordRequired';
+  static const String passwordType = 'passwordType';
   static const String emailRequired = 'emailRequired';
   static const String registerSuccess = 'registerSuccess';
   static const String swtwr = 'swtwr';
@@ -228,6 +229,7 @@ mixin AppLocal{
     userNameRequired: "User Name is required.",
     emailRequired: "Email Address is required.",
     passwordRequired: "Password is required.",
+    passwordType: "Password must at least one uppercase letter , one lowercase letter, one digit and one special character.",
     validPassword: "Enter a valid Password.",
     passwordChangedSucc: "Password changed successfully, you can login again with a new password.",
     loginFailed: "Wrong Credentials! Login Failed.",
