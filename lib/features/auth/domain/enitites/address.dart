@@ -1,17 +1,17 @@
 import 'package:equatable/equatable.dart';
 
 class Address extends Equatable{
-  String? id;
-  String? houseNo;
-  String? street;
-  String? city;
-  String? landMark;
-  String? state;
-  String? zipCode;
-  String? country;
-  bool? isDefault;
+ final String? id;
+ final String? houseNo;
+ final String? street;
+ final String? city;
+ final String? landMark;
+ final String? state;
+ final String? zipCode;
+ final String? country;
+ final bool? isDefault;
 
-  Address({
+  const Address({
     required this.id,
     required this.houseNo,
     required this.street,

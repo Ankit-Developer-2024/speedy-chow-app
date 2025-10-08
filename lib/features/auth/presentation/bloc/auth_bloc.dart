@@ -1,17 +1,25 @@
 import 'dart:async';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
+import 'package:speedy_chow/core/util/helpers/fetch_lat_log_helper.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/register_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/reset_password_req_usecase.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/reset_password_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/verify_otp_usecase.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -28,6 +36,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final FetchUserUseCase fetchUserUseCase;
   final UpdateAddressAuthUseCase updateAddressAuthUseCase;
   final AddAddressAuthUseCase addressAuthUseCase;
+  final ResetPasswordReqUseCase resetPasswordReqUseCase;
+  final ResetPasswordUseCase resetPasswordUseCase;
+  final VerifyOtpUseCase verifyOtpUseCase;
 
   AuthBloc({
     required this.authLoginUseCase,
@@ -35,6 +46,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.fetchUserUseCase,
     required this.updateAddressAuthUseCase,
     required this.addressAuthUseCase,
+    required this.resetPasswordReqUseCase,
+    required this.resetPasswordUseCase,
+    required this.verifyOtpUseCase,
   }) : super(AuthInitial()) {
     on<PasswordHiddenEvent>(_isPasswordHidden);
     on<AuthLoginEvent>(_login);
@@ -52,6 +66,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SelectDefaultAddressAuthEvent>(_selectDefaultAddress);
     on<AddAddressAuthEvent>(_addAddress);
     on<FormIsDefaultAddressAuthEvent>(_formIsDefaultAddress);
+    on<UserFetchAddressAuthEvent>(_userFetchAddress);
   }
 
   void _isPasswordHidden(PasswordHiddenEvent event,Emitter<AuthState> emit){
@@ -122,14 +137,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _emailForgotPasswordState(AuthEmailForgotPasswordEvent event,Emitter<AuthState> emit)async{
 
-    emit(AuthEmailForgotPasswordState(isLoading: true ,isSuccess: false));
-    await Future.delayed(Duration(seconds: 3));
-    //call api here
-    if(event.email =="demo@gmail.com"){
-      email=event.email;
-      emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: true,));
+    emit(AuthEmailForgotPasswordState(isLoading: true ,isSuccess: false,msg: ""));
+    if(event.email.isNotEmpty){
+      try{
+        email=event.email;
+        ApiResponse? response=await resetPasswordReqUseCase(ResetPasswordReqUseCaseParams(email: event.email));
+        if(response?.success==true){
+          emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: true,msg: response!.message.toString()));
+        }else{
+          emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false,msg: response?.message.toString() ?? "User not found!"));
+        }
+      }catch(err){
+        emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false,msg: err.toString()));
+      }
+
     }else{
-      emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false ));
+      emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false,msg: "Email field empty!" ));
     }
 
   }
@@ -249,6 +272,38 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _formIsDefaultAddress(FormIsDefaultAddressAuthEvent event,Emitter<AuthState> emit){
     emit(FormIsDefaultAddressAuthState());
+  }
+
+  void _userFetchAddress(UserFetchAddressAuthEvent event,Emitter<AuthState> emit)async{
+
+    try{
+      emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: false, message: "", loading: true));
+      Position? data=await FetchLatLogHelper.getCurrentLatLog(context: event.context);
+      if(data!=null){
+        List<Placemark> placemarks = await placemarkFromCoordinates(data.latitude, data.longitude);
+        if(placemarks.isNotEmpty){
+          emit(
+            UserFetchAddressAuthState(
+                street: "${placemarks[0].street}, ${placemarks[0].thoroughfare}, ${placemarks[0].locality}",
+                zipcode: placemarks[0].postalCode ?? "",
+                country: placemarks[0].country ?? "",
+                state: placemarks[0].administrativeArea ?? "",
+                city: placemarks[0].subAdministrativeArea ?? "",
+                error: false,
+                message: "Address fetch Successfully",
+                loading: false));
+        }else{
+          emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));
+        }
+      }else{
+        emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));
+      }
+    } on PlatformException catch(e){
+      emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));
+    }catch(e){
+      emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));
+    }
+
   }
 
 

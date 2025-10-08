@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/components/widgets/loader.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
@@ -74,62 +76,43 @@ class _ForgotPasswordViewState extends State<ForgotPasswordView> {
               ),
             ),
             Spacer(),
-            BlocConsumer<AuthBloc, AuthState>(
+            BlocListener<AuthBloc, AuthState>(
               listenWhen: (prev, curr) => curr is AuthEmailForgotPasswordState,
               listener: (context, state) {
                 if (state is AuthEmailForgotPasswordState) {
-                  if (state.isSuccess && !state.isLoading) {
+                  if(state.isLoading){
+                    customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
+                  }
+                 else if (state.isSuccess && !state.isLoading) {
+                     context.pop();
                     otpBottomSheet(context,context.read<AuthBloc>());
 
                   } else if (!state.isSuccess && !state.isLoading) {
+                    context.pop();
                     customSnackBar(
                       context,
-                      AppLocal.loginFailed.getString(context),
+                      state.msg,
                       bgColor: AppColors.red800,
                     );
                   }
                 }
               },
-              buildWhen: (prev, curr) => curr is AuthEmailForgotPasswordState,
-              builder: (context, state) {
-                if (state is AuthEmailForgotPasswordState) {
-                  return Button(
-                    onTap: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        FocusScope.of(context).unfocus();
-                        context.read<AuthBloc>().add(AuthEmailForgotPasswordEvent(email: emailController.text));
-                      }
-                    },
-                    child: state.isLoading
-                        ? Center(child: Loader())
-                        : Text(
-                      AppLocal.continueText.getString(context),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.medium20P(
-                        color: AppColors.white,
-                      ),
-                    ),
-                  );
-                } else {
-                  return Button(
-                    onTap: () {
-                      if (_formKey.currentState != null &&
-                          _formKey.currentState!.validate()) {
-                        FocusScope.of(context).unfocus();
-                       context.read<AuthBloc>().add(AuthEmailForgotPasswordEvent(email: emailController.text));
-                      }
-                    },
-                    child: Text(
-                      AppLocal.continueText.getString(context),
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.medium20P(
-                        color: AppColors.white,
-                      ),
-                    ),
-                  );
-                }
-              },
+              child:Button(
+                onTap: () {
+                  if (_formKey.currentState != null &&
+                      _formKey.currentState!.validate()) {
+                    FocusScope.of(context).unfocus();
+                    context.read<AuthBloc>().add(AuthEmailForgotPasswordEvent(email: emailController.text));
+                  }
+                },
+                child:Text(
+                  AppLocal.continueText.getString(context),
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.medium20P(
+                    color: AppColors.white,
+                  ),
+                ),
+              )
             ),
           ],
         ),

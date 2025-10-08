@@ -70,7 +70,7 @@ class OrderedPlacedView extends StatelessWidget {
                       context.read<NavigationBloc>().add(
                         NavigationTabChangedEvent(index: 0),
                       );
-                    }, child: Center(child: Text(AppLocal.backToCart.getString(context),style: AppTextStyles.medium18P(color: AppColors.white),))),
+                    }, child: Center(child: Text(AppLocal.backToHome.getString(context),style: AppTextStyles.medium18P(color: AppColors.white),))),
               )
 
             ],

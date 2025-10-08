@@ -2,25 +2,41 @@
 
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:get_it/get_it.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/features/auth/data/data_source/aut_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/auth_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/data_source/register_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/register_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/reset_password_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/reset_password_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/reset_password_req_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/reset_password_req_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/data_source/user_remote_source.dart';
 import 'package:speedy_chow/features/auth/data/data_source/user_remote_source_impl.dart';
+import 'package:speedy_chow/features/auth/data/data_source/verify_otp_remote_source.dart';
+import 'package:speedy_chow/features/auth/data/data_source/verify_otp_remote_source_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/auth_login_repo_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/register_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/reset_password_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/reset_password_req_repo_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/user_repo_impl.dart';
+import 'package:speedy_chow/features/auth/data/repositories/verify_otp_repo_impl.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/auth_login_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/reaet_password_req_repo.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/register_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/reset_password_repo.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/user_repo.dart';
+import 'package:speedy_chow/features/auth/domain/repositories/verify_otp_repo.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/add_address_auth_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/auth_login_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/fetch_user_use_case.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/register_use_case.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/reset_password_req_usecase.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/reset_password_usecase.dart';
 import 'package:speedy_chow/features/auth/domain/use_cases/update_address_auth_usecase.dart';
+import 'package:speedy_chow/features/auth/domain/use_cases/verify_otp_usecase.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
@@ -56,20 +72,30 @@ import 'package:speedy_chow/features/cart/data/data_source/remote_source/update_
 import 'package:speedy_chow/features/auth/data/repositories/add_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/delete_cart_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/fetch_cart_products_repo_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/razorpay_order_id_remote_source.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/razorpay_order_id_remote_source_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/razorpay_save_verify_remote_source.dart';
+import 'package:speedy_chow/features/payment_method/data/data_source/remote_source/razorpay_save_verify_remote_source_impl.dart';
 import 'package:speedy_chow/features/payment_method/data/repositories/create_order_repo_impl.dart';
 import 'package:speedy_chow/features/auth/data/repositories/update_address_repo_impl.dart';
 import 'package:speedy_chow/features/cart/data/repositories/update_cart_repo_impl.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/add_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/delete_cart_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/fetch_cart_products_repo.dart';
+import 'package:speedy_chow/features/payment_method/data/repositories/razorpay_order_id_repo_impl.dart';
+import 'package:speedy_chow/features/payment_method/data/repositories/razorpay_save_verify_repo_impl.dart';
 import 'package:speedy_chow/features/payment_method/domain/repostories/create_order_repo.dart';
 import 'package:speedy_chow/features/auth/domain/repositories/update_address_repo.dart';
 import 'package:speedy_chow/features/cart/domain/repositories/update_cart_repo.dart';
+import 'package:speedy_chow/features/payment_method/domain/repostories/razorpay_order_id_repo.dart';
+import 'package:speedy_chow/features/payment_method/domain/repostories/razorpay_save_verify_repo.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/delete_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/fetch_user_cart_use_case.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/create_order_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/fetch_cart_items_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/razorpay_order_id_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/razorpay_save_verify_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/update_address_usecase.dart';
 import 'package:speedy_chow/features/cart/domain/use_case/update_cart_use_case.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
@@ -197,18 +223,27 @@ void _initAuthBloc(){
   ..registerFactory<UserRemoteSource>(()=>UserRemoteSourceImpl())
   ..registerFactory<UpdateAddressRemoteSource>(()=>UpdateAddressRemoteSourceImpl())
   ..registerFactory<AddAddressRemoteSource>(()=>AddAddressRemoteSourceImpl())
+  ..registerFactory<ResetPasswordReqRemoteSource>(()=>ResetPasswordReqRemoteSourceImpl())
+  ..registerFactory<ResetPasswordRemoteSource>(()=>ResetPasswordRemoteSourceImpl())
+  ..registerFactory<VerifyOtpRemoteSource>(()=>VerifyOtpRemoteSourceImpl())
 
   ..registerFactory<AuthLoginRepo>(()=>AuthLoginRepoImpl(authRemoteSource: getIt<AuthRemoteSource>()))
   ..registerFactory<RegisterRepo>(()=>RegisterRepoImpl(registerRemoteSource: getIt<RegisterRemoteSource>()))
   ..registerFactory<UserRepo>(()=>UserRepoImpl(userRemoteSource: getIt<UserRemoteSource>()))
   ..registerFactory<UpdateAddressRepo>(()=>UpdateAddressRepoImpl(updateAddressRemoteSource: getIt<UpdateAddressRemoteSource>()))
   ..registerFactory<AddAddressRepo>(()=>AddAddressRepoImpl(addAddressRemoteSource: getIt<AddAddressRemoteSource>()))
+  ..registerFactory<ResetPasswordReqRepo>(()=>ResetPasswordReqRepoImpl(resetPasswordReqRemoteSource: getIt<ResetPasswordReqRemoteSource>()))
+  ..registerFactory<ResetPasswordRepo>(()=>ResetPasswordRepoImpl(resetPasswordRemoteSource: getIt<ResetPasswordRemoteSource>()))
+  ..registerFactory<VerifyOtpRepo>(()=>VerifyOtpRepoImpl(verifyOtpRemoteSource: getIt<VerifyOtpRemoteSource>()))
 
   ..registerFactory<AuthLoginUseCase>(()=>AuthLoginUseCase(authLoginRepo: getIt<AuthLoginRepo>()))
   ..registerFactory<RegisterUseCase>(()=>RegisterUseCase(registerRepo: getIt<RegisterRepo>()))
   ..registerFactory<FetchUserUseCase>(()=>FetchUserUseCase(userRepo: getIt<UserRepo>()))
   ..registerFactory<UpdateAddressAuthUseCase>(()=>UpdateAddressAuthUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
   ..registerFactory<AddAddressAuthUseCase>(()=>AddAddressAuthUseCase(addAddressRepo: getIt<AddAddressRepo>()))
+  ..registerFactory<ResetPasswordReqUseCase>(()=>ResetPasswordReqUseCase(resetPasswordReqRepo: getIt<ResetPasswordReqRepo>()))
+  ..registerFactory<ResetPasswordUseCase>(()=>ResetPasswordUseCase(resetPasswordRepo: getIt<ResetPasswordRepo>()))
+  ..registerFactory<VerifyOtpUseCase>(()=>VerifyOtpUseCase(verifyOtpRepo: getIt<VerifyOtpRepo>()))
 
 
   ..registerSingleton(AuthBloc(
@@ -216,7 +251,10 @@ void _initAuthBloc(){
       registerUseCase: getIt<RegisterUseCase>(),
       fetchUserUseCase: getIt<FetchUserUseCase>(),
       updateAddressAuthUseCase: getIt<UpdateAddressAuthUseCase>(),
-      addressAuthUseCase: getIt<AddAddressAuthUseCase>()
+      addressAuthUseCase: getIt<AddAddressAuthUseCase>(),
+      resetPasswordReqUseCase: getIt<ResetPasswordReqUseCase>(),
+      resetPasswordUseCase: getIt<ResetPasswordUseCase>(),
+      verifyOtpUseCase: getIt<VerifyOtpUseCase>(),
   ));
 }
 
@@ -313,19 +351,28 @@ void _initOrderBloc(){
 void _paymentMethod(){
 
   getIt..registerFactory<CreateOrderRemoteSource>(()=>CreateOrderRemoteSourceImpl())
+  ..registerFactory<RazorpayOrderIdRemoteSource>(()=>RazorpayOrderIdRemoteSourceImpl())
+  ..registerFactory<RazorpaySaveVerifyRemoteSource>(()=>RazorpaySaveVerifyRemoteSourceImpl())
 
  ..registerFactory<CreateOrderRepo>(()=>CreateOrderRepoImpl(createOrderRemoteSource: getIt<CreateOrderRemoteSource>()))
+ ..registerFactory<RazorpayOrderIdRepo>(()=>RazorpayOrderIdRepoImpl(razorpayOrderIdRemoteSource: getIt<RazorpayOrderIdRemoteSource>()))
+ ..registerFactory<RazorpaySaveVerifyRepo>(()=>RazorpaySaveVerifyRepoImpl(razorpaySaveVerifyRemoteSource: getIt<RazorpaySaveVerifyRemoteSource>()))
 
   ..registerFactory<UpdateAddressUseCase>(()=>UpdateAddressUseCase(updateAddressRepo: getIt<UpdateAddressRepo>()))
   ..registerFactory<AddAddressUseCase>(()=>AddAddressUseCase(addAddressRepo: getIt<AddAddressRepo>()))
   ..registerFactory<CreateOrderUseCase>(()=>CreateOrderUseCase(createOrderRepo: getIt<CreateOrderRepo>()))
   ..registerFactory<FetchCartItemsUseCase>(()=>FetchCartItemsUseCase(fetchCartProductsRepo: getIt<FetchCartProductsRepo>()))
+  ..registerFactory<RazorpayOrderIdUseCase>(()=>RazorpayOrderIdUseCase(razorpayOrderIdRepo: getIt<RazorpayOrderIdRepo>()))
+  ..registerFactory<RazorpaySaveVerifyUseCase>(()=>RazorpaySaveVerifyUseCase(razorpaySaveVerifyRepo: getIt<RazorpaySaveVerifyRepo>()))
 
   ..registerFactory<PaymentMethodBloc>(()=>PaymentMethodBloc(
     updateAddressUseCase:getIt<UpdateAddressUseCase>(),
     addAddressUseCase:getIt<AddAddressUseCase>(),
     createOrderUseCase:getIt<CreateOrderUseCase>(),
-    fetchCartItemsUseCase: getIt<FetchCartItemsUseCase>()
+    fetchCartItemsUseCase: getIt<FetchCartItemsUseCase>(),
+    razorpay: Razorpay(),
+    razorpayOrderIdUseCase: getIt<RazorpayOrderIdUseCase>(),
+    razorpaySaveVerifyUseCase: getIt<RazorpaySaveVerifyUseCase>(),
   ));
 }
 

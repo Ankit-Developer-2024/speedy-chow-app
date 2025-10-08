@@ -141,3 +141,12 @@ final class FormIsDefaultAddressAuthEvent extends AuthEvent{
   @override
   List<Object?> get props => [dateTime];
 }
+
+
+final class UserFetchAddressAuthEvent extends AuthEvent{
+  final BuildContext context;
+
+  UserFetchAddressAuthEvent({required this.context});
+  @override
+  List<Object?> get props => [context];
+}

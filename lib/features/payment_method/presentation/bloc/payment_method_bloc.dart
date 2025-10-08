@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
@@ -10,6 +11,8 @@ import 'package:speedy_chow/features/payment_method/domain/enitites/create_order
 import 'package:speedy_chow/features/payment_method/domain/use_case/add_address_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/create_order_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/fetch_cart_items_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/razorpay_order_id_use_case.dart';
+import 'package:speedy_chow/features/payment_method/domain/use_case/razorpay_save_verify_usecase.dart';
 import 'package:speedy_chow/features/payment_method/domain/use_case/update_address_usecase.dart';
 
 part 'payment_method_event.dart';
@@ -27,13 +30,21 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   final AddAddressUseCase addAddressUseCase;
   final CreateOrderUseCase createOrderUseCase;
   final FetchCartItemsUseCase fetchCartItemsUseCase;
+  final RazorpayOrderIdUseCase razorpayOrderIdUseCase;
+  final Razorpay razorpay;
+  final RazorpaySaveVerifyUseCase razorpaySaveVerifyUseCase;
 
   PaymentMethodBloc({
     required this.updateAddressUseCase,
     required this.addAddressUseCase,
     required this.createOrderUseCase,
-    required this.fetchCartItemsUseCase
+    required this.fetchCartItemsUseCase,
+    required this.razorpay,
+    required this.razorpayOrderIdUseCase,
+    required this.razorpaySaveVerifyUseCase,
   }) : super(PaymentMethodInitial()) {
+    razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
     on<AddAddressPaymentMethodEvent>(_addAddress);
     on<UpdateAddressPaymentMethodEvent>(_updateAddress);
     on<DefaultAddressEvent>(_isDefaultAddress);
@@ -42,6 +53,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
     on<SelectPaymentMethodEvent>(_selectPaymentMethod);
     on<CreateOrderEvent>(_createOrder);
     on<FetchCartEvent>(_fetchCart);
+    on<RazorpayPaymentEvent>(_razorpayPayment);
+    on<RazorpayPaymentNotifyErrorEvent>(_razorpayPaymentNotifyError);
   }
 
   void _addAddress(AddAddressPaymentMethodEvent event , Emitter<PaymentMethodState> emit)async{
@@ -137,9 +150,6 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
     }
   }
 
-
-
-
   void _createOrder(CreateOrderEvent event,Emitter<PaymentMethodState> emit)async{
     try{
       emit(CreateOrderState(msg: "", loading: true, success: false, createOrder: CreateOrder(isOrderCreated: false)));
@@ -150,7 +160,9 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
           totalAmount: event.totalAmount,
           totalItems: event.totalItems,
           paymentMethod: event.paymentMethod,
-          selectedAddress: event.selectedAddress));
+          selectedAddress: event.selectedAddress,
+          paymentId: event.paymentId
+          ));
 
       if(response?.success==true){
         emit(CreateOrderState(msg: response?.message.toString() ?? "Order created successfully.", loading: false, success: true, createOrder: response?.data));
@@ -161,4 +173,77 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
       emit(CreateOrderState(msg: "", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
     }
   }
+
+  void _razorpayPayment(RazorpayPaymentEvent event,Emitter<PaymentMethodState> emit)async{
+      try{
+
+        ApiResponse? response = await razorpayOrderIdUseCase(RazorpayOrderIdParams(amount: totalPrice*100, otherDetails: {"totalItems":items.length}));
+        if(response?.success==true){
+          var options = {
+            'key': 'rzp_test_ROzfZsP410mNpn',
+            'amount': response?.data.amount,
+            'name': 'Speedy Chow',
+            'description': 'Buy fast food from Speedy Chow',
+            "order_id": response?.data.orderId,
+            'retry': {'enabled': true, 'max_count': 4},
+            'send_sms_hash': true,
+            'prefill': {'contact': '+918059600000', 'email': 'test@razorpay.com'},
+          };
+            razorpay.open(options);
+        }else{
+          emit(RazorpayPaymentNotifyErrorState(msg: response?.message ?? "Payment failed!"));
+        }
+
+      }catch (err){
+        emit(RazorpayPaymentNotifyErrorState(msg: "$err | Payment failed!"));
+
+      }
+  }
+
+  void _razorpayPaymentNotifyError(RazorpayPaymentNotifyErrorEvent event,Emitter<PaymentMethodState> emit){
+    emit(RazorpayPaymentNotifyErrorState(msg: event.msg));
+  }
+
+  void _handlePaymentSuccess(PaymentSuccessResponse response) async{
+      //call api save data and verify in single api
+     try{
+       if(response.paymentId!=null && response.orderId!=null && response.signature!=null){
+         ApiResponse? resp=await razorpaySaveVerifyUseCase(RazorpaySaveVerifyParams(paymentId: response.paymentId!, orderId: response.orderId!, paymentSignature: response.signature!));
+
+         if(resp?.success==true && resp?.data.verify==true){
+           add(CreateOrderEvent(
+               items: items
+                   .map((item) => item.toJson())
+                   .toList(),
+               totalAmount: totalPrice,
+               totalItems: items.length,
+               paymentMethod: "Razorpay",
+               selectedAddress: selectedAddressModel == null ? {}
+                   : selectedAddressModel!.toJson(),
+             paymentId: response.paymentId!
+           ));
+         }else{
+           print("222222222222");
+            add(RazorpayPaymentNotifyErrorEvent(msg: "Payment not verified"));
+         }
+       }
+     }catch(err){
+       print("3333333333333333333${err.toString()}");
+       add(RazorpayPaymentNotifyErrorEvent(msg: err.toString()));
+     }
+  }
+
+  void _handlePaymentError(PaymentFailureResponse response) {
+    print("4444444444444${response.message}");
+    add(RazorpayPaymentNotifyErrorEvent(msg: "Payment failed"));
+  }
+
+
+  @override
+  Future<void> close() {
+    razorpay.clear();
+    return super.close();
+  }
+
+
 }

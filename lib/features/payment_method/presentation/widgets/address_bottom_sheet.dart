@@ -4,11 +4,14 @@ import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/components/widgets/customLoader.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
+import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/auth/presentation/widgets/text_field_widget.dart';
 import 'package:speedy_chow/features/payment_method/presentation/bloc/payment_method_bloc.dart';
 
@@ -51,6 +54,25 @@ class _CustomAddressBottomSheetState extends State<CustomAddressBottomSheet> {
   bool isDefault=false;
 
   @override
+  void initState() {
+    super.initState();
+    country.text="India";
+    name.text = context.read<PaymentMethodBloc>().userModel!.name.toString();
+    phone.text = context.read<PaymentMethodBloc>().userModel!.phone.toString();
+    if(widget.address!=null){
+      houseNo.text=widget.address!.houseNo.toString();
+      street.text=widget.address!.street.toString();
+      landMark.text=widget.address!.landMark.toString();
+      zipcode.text=widget.address!.zipCode.toString();
+      city.text=widget.address!.city.toString();
+      state.text=widget.address!.state.toString();
+      isDefault=widget.address!.isDefault ?? false;
+
+    }
+
+  }
+
+  @override
   void dispose() {
     super.dispose();
     name.dispose();
@@ -66,19 +88,6 @@ class _CustomAddressBottomSheetState extends State<CustomAddressBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    country.text="India";
-    name.text = context.read<PaymentMethodBloc>().userModel!.name.toString();
-    phone.text = context.read<PaymentMethodBloc>().userModel!.phone.toString();
-    if(widget.address!=null){
-        houseNo.text=widget.address!.houseNo.toString();
-        street.text=widget.address!.street.toString();
-        landMark.text=widget.address!.landMark.toString();
-        zipcode.text=widget.address!.zipCode.toString();
-        city.text=widget.address!.city.toString();
-        state.text=widget.address!.state.toString();
-        isDefault=widget.address!.isDefault ?? false;
-
-    }
     return SingleChildScrollView(
       child: Padding(
         padding: EdgeInsets.only(
@@ -140,10 +149,34 @@ class _CustomAddressBottomSheetState extends State<CustomAddressBottomSheet> {
                           }
                       ),
                       Text(AppLocal.maybeAssistDelivery.getString(context),style: AppTextStyles.medium12P(),),
-                      Button(onTap: (){},
-                          color: AppColors.transparent,
-                          border: BoxBorder.fromBorderSide(BorderSide(color: AppColors.grey500)),
-                          child: Center(child: Text(AppLocal.useMyLocation.getString(context),style: AppTextStyles.medium16P(),))),
+                      BlocListener<AuthBloc, AuthState>(
+                        listenWhen: (prev,curr)=> curr is UserFetchAddressAuthState,
+                        listener: (context, states) {
+                          if(states is UserFetchAddressAuthState){
+                            if(states.loading==true){
+                              customLoaderDialog(context: context, title:AppLocal.fetchingAddress.getString(context));
+                            }
+                            else if(states.loading==false && states.error==false){
+                              street.text=states.street;
+                              zipcode.text=states.zipcode;
+                              country.text=states.country;
+                              state.text=states.state;
+                              city.text=states.city;
+                              context.pop();
+                            }else if(states.loading==false && states.error==true){
+                              context.pop();
+                              customSnackBar(context,states.message);
+                            }
+                          }
+                        },
+                        child: Button(onTap: (){
+                          context.read<AuthBloc>().add(UserFetchAddressAuthEvent(context: context));
+                        },
+                            color: AppColors.transparent,
+                            border: BoxBorder.fromBorderSide(BorderSide(color: AppColors.grey500)),
+                            child: Center(child: Text(AppLocal.useMyLocation.getString(context),style: AppTextStyles.medium16P(),))
+                        ),),
+
                       TextFieldWidget(controller: houseNo, label: AppLocal.houseNo.getString(context),
                           onValidate: (val){
                             if(val!.isEmpty){

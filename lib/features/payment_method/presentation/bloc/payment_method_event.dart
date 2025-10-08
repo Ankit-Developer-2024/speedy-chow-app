@@ -68,9 +68,27 @@ final class CreateOrderEvent extends PaymentMethodEvent{
   final int totalItems;
   final String paymentMethod;
   final Map<String,dynamic> selectedAddress;
+  final String paymentId;
 
-  CreateOrderEvent({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
+  CreateOrderEvent({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress,required this.paymentId});
   @override
-  List<Object?> get props => [items,totalAmount,totalItems,paymentMethod,selectedAddress];
+  List<Object?> get props => [items,totalAmount,totalItems,paymentMethod,selectedAddress,paymentId];
+
+}
+
+final class RazorpayPaymentEvent extends PaymentMethodEvent{
+ final DateTime dateTime=DateTime.now();
+
+  @override
+  List<Object?> get props =>[dateTime];
+
+}
+
+final class RazorpayPaymentNotifyErrorEvent extends PaymentMethodEvent{
+  final String msg;
+
+  RazorpayPaymentNotifyErrorEvent({required this.msg});
+  @override
+  List<Object?> get props => [msg];
 
 }

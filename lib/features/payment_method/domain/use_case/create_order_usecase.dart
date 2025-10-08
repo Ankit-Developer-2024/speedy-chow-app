@@ -21,8 +21,9 @@ class CreateOrderUseCaseParams{
   final int totalItems;
   final String paymentMethod;
   final Map<String,dynamic> selectedAddress;
+  final String paymentId;
 
-  CreateOrderUseCaseParams({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
+  CreateOrderUseCaseParams({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress,required this.paymentId});
 
    Map<String,dynamic> toJson(){
     return {
@@ -31,6 +32,7 @@ class CreateOrderUseCaseParams{
       "totalItems":totalItems,
       "paymentMethod":paymentMethod,
       "selectedAddress":selectedAddress,
+      "paymentId":paymentId
     };
   }
 }

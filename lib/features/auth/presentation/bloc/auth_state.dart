@@ -79,18 +79,12 @@ final class AuthForgotPasswordState extends AuthState{
 final class AuthEmailForgotPasswordState extends AuthState {
   final bool isLoading;
   final bool isSuccess;
+  final String msg;
 
-  AuthEmailForgotPasswordState({required this.isLoading,required this.isSuccess});
-
-  AuthEmailForgotPasswordState copyWith({bool? isLoading, bool? isSuccess}) {
-    return AuthEmailForgotPasswordState(
-        isLoading: isLoading ?? this.isLoading,
-        isSuccess: isSuccess ?? this.isSuccess
-    );
-  }
+  AuthEmailForgotPasswordState({required this.isLoading,required this.isSuccess,required this.msg});
 
   @override
-  List<Object?> get props => [isLoading, isSuccess];
+  List<Object?> get props => [isLoading, isSuccess,msg];
 }
 
 final class AuthIsOtpValidState extends AuthState{
@@ -209,4 +203,28 @@ final class FormIsDefaultAddressAuthState extends AuthState{
   final DateTime dateTime=DateTime.now();
   @override
   List<Object?> get props => [dateTime];
+}
+
+final class UserFetchAddressAuthState extends AuthState{
+  final bool error;
+  final bool loading;
+  final String message;
+  final String street;
+  final String zipcode;
+  final String country;
+  final String state;
+  final String city;
+
+  UserFetchAddressAuthState({
+    required this.street,
+    required this.zipcode,
+    required this.country,
+    required this.state,
+    required this.city,
+    required this.error,
+    required this.message,
+    required this.loading,
+  });
+  @override
+  List<Object?> get props => [street,zipcode,country,state,city,error,message,loading];
 }

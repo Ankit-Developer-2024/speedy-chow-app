@@ -3,6 +3,7 @@
 mixin AppLocal{
   static const String speedChow = 'speedChow';
   static const String loading = 'loading';
+  static const String fetchingAddress = 'fetchingAddress';
   static const String whatWeServe = 'whatWeServe';
   static const String whatWeServeDesc = 'whatWeServeDesc';
   static const String skip = 'skip';
@@ -70,7 +71,9 @@ mixin AppLocal{
   static const String deliveryTo='deliveryTo';
   static const String orderTotal='orderTotal';
   static const String selectPaymentMethod='selectPaymentMethod';
+  static const String enterPaymentInfo='enterPaymentInfo';
   static const String cashOnDelivery='cashOnDelivery';
+  static const String razorpayPayment='razorpayPayment';
   static const String recommendedForYou='recommendedForYou';
   static const String ouchHungry='ouchHungry';
   static const String notOrderedAnyFood='notOrderedAnyFood';
@@ -123,6 +126,8 @@ mixin AppLocal{
   static const String  enable='enable';
   static const String  galleryPermission='galleryPermission';
   static const String  galleryPermissionDesc='galleryPermissionDesc';
+  static const String  locationPermission='locationPermission';
+  static const String  locationPermissionDesc='locationPermissionDesc';
   static const String  dobFieldEmpty='dobFieldEmpty';
   static const String  genderFieldEmpty='genderFieldEmpty';
   static const String  changeDeliveryAddress='changeDeliveryAddress';
@@ -181,6 +186,7 @@ mixin AppLocal{
    static const Map<String, dynamic> EN = {
     speedChow: 'SPEEDY CHOW',
     loading: 'Loading...',
+    fetchingAddress: 'Fetching address...',
     whatWeServe: 'We serve incomparable delicacies',
     whatWeServeDesc: 'All the best restaurants with their top menu waiting for you, they cant’t wait for your order!!',
     skip: 'Skip',
@@ -248,7 +254,9 @@ mixin AppLocal{
      deliveryTo: "Delivery to",
      orderTotal: "Order Total:",
      selectPaymentMethod: "Select a payment method",
+     enterPaymentInfo:"Please enter your payment information to continue.",
      cashOnDelivery: "Cash on Delivery/Pay on Delivery",
+     razorpayPayment: "Razorpay (UPI | Cards | NetBanking etc.)",
     recommendedForYou: "Recommended For You",
     ouchHungry: "Ouch! Hungry",
     notOrderedAnyFood: "Seems like you have not ordered any food yet",
@@ -301,6 +309,8 @@ mixin AppLocal{
      enable: "Enable",
      galleryPermission: "Gallery Permission",
      galleryPermissionDesc: "Please allow access to your gallery. Speedy chow cannot pick photo without this permission.",
+     locationPermission: "Location Permission",
+     locationPermissionDesc: "Please allow access to your location services. Speedy chow cannot fetch location without this permission.",
      dobFieldEmpty: "DOB field may be empty!",
      genderFieldEmpty: "Gender field may be empty!",
      changeDeliveryAddress:"Change delivery Address",

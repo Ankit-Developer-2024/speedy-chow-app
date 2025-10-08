@@ -31,7 +31,7 @@ class PaymentMethods extends StatelessWidget {
                  crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
                    Icon(Icons.error_rounded,color: AppColors.red1000,),
-                   Expanded(child: Text("Please enter your payment information to continue.",style: AppTextStyles.medium14P(color: AppColors.red1000),))
+                   Expanded(child: Text(AppLocal.enterPaymentInfo.getString(context),style: AppTextStyles.medium14P(color: AppColors.red1000),))
                  ],
                )
                    :SizedBox.shrink();
@@ -46,12 +46,7 @@ class PaymentMethods extends StatelessWidget {
               context.read<PaymentMethodBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: true));
             }else{
               context.read<PaymentMethodBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
-              if(context.read<PaymentMethodBloc>().paymentMethod=='COD'){
-                context.pushNamed(AppRoutes.createOrder,extra: context.read<PaymentMethodBloc>());
-              }else{
-                customSnackBar(context, "UPI payment method not active we are currently working on this.",bgColor: AppColors.yellow800);
-              }
-
+              context.pushNamed(AppRoutes.createOrder,extra: context.read<PaymentMethodBloc>());
             }
 
           },
@@ -80,11 +75,13 @@ class PaymentMethods extends StatelessWidget {
               ),
             ),
             CheckboxMenuButton(
-              value: context.read<PaymentMethodBloc>().paymentMethod=="UPI" ? true :false,
+              value: context.read<PaymentMethodBloc>().paymentMethod=="Razorpay" ? true :false,
               onChanged: (val) {
-                context.read<PaymentMethodBloc>()..add(SelectPaymentMethodEvent(paymentMethod: "UPI"))..add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
+                context.read<PaymentMethodBloc>()..add(SelectPaymentMethodEvent(paymentMethod: "Razorpay"))..add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
               },
-              child: Text("UPI", style: AppTextStyles.medium14P()),
+              child: SizedBox(
+                   width:MediaQuery.sizeOf(context).width-102,
+                  child: Text(AppLocal.razorpayPayment.getString(context),style: AppTextStyles.medium14P(),overflow: TextOverflow.ellipsis,maxLines: 2,))
             ),
           ],
         );

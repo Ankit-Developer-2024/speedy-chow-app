@@ -25,7 +25,6 @@ class CreateOrderView extends StatefulWidget {
 }
 
 class _CreateOrderViewState extends State<CreateOrderView> {
-
   @override
   void initState() {
     super.initState();
@@ -35,7 +34,7 @@ class _CreateOrderViewState extends State<CreateOrderView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBar(
+      appBar: AppBar(
         shadowColor: AppColors.grey10.withAlpha(100),
         leading: IconButton(
           onPressed: () {
@@ -55,68 +54,110 @@ class _CreateOrderViewState extends State<CreateOrderView> {
             top: AppDimensions.spacing_10,
           ),
           child: Column(
-           mainAxisSize: MainAxisSize.min,
-           crossAxisAlignment: CrossAxisAlignment.start,
-           spacing: AppDimensions.spacing_10,
-           children: [
-             PrimaryButton(
-               onPress: (){
-                 context.read<PaymentMethodBloc>().add(CreateOrderEvent(
-                     items: context.read<PaymentMethodBloc>().items.map((item)=>item.toJson()).toList(),
-                     totalAmount: context.read<PaymentMethodBloc>().totalPrice,
-                     totalItems: context.read<PaymentMethodBloc>().items.length,
-                     paymentMethod: context.read<PaymentMethodBloc>().paymentMethod,
-                     selectedAddress:context.read<PaymentMethodBloc>().selectedAddressModel == null
-                         ? {}
-                         : context.read<PaymentMethodBloc>().selectedAddressModel!.toJson()
-                 ));
-               },
-               title:AppLocal.placeYourOrder.getString(context),
-               titleStyle: AppTextStyles.medium18P(color: AppColors.white),
-             ),
-             HAxisLine(),
-             TotalRupeeDetails(),
-             HAxisLine(),
-             PayingMethodDetails(),
-             HAxisLine(),
-             DeliveringAddressDetails(),
-             HAxisLine(),
-             ItemsDetails(),
-             HAxisLine(),
-             BlocListener<PaymentMethodBloc, PaymentMethodState>(
-              listenWhen: (prev,curr)=>curr is CreateOrderState,
-              listener: (context, state) {
-                   if(state is CreateOrderState){
-                     if(state.loading==true){
-                       customLoaderDialog(context: context, title: AppLocal.loading.getString(context));
-                     }else if(state.success==true){
-                       context.pop();
-                       context.pushReplacementNamed(AppRoutes.orderPlaced,extra: context.read<PaymentMethodBloc>());
-                     }else if(state.success==false){
-                       context.pop();
-                       customSnackBar(context, state.msg,bgColor: AppColors.red800);
-                     }
-                   }
-               },
-              child: PrimaryButton(
-               onPress: (){
-                  context.read<PaymentMethodBloc>().add(CreateOrderEvent(
-                      items: context.read<PaymentMethodBloc>().items.map((item)=>item.toJson()).toList(),
-                      totalAmount: context.read<PaymentMethodBloc>().totalPrice,
-                      totalItems: context.read<PaymentMethodBloc>().items.length,
-                      paymentMethod: context.read<PaymentMethodBloc>().paymentMethod,
-                      selectedAddress:context.read<PaymentMethodBloc>().selectedAddressModel == null
-                          ? {}
-                          : context.read<PaymentMethodBloc>().selectedAddressModel!.toJson()
-                  ));
-
-             },
-               title:AppLocal.placeYourOrder.getString(context),
-               titleStyle: AppTextStyles.medium18P(color: AppColors.white),
-               ),
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: AppDimensions.spacing_10,
+            children: [
+              PrimaryButton(
+                onPress: () {
+                  if (context.read<PaymentMethodBloc>().paymentMethod == 'Razorpay') {
+                    context.read<PaymentMethodBloc>().add(RazorpayPaymentEvent());
+                  } else {
+                    context.read<PaymentMethodBloc>().add(CreateOrderEvent(
+                        items: context
+                            .read<PaymentMethodBloc>()
+                            .items
+                            .map((item) => item.toJson())
+                            .toList(),
+                        totalAmount:
+                            context.read<PaymentMethodBloc>().totalPrice,
+                        totalItems:
+                            context.read<PaymentMethodBloc>().items.length,
+                        paymentMethod:
+                            context.read<PaymentMethodBloc>().paymentMethod,
+                        paymentId: '',
+                        selectedAddress: context
+                                    .read<PaymentMethodBloc>()
+                                    .selectedAddressModel ==
+                                null
+                            ? {}
+                            : context
+                                .read<PaymentMethodBloc>()
+                                .selectedAddressModel!
+                                .toJson()));
+                  }
+                },
+                title: AppLocal.placeYourOrder.getString(context),
+                titleStyle: AppTextStyles.medium18P(color: AppColors.white),
               ),
-             SizedBox(height: AppDimensions.spacing_4,)
-           ],
+              HAxisLine(),
+              TotalRupeeDetails(),
+              HAxisLine(),
+              PayingMethodDetails(),
+              HAxisLine(),
+              DeliveringAddressDetails(),
+              HAxisLine(),
+              ItemsDetails(),
+              HAxisLine(),
+              BlocListener<PaymentMethodBloc, PaymentMethodState>(
+                listenWhen: (prev, curr) => curr is CreateOrderState || curr is RazorpayPaymentNotifyErrorState,
+                listener: (context, state) {
+                  if (state is CreateOrderState) {
+                    if (state.loading == true) {
+                      customLoaderDialog(
+                          context: context,
+                          title: AppLocal.loading.getString(context));
+                    } else if (state.success == true) {
+                      context.pop();
+                      context.pushReplacementNamed(AppRoutes.orderPlaced,
+                          extra: context.read<PaymentMethodBloc>());
+                    } else if (state.success == false) {
+                      context.pop();
+                      customSnackBar(context, state.msg,
+                          bgColor: AppColors.red800);
+                    }
+                  }else if(state is RazorpayPaymentNotifyErrorState){
+                    customSnackBar(context, state.msg,
+                        bgColor: AppColors.red800);
+                  }
+                },
+                child: PrimaryButton(
+                  onPress: () {
+                    if (context.read<PaymentMethodBloc>().paymentMethod == 'Razorpay') {
+                      context.read<PaymentMethodBloc>().add(RazorpayPaymentEvent());
+                    } else {
+                      context.read<PaymentMethodBloc>().add(CreateOrderEvent(
+                          items: context
+                              .read<PaymentMethodBloc>()
+                              .items
+                              .map((item) => item.toJson())
+                              .toList(),
+                          totalAmount:
+                          context.read<PaymentMethodBloc>().totalPrice,
+                          totalItems:
+                          context.read<PaymentMethodBloc>().items.length,
+                          paymentMethod:
+                          context.read<PaymentMethodBloc>().paymentMethod,
+                          paymentId: '',
+                          selectedAddress: context
+                              .read<PaymentMethodBloc>()
+                              .selectedAddressModel ==
+                              null
+                              ? {}
+                              : context
+                              .read<PaymentMethodBloc>()
+                              .selectedAddressModel!
+                              .toJson()));
+                    }
+                  },
+                  title: AppLocal.placeYourOrder.getString(context),
+                  titleStyle: AppTextStyles.medium18P(color: AppColors.white),
+                ),
+              ),
+              SizedBox(
+                height: AppDimensions.spacing_4,
+              )
+            ],
           ),
         ),
       ),

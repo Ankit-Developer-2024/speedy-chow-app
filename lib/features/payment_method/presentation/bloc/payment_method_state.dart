@@ -74,3 +74,13 @@ final class CreateOrderState extends PaymentMethodState{
   List<Object?> get props => [msg,loading,success,createOrder];
 
 }
+
+final class RazorpayPaymentNotifyErrorState extends PaymentMethodState{
+  final String msg;
+
+  RazorpayPaymentNotifyErrorState({required this.msg});
+
+  @override
+  List<Object?> get props => [msg];
+
+}

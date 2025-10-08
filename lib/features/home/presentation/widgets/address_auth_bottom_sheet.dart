@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
 import 'package:speedy_chow/core/components/widgets/customLoader.dart';
+import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
+import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/core/util/helpers/fetch_lat_log_helper.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/auth/presentation/widgets/text_field_widget.dart';
 
@@ -130,10 +136,33 @@ class _CustomAddressAuthBottomSheetState extends State<CustomAddressAuthBottomSh
                           }
                       ),
                       Text(AppLocal.maybeAssistDelivery.getString(context),style: AppTextStyles.medium12P(),),
-                      Button(onTap: (){},
+                      BlocListener<AuthBloc, AuthState>(
+                        listenWhen: (prev,curr)=> curr is UserFetchAddressAuthState,
+                        listener: (context, states) {
+                        if(states is UserFetchAddressAuthState){
+                            if(states.loading==true){
+                              customLoaderDialog(context: context, title:AppLocal.fetchingAddress.getString(context));
+                            }
+                            else if(states.loading==false && states.error==false){
+                              street.text=states.street;
+                              zipcode.text=states.zipcode;
+                              country.text=states.country;
+                              state.text=states.state;
+                              city.text=states.city;
+                              context.pop();
+                            }else if(states.loading==false && states.error==true){
+                              customSnackBar(context,states.message);
+                            }
+                           }
+                        },
+                        child: Button(onTap: (){
+                          context.read<AuthBloc>().add(UserFetchAddressAuthEvent(context: context));
+                          },
                           color: AppColors.transparent,
                           border: BoxBorder.fromBorderSide(BorderSide(color: AppColors.grey500)),
-                          child: Center(child: Text(AppLocal.useMyLocation.getString(context),style: AppTextStyles.medium16P(),))),
+                          child: Center(child: Text(AppLocal.useMyLocation.getString(context),style: AppTextStyles.medium16P(),))
+                      ),),
+
                           TextFieldWidget(controller: houseNo, label: AppLocal.houseNo.getString(context),
                           onValidate: (val){
                             if(val!.isEmpty){
