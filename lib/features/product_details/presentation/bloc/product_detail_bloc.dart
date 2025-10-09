@@ -138,7 +138,6 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   }
 
 
-
   void _incAndDecProductQuantity(
       ProductDetailIncAndDecProductQuantityEvent event,
       Emitter<ProductDetailState> emit) async{
@@ -170,7 +169,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       ApiResponse? response=await addProductToCartUseCase(AddProductToCartParam(data: {"quantity":totalQuantity,"productId":event.product.id}));
       if(response?.success==true){
         isProductAlreadyAddedToCart=true;
-        emit(ProductDetailAddProductInCartState(loading: false, success: true, msg: response!.message.toString()));
+        cartId=response!.data.cartId;
+        emit(ProductDetailAddProductInCartState(loading: false, success: true, msg: response.message.toString()));
       }else{
         emit(ProductDetailAddProductInCartState(loading: false, success: false, msg: response!.message.toString()));
       }
