@@ -181,6 +181,10 @@ mixin AppLocal{
   static const String  areYouSureBuyAgain='areYouSureBuyAgain';
   static const String  selectAddress='selectAddress';
   static const String  back='back';
+  static const String  changeLanguage='changeLanguage';
+  static const String  changeLanguageAbout='changeLanguageAbout';
+  static const String  hindi='hindi';
+  static const String  english='english';
 
 
    static const Map<String, dynamic> EN = {
@@ -365,10 +369,14 @@ mixin AppLocal{
      selectAddress: "Select Address",
      areYouSureBuyAgain: "Are you sure you buy again?",
      back: "Back",
+     changeLanguage: "Change Language",
+     changeLanguageAbout: "Please choose the language you are most comfortable with.",
+     hindi:"हिन्दी",
+     english:"English",
 };
 
    static const Map<String, dynamic> HI = {
-     'speedChow': 'स्पीडी चौ',
+     speedChow: 'स्पीडी चौ',
      'loading': 'लोड हो रहा है...',
      'fetchingAddress': 'पता प्राप्त किया जा रहा है...',
      'whatWeServe': 'हम अद्वितीय व्यंजन परोसते हैं',
@@ -549,6 +557,10 @@ mixin AppLocal{
      'selectAddress': 'पता चुनें',
      'areYouSureBuyAgain': 'क्या आप वाकई फिर से खरीदना चाहते हैं?',
      'back': 'वापस',
+     changeLanguage: 'भाषा बदलें',
+     changeLanguageAbout: 'कृपया वह भाषा चुनें जिसमें आप सबसे अधिक सहज हों।',
+     hindi: 'हिन्दी',
+     english: 'English',
    };
 
 }

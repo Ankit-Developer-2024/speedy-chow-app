@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/components/widgets/button.dart';
+import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
@@ -61,8 +62,9 @@ class CustomAddressAuthBottomSheet extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   spacing: AppDimensions.spacing_6,
                   children: [
-                    Text("Change Language",style: AppTextStyles.semiBold24P(),),
-                    Text("Please choose the language you are most comfortable with.",style: AppTextStyles.medium14P(color: AppColors.grey500),),
+                    Text(AppLocal.changeLanguage.getString(context),style: AppTextStyles.semiBold24P(),),
+                    Text(AppLocal.changeLanguageAbout.getString(context),style: AppTextStyles.medium14P(color: AppColors.grey500),),
+                  SizedBox(height: AppDimensions.spacing_8,),
                   Button(onTap: (){
                    getIt<FlutterLocalization>().translate('en');
                    getIt<ConfigBloc>().add(ChangeLanguageEvent(locale: Locale('en')));
@@ -71,7 +73,7 @@ class CustomAddressAuthBottomSheet extends StatelessWidget {
                           color: AppColors.black
                       ),
                       color: getIt<FlutterLocalization>().currentLocale?.languageCode=="en" ?null : AppColors.white   ,
-                      child: Center(child: Text("English",style: AppTextStyles.medium16P(
+                      child: Center(child: Text(AppLocal.english.getString(context),style: AppTextStyles.medium16P(
                       color:  getIt<FlutterLocalization>().currentLocale?.languageCode=="en" ? AppColors.white :AppColors.black
                   ),))),
                  Button(onTap: (){
@@ -82,7 +84,7 @@ class CustomAddressAuthBottomSheet extends StatelessWidget {
                        color: AppColors.black
                      ),
                      color: getIt<FlutterLocalization>().currentLocale?.languageCode=="hi" ?null : AppColors.white   ,
-                     child: Center(child: Text("Hindi",style: AppTextStyles.medium16P(
+                     child: Center(child: Text(AppLocal.hindi.getString(context),style: AppTextStyles.medium16P(
                          color:  getIt<FlutterLocalization>().currentLocale?.languageCode=="hi" ? AppColors.white :AppColors.black
                      ),))),
                   ],

@@ -6,6 +6,7 @@ import 'package:speedy_chow/features/profile/presentation/widgets/change_languag
 import 'package:speedy_chow/features/profile/presentation/widgets/privacy_policay_bottom_sheet.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item.dart';
 import 'package:speedy_chow/features/profile/presentation/widgets/profile_item_app_bar.dart';
+import 'package:speedy_chow/features/profile/presentation/widgets/terms_and_conditions_bottom_sheet.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -25,7 +26,9 @@ class SettingsView extends StatelessWidget {
           ProfileItem(onTap: (){
             privacyPolicyBottomSheet(context);
           }, icon: Icons.privacy_tip_outlined, text: AppLocal.privacyPolicy.getString(context)),
-          ProfileItem(onTap: (){}, icon: Icons.file_open_outlined, text: AppLocal.termsAndConditions.getString(context))
+          ProfileItem(onTap: (){
+            termsAndConditionsBottomSheet(context);
+          }, icon: Icons.file_open_outlined, text: AppLocal.termsAndConditions.getString(context))
         ],
       ),
     ),
