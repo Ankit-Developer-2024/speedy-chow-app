@@ -397,12 +397,12 @@ void _initProfileBloc(){
 void initFlutterLocalization() {
     getIt<FlutterLocalization>().init(
         mapLocales: [
-          MapLocale('en',
+         const MapLocale('en',
               AppLocal.EN,
               countryCode: 'IN',
-
-          )
+         ),
+          const MapLocale('hi',AppLocal.HI ,countryCode: 'IN',),
         ],
-        initLanguageCode: 'en');
+        initLanguageCode: 'hi');
 
 }

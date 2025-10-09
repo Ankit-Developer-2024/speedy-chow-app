@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:speedy_chow/features/config/data/repository/config_repo_impl.dart';
@@ -12,6 +13,7 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
 }) : super(ConfigState()) {
     on<LoadConfigEvent>(_loadConfig);
     on<SetIsAppInstallEvent>(_setIsAppInstall);
+    on<ChangeLanguageEvent>(_changeLanguage);
   }
 
   void _loadConfig(LoadConfigEvent event,Emitter<ConfigState> emit){
@@ -23,6 +25,10 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   void _setIsAppInstall(SetIsAppInstallEvent event,Emitter<ConfigState> emit){
     configRepoImpl.setIsAppInstalled(event.val);
     emit(ConfigState(isAppInstall: configRepoImpl.getIsAppInstalled()));
+  }
+
+  void _changeLanguage(ChangeLanguageEvent event,Emitter<ConfigState> emit){
+    emit(ChangeLanguageState(locale: event.locale));
   }
 
 }

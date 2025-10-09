@@ -17,3 +17,13 @@ class ConfigState extends Equatable {
   @override
   List<Object?> get props => [isAppInstall];
 }
+
+
+final class ChangeLanguageState extends ConfigState{
+  final Locale locale;
+
+  const ChangeLanguageState({required this.locale});
+  @override
+  List<Object?> get props => [locale];
+
+}

@@ -17,3 +17,11 @@ final class SetIsAppInstallEvent extends ConfigEvent{
   List<Object?> get props => [val];
 }
 
+final class ChangeLanguageEvent extends ConfigEvent{
+  final Locale locale;
+
+   ChangeLanguageEvent({required this.locale});
+  @override
+  List<Object?> get props => [locale];
+
+}
