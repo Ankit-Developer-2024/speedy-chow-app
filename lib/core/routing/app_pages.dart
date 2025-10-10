@@ -8,6 +8,7 @@ import 'package:speedy_chow/features/auth/presentation/views/register_view.dart'
 import 'package:speedy_chow/features/auth/presentation/views/reset_password_view.dart';
 import 'package:speedy_chow/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:speedy_chow/features/cart/presentation/view/cart_view.dart';
+import 'package:speedy_chow/features/home/presentation/view/home_search_view.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/order/presentation/view/order_details_view.dart';
 import 'package:speedy_chow/features/order/presentation/view/order_view.dart';
@@ -112,6 +113,15 @@ class AppPages {
             ),
           ),
         ],
+      ),
+
+      GoRoute(
+        name: AppRoutes.homeSearchView,
+        path: '/${AppRoutes.homeSearchView}',
+        builder: (context, state) => BlocProvider.value(
+          value: state.extra as HomeBloc,
+          child: HomeSearchView(),
+        ),
       ),
 
 

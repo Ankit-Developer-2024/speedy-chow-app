@@ -28,5 +28,14 @@ final class HomeSelectAndUnselectCategoryEvent extends HomeEvent{
 
 }
 
+final class HomeSearchProductByNameEvent extends HomeEvent{
+  final String name;
+
+  const HomeSearchProductByNameEvent({required this.name});
+  @override
+  List<Object?> get props => [name];
+
+}
+
 
 

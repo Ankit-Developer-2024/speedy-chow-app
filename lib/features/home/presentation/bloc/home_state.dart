@@ -44,3 +44,14 @@ final class HomeSelectAndUnselectCategoryState extends HomeState{
 
 }
 
+final class HomeSearchProductByNameState extends HomeState{
+  final bool loading;
+  final bool success;
+  final String msg;
+  final List<SearchProduct> searchProduct;
+
+  const HomeSearchProductByNameState({required this.loading,required this.success,required this.msg,required this.searchProduct});
+  @override
+  List<Object?> get props => [loading,success,msg,searchProduct];
+
+}

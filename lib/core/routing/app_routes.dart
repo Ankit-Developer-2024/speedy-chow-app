@@ -6,6 +6,7 @@ class AppRoutes {
   static const resetPassword = 'reset-password';
   static const homeMainNavigation = 'homeMainNavigation';
   static const home = 'home';
+  static const homeSearchView = 'homeSearchView';
   static const cart = 'cart';
   static const order = 'order';
   static const profile = 'profile';

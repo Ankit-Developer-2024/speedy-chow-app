@@ -4,8 +4,10 @@ import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/home/domain/entities/category.dart';
 import 'package:speedy_chow/features/home/domain/entities/product.dart';
+import 'package:speedy_chow/features/home/domain/entities/search_product.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_category.dart';
 import 'package:speedy_chow/features/home/domain/use_cases/fetch_all_products.dart';
+import 'package:speedy_chow/features/home/domain/use_cases/search_product_usecase.dart';
 
 part 'home_event.dart';
 part 'home_state.dart';
@@ -13,17 +15,23 @@ part 'home_state.dart';
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final FetchAllProduct fetchAllProduct;
   final FetchAllCategory fetchAllCategory;
+  final SearchProductUseCase searchProductUseCase;
 
   List<Category> selectedCategory=<Category>[];
   List<String> selectedCategoryName=[];
   List<Product> product=<Product>[];
   List<Product> filterProduct=<Product>[];
 
-  HomeBloc({required this.fetchAllProduct, required this.fetchAllCategory})
+  HomeBloc({
+    required this.fetchAllProduct,
+    required this.fetchAllCategory,
+    required this.searchProductUseCase,
+  })
       : super(HomeInitial()) {
     on<HomeFetchAllProductEvent>(_fetchAllProduct);
     on<HomeFetchAllCategoryEvent>(_fetchAllCategory);
     on<HomeSelectAndUnselectCategoryEvent>(_selectAndUnselectCategory);
+    on<HomeSearchProductByNameEvent>(_searchProduct);
   }
 
   void _fetchAllProduct(
@@ -99,5 +107,22 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
      emit(HomeSelectAndUnselectCategoryState());
 
   }
+
+  void _searchProduct(HomeSearchProductByNameEvent event,Emitter<HomeState> emit)async{
+    try{
+      emit(HomeSearchProductByNameState(loading: true, success: false, msg: "", searchProduct: []));
+      ApiResponse? response = await searchProductUseCase(SearchProductUseCaseParam(name: event.name));
+      if(response?.success==true){
+        emit(HomeSearchProductByNameState(loading: false, success: true, msg: response?.message ?? "Product Searched!", searchProduct: response?.data));
+      }else{
+        emit(HomeSearchProductByNameState(loading: false, success: false, msg: response?.message ?? "No product found!", searchProduct: []));
+      }
+    }catch(err){
+      emit(HomeSearchProductByNameState(loading: false, success: false, msg: err.toString(), searchProduct: []));
+
+    }
+  }
+
+
 
 }

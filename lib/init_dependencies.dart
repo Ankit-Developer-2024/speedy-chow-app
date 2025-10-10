@@ -40,6 +40,11 @@ import 'package:speedy_chow/features/auth/domain/use_cases/verify_otp_usecase.da
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source.dart';
 import 'package:speedy_chow/features/cart/data/data_source/local_source/cart_local_source_impl.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/search_product_remote_source.dart';
+import 'package:speedy_chow/features/home/data/data_source/remote_source/search_product_remote_source_impl.dart';
+import 'package:speedy_chow/features/home/data/repositories/search_product_repo_impl.dart';
+import 'package:speedy_chow/features/home/domain/repositories/search_product_repo.dart';
+import 'package:speedy_chow/features/home/domain/use_cases/search_product_usecase.dart';
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_order_details_remote_source.dart';
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_order_details_remote_source_impl.dart';
 import 'package:speedy_chow/features/order/data/data_source/remote_source/fetch_orders_remote_source.dart';
@@ -261,17 +266,26 @@ void _initAuthBloc(){
 void _initHomeBloc(){
   //data_source
   getIt..registerFactory<ProductLocalSource>(()=>ProductLocalSourceImpl())
+    ..registerFactory<CategoryLocalSource>(()=>CategoryLocalSourceImpl())
+
   ..registerFactory<ProductRemoteSource>(()=>ProductRemoteSourceImpl())
-  ..registerFactory<CategoryLocalSource>(()=>CategoryLocalSourceImpl())
   ..registerFactory<CategoryRemoteSource>(()=>CategoryRemoteSourceImpl())
+  ..registerFactory<SearchProductRemoteSource>(()=>SearchProductRemoteSourceImpl())
   //repositories
   ..registerFactory<ProductRepository>(()=>ProductRepositoryImpl(productLocalSource: getIt<ProductLocalSource>(),productRemoteSource: getIt<ProductRemoteSource>()))
   ..registerFactory<CategoryRepository>(()=>CategoryRepositoryImpl(categoryLocalSource: getIt<CategoryLocalSource>(),categoryRemoteSource: getIt<CategoryRemoteSource>()))
+  ..registerFactory<SearchProductRepo>(()=>SearchProductRepoImpl(searchProductRemoteSource: getIt<SearchProductRemoteSource>()))
   //use_case
   ..registerFactory<FetchAllProduct>(()=>FetchAllProduct(productRepository: getIt<ProductRepository>()))
   ..registerFactory<FetchAllCategory>(()=>FetchAllCategory(categoryRepository: getIt<CategoryRepository>()))
+  ..registerFactory<SearchProductUseCase>(()=>SearchProductUseCase(searchProductRepo: getIt<SearchProductRepo>()))
   //bloc
-  ..registerFactory<HomeBloc>(()=>HomeBloc(fetchAllProduct: getIt<FetchAllProduct>(),fetchAllCategory: getIt<FetchAllCategory>()));
+  ..registerFactory<HomeBloc>(()=>HomeBloc(
+      fetchAllProduct: getIt<FetchAllProduct>(),
+      fetchAllCategory: getIt<FetchAllCategory>(),
+      searchProductUseCase: getIt<SearchProductUseCase>()
+  ),
+  );
 
 }
 

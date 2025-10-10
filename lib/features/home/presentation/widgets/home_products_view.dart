@@ -62,7 +62,7 @@ class HomeProductsView extends StatelessWidget {
                      return InkWell(
                        onTap: () {
                          context.pushNamed(AppRoutes.productDetails,
-                             extra: state.data[index]);
+                             extra: state.data[index].id);
                        },
                        child: Container(
                          padding: EdgeInsets.all(AppDimensions.spacing_8),

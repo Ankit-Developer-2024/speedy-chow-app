@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
+import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/get_address.dart';
+import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 import 'package:speedy_chow/features/home/presentation/widgets/change_default_address_bottom_sheet.dart';
 
 class HomeTopView extends StatelessWidget {
@@ -82,8 +85,8 @@ class HomeTopView extends StatelessWidget {
                 children: [
                   IconButton.outlined(
                     onPressed: () async{
-                      customSnackBar(context, "We are working on this feature.",bgColor: AppColors.yellow900);
-                    },
+                      context.pushNamed(AppRoutes.homeSearchView,extra: context.read<HomeBloc>());
+                     },
                     style: ButtonStyle(
                       padding:WidgetStateProperty.all(EdgeInsets.zero) ,
                       minimumSize:WidgetStateProperty.all(Size(32, 32)) ,

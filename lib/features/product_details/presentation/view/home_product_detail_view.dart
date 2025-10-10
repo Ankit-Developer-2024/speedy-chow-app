@@ -10,6 +10,7 @@ import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/home/domain/entities/product.dart';
+import 'package:speedy_chow/features/home/domain/entities/search_product.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/product_details/presentation/widgets/add_to_cart_btn.dart';
@@ -29,12 +30,12 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     if (!_isInit) {
-      final product = GoRouterState.of(context).extra as Product;
+      final productId = GoRouterState.of(context).extra as String;
       _productDetailBloc = context.read<ProductDetailBloc>();
       _productDetailBloc
-        ..add(ProductDetailFetchProductEvent(productId: product.id.toString()))
+        ..add(ProductDetailFetchProductEvent(productId: productId))
         ..add(ProductQuantityUserCartFetchEvent(
-            productId: product.id.toString()));
+            productId: productId));
       _isInit = true;
     }
   }

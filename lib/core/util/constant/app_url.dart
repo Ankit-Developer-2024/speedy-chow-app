@@ -11,6 +11,7 @@ class AppUrl{
   static final String userImage='user/image';
   static final String updateAddress='user/addresses';
   static final String fetchProduct='product';
+  static final String searchProduct='product/search';
   static final String cart='cart';
   static final String fetchCategory='category';
   static final String order='order';
