@@ -11,7 +11,7 @@ class CategoryModel extends Category {
     return CategoryModel(
         id: json['id'] ?? '',
         name: json["name"] ?? '',
-        imgUrl: json["imgUrl"] ?? '',
+        imgUrl: json["image"] ?? '',
         isSelected: false);
   }
 

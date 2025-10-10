@@ -1,7 +1,7 @@
 class Category {
   final String? id;
   final String? name;
-  final String? imgUrl;
+  final String imgUrl;
   bool? isSelected;
 
   Category(

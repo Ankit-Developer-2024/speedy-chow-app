@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
@@ -39,7 +40,7 @@ class HomeCategoryView extends StatelessWidget {
             ],
           ),
           SizedBox(
-            height: AppDimensions.size_89,
+            height: AppDimensions.size_100,
             child: BlocBuilder<HomeBloc, HomeState>(
               buildWhen: (prev,curr)=>curr is HomeSelectAndUnselectCategoryState || curr is HomeFetchAllCategoryState,
               builder: (context, state) {
@@ -61,33 +62,40 @@ class HomeCategoryView extends StatelessWidget {
                         },
                         borderRadius: BorderRadius.circular(AppDimensions.radius_8),
                         child: Container(
-                          padding: EdgeInsets.all(AppDimensions.spacing_8),
+                          padding: EdgeInsets.all(AppDimensions.spacing_4),
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(AppDimensions.radius_8),
                               border:BoxBorder.fromBorderSide(BorderSide(color: AppColors.darkOrange.withAlpha(100))),
                               color: context
                                   .read<HomeBloc>()
                                   .selectedCategory[index]
-                                  .isSelected! ? AppColors.darkOrange :AppColors.white
+                                  .isSelected! ? AppColors.darkOrange.withAlpha(200) :AppColors.white
                           ),
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              SvgPicture.asset(
-                                getLocalSvg("success"),
-                                width: 40,
-                                height: 40,
-                                fit: BoxFit.contain,
-                              ),
-                              SizedBox(
-                                height: AppDimensions.spacing_8,
-                              ),
+                              ClipRRect(
+                                borderRadius: BorderRadiusGeometry
+                                    .circular(
+                                    AppDimensions.radius_8),
+                                child: CachedNetworkImage (
+                                  imageUrl: context
+                                      .read<HomeBloc>()
+                                      .selectedCategory[index]
+                                      .imgUrl,
+                                  placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  fit: BoxFit.cover,
+                                  width: AppDimensions.size_80,
+                                  height: 70,
+                                ),),
                               Text(
                                 context
                                     .read<HomeBloc>()
                                     .selectedCategory[index]
                                     .name
                                     .toString(),
-                                style: AppTextStyles.medium16P(
+                                style: AppTextStyles.medium14P(
                                     color: context
                                         .read<HomeBloc>()
                                         .selectedCategory[index]

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
-import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/home/presentation/bloc/home_bloc.dart';
 
 Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
@@ -62,7 +62,7 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                 .map((category) {
                               var (index, item) = category;
                               return SizedBox(
-                                  height: AppDimensions.size_89,
+                                  height: AppDimensions.size_100,
                                   child: InkWell(
                                     onTap: () {
                                       context.read<HomeBloc>().add(
@@ -77,7 +77,7 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                         AppDimensions.radius_8),
                                     child: Container(
                                       padding: EdgeInsets.all(
-                                          AppDimensions.spacing_8),
+                                          AppDimensions.spacing_4),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               AppDimensions.radius_8),
@@ -87,22 +87,28 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                                           .darkOrange
                                                           .withAlpha(100))),
                                           color: item.isSelected!
-                                              ? AppColors.darkOrange
+                                              ? AppColors.darkOrange.withAlpha(200)
                                               : AppColors.white),
                                       child: Column(
                                         children: [
-                                          SvgPicture.asset(
-                                            getLocalSvg("success"),
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          SizedBox(
-                                            height: AppDimensions.spacing_8,
-                                          ),
+                                          ClipRRect(
+                                            borderRadius: BorderRadiusGeometry
+                                                .circular(
+                                                AppDimensions.radius_8),
+                                            child: CachedNetworkImage (
+                                              imageUrl: context
+                                                  .read<HomeBloc>()
+                                                  .selectedCategory[index]
+                                                  .imgUrl,
+                                              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                              errorWidget: (context, url, error) => Icon(Icons.error),
+                                              fit: BoxFit.cover,
+                                              width: AppDimensions.size_68,
+                                              height: 70,
+                                            ),),
                                           Text(
                                             item.name.toString(),
-                                            style: AppTextStyles.medium16P(
+                                            style: AppTextStyles.medium14P(
                                                 color: item.isSelected!
                                                     ? AppColors.white
                                                     : AppColors.black),
@@ -129,7 +135,7 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                 .map((category) {
                               var (index, item) = category;
                               return SizedBox(
-                                  height: AppDimensions.size_89,
+                                  height: AppDimensions.size_100,
                                   child: InkWell(
                                     onTap: () {
                                       context.read<HomeBloc>().add(
@@ -144,7 +150,7 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                         AppDimensions.radius_8),
                                     child: Container(
                                       padding: EdgeInsets.all(
-                                          AppDimensions.spacing_8),
+                                          AppDimensions.spacing_4),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               AppDimensions.radius_8),
@@ -154,22 +160,29 @@ Future<dynamic> categoryBottomSheet(BuildContext context, HomeBloc bloc) {
                                                       .darkOrange
                                                       .withAlpha(100))),
                                           color: item.isSelected!
-                                              ? AppColors.darkOrange
+                                              ? AppColors.darkOrange.withAlpha(200)
                                               : AppColors.white),
                                       child: Column(
                                         children: [
-                                          SvgPicture.asset(
-                                            getLocalSvg("success"),
-                                            width: 40,
-                                            height: 40,
-                                            fit: BoxFit.contain,
-                                          ),
-                                          SizedBox(
-                                            height: AppDimensions.spacing_8,
-                                          ),
+                                          ClipRRect(
+                                            borderRadius: BorderRadiusGeometry
+                                                .circular(
+                                                AppDimensions.radius_8),
+                                            child: CachedNetworkImage (
+                                              imageUrl: context
+                                                  .read<HomeBloc>()
+                                                  .selectedCategory[index]
+                                                  .imgUrl,
+                                              placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                                              errorWidget: (context, url, error) => Icon(Icons.error),
+                                              fit: BoxFit.cover,
+                                              width: AppDimensions.size_80,
+                                              height: 70,
+                                            ),),
+
                                           Text(
                                             item.name.toString(),
-                                            style: AppTextStyles.medium16P(
+                                            style: AppTextStyles.medium14P(
                                                 color: item.isSelected!
                                                     ? AppColors.white
                                                     : AppColors.black),
