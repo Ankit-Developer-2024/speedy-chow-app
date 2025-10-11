@@ -4,7 +4,9 @@ mixin AppLocal{
   static const String loading = 'loading';
   static const String fetchingAddress = 'fetchingAddress';
   static const String whatWeServe = 'whatWeServe';
-  static const String whatWeServeDesc = 'whatWeServeDesc';
+  static const String whatWeServeDesc1 = 'whatWeServeDesc1';
+  static const String whatWeServeDesc2 = 'whatWeServeDesc2';
+  static const String whatWeServeDesc3 = 'whatWeServeDesc3';
   static const String skip = 'skip';
   static const String next = 'next';
   static const String loginTitle = 'loginTitle';
@@ -192,8 +194,10 @@ mixin AppLocal{
     loading: 'Loading...',
     fetchingAddress: 'Fetching address...',
     whatWeServe: 'We serve incomparable delicacies',
-    whatWeServeDesc: 'All the best restaurants with their top menu waiting for you, they cant’t wait for your order!!',
-    skip: 'Skip',
+   whatWeServeDesc1:"Order ahead and skip the line when you arrive. Get your food exactly when you want it, with no waiting.",
+   whatWeServeDesc2: "See our menu with mouth-watering photos and details. We promise great food made with fresh, quality ingredients.",
+   whatWeServeDesc3: "Access special discounts on popular items and deals on new menu additions, available only through the app.",
+   skip: 'Skip',
     next: 'Next',
     loginTitle: 'Login to your account.',
     loginSubTitle: 'Please login in to your account',
@@ -380,7 +384,9 @@ mixin AppLocal{
      'loading': 'लोड हो रहा है...',
      'fetchingAddress': 'पता प्राप्त किया जा रहा है...',
      'whatWeServe': 'हम अद्वितीय व्यंजन परोसते हैं',
-     'whatWeServeDesc': 'सभी बेहतरीन रेस्तरां अपने टॉप मेन्यू के साथ आपका इंतज़ार कर रहे हैं, वे आपके ऑर्डर का इंतज़ार नहीं कर सकते!!',
+     whatWeServeDesc1:"Order ahead and skip the line when you arrive. Get your food exactly when you want it, with no waiting.",
+     whatWeServeDesc2: "See our menu with mouth-watering photos and details. We promise great food made with fresh, quality ingredients.",
+     whatWeServeDesc3: "Access special discounts on popular items and deals on new menu additions, available only through the app.",
      'skip': 'छोड़ें',
      'next': 'अगला',
      'loginTitle': 'अपने खाते में लॉगिन करें।',

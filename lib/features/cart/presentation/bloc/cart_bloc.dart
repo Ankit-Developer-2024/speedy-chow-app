@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/cart/domain/entities/cart.dart';
@@ -38,6 +39,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
           success: false,
           totalPrice: 0,
           data: []));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await fetchCartProductsUseCase(NoParams());
 
       if(response?.success==true){
@@ -59,6 +61,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             totalPrice: 0,
             data: response?.data ?? [] ));
       }
+      }else{
+        emit(CartFetchUserCartState(
+            msg: "No internet!",
+            loading: false,
+            success: false,
+            totalPrice: 0,
+            data:  []));
+      }
+
 
     } catch (e) {
       emit(CartFetchUserCartState(
@@ -73,7 +84,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _updateCart(UpdateCartEvent event,Emitter<CartState> emit) async{
     try{
       emit(UpdateCartState(msg: "", loading: true, success: false));
-
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await updateCartUseCase(UpdateCartParam(cartId: event.cart.id.toString(), data: {"quantity":event.quantity}));
       if(response?.success==true){
         int index = items.indexOf(event.cart);
@@ -82,6 +93,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(UpdateCartState(msg: response?.message.toString() ?? "Item updated successfully", loading: false, success: true));
       }else{
         emit(UpdateCartState(msg: response?.message.toString() ?? "Item Not Updated", loading: false, success: false));
+      }}else{
+        emit(UpdateCartState(msg: "No internet!", loading: false, success: false));
+
       }
     }catch(e){
       emit(UpdateCartState(msg: e.toString(), loading: false, success: false));
@@ -91,7 +105,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _deleteCart(DeleteCartEvent event,Emitter<CartState> emit)async{
     try{
       emit(DeleteCartState(msg: "", loading: true, success: false));
-
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await deleteCartUseCase(DeleteCartParam(cartId: event.cart.id.toString()));
       if(response?.success==true){
         items.remove(event.cart);
@@ -99,6 +113,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
         emit(DeleteCartState(msg: response?.message.toString() ?? "Item deleted successfully", loading: false, success: true));
       }else{
         emit(DeleteCartState(msg: response?.message.toString() ?? "Item Not deleted", loading: false, success: false));
+      }}else{
+        emit(DeleteCartState(msg: "No internet!", loading: false, success: false));
       }
     }catch(e){
       emit(DeleteCartState(msg: e.toString(), loading: false, success: false));

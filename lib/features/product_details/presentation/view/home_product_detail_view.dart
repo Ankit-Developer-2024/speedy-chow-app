@@ -9,8 +9,6 @@ import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
-import 'package:speedy_chow/features/home/domain/entities/product.dart';
-import 'package:speedy_chow/features/home/domain/entities/search_product.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 import 'package:speedy_chow/features/product_details/presentation/bloc/product_detail_bloc.dart';
 import 'package:speedy_chow/features/product_details/presentation/widgets/add_to_cart_btn.dart';
@@ -81,10 +79,8 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                                 AppDimensions.radius_8),
                             child: CachedNetworkImage(
                                 imageUrl: product.img!,
-                                placeholder: (context, url) =>
-                                    Center(child: CircularProgressIndicator()),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
+                                placeholder: (context, url) => Center(child: Icon(Icons.image_outlined,size: AppDimensions.size_150,color: AppColors.grey200)),
+                                errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_126,color: AppColors.red),
                                 fit: BoxFit.cover))
                         : Image.asset(
                             getLocalJpeg("burger"),
@@ -115,6 +111,9 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                           top: AppDimensions.spacing_16),
                       decoration: BoxDecoration(
                           color: AppColors.white,
+                          boxShadow: [
+                            BoxShadow(color: AppColors.grey100,blurRadius: 10,blurStyle: BlurStyle.outer)
+                          ],
                           borderRadius: BorderRadius.only(
                               topRight:
                                   Radius.circular(AppDimensions.radius_50),

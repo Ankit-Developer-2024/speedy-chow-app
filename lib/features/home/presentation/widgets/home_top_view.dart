@@ -6,6 +6,7 @@ import 'package:shimmer/shimmer.dart';
 import 'package:speedy_chow/core/components/widgets/custom_snackbar.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/routing/app_routes.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';

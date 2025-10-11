@@ -55,8 +55,8 @@ class UserImageEditableView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppDimensions.radius_100),
                       child:CachedNetworkImage(
                           imageUrl: context.read<ProfileBloc>().userModel!.image!,
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          placeholder: (context, url) => Center(child: Icon(Icons.person,size: AppDimensions.size_55,color: AppColors.grey200)),
+                          errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_72,color: AppColors.red),
                           fit: BoxFit.cover,width: AppDimensions.size_139,height: AppDimensions.size_139
                       ))
                       : CircleAvatar(
@@ -103,8 +103,8 @@ class UserImageEditableView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(AppDimensions.radius_100),
                       child: CachedNetworkImage(
                           imageUrl: context.read<ProfileBloc>().userModel!.image!,
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          placeholder: (context, url) => Center(child: Icon(Icons.person,size: AppDimensions.size_55,color: AppColors.grey200)),
+                          errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_72,color: AppColors.red),
                           fit: BoxFit.cover,width: AppDimensions.size_139,height: AppDimensions.size_139
                       ))
                       : CircleAvatar(

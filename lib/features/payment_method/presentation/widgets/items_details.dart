@@ -44,8 +44,8 @@ class ItemsDetails extends StatelessWidget {
                              item.product?.img!=null ?
                              CachedNetworkImage(
                                imageUrl:item.product!.img!,
-                               placeholder: (context, url) => CircularProgressIndicator(),
-                               errorWidget: (context, url, error) => Icon(Icons.error),
+                               placeholder: (context, url) => Center(child: Icon(Icons.image_outlined,size: AppDimensions.size_126,color: AppColors.grey200)),
+                               errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_55,color: AppColors.red),
                                fit: BoxFit.cover,
                              )
                              : Image.asset(getLocalJpeg("burger"),fit: BoxFit.cover,)

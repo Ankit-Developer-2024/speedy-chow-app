@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
+import 'package:speedy_chow/core/routing/app_routes.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
@@ -59,13 +60,51 @@ class OneTimeUi extends StatelessWidget {
                                   color: AppColors.white,
                                 ),
                               ),
-                              Text(
-                                AppLocal.whatWeServeDesc.getString(context),
-                                textAlign: TextAlign.center,
-                                style: AppTextStyles.light14P(
-                                  color: AppColors.white,
-                                ),
-                              ),
+                              BlocBuilder<SplashBloc, SplashState>(
+                                buildWhen: (prev,curr)=> curr is SplashOneTimeUiState,
+                               builder: (context, state) {
+                                  if(state is SplashOneTimeUiState){
+                                    return IndexedStack(
+                                      index: state.introPart,
+                                      children: [
+                                    Text(
+                                    AppLocal.whatWeServeDesc1.getString(
+                                    context),
+                                 textAlign: TextAlign.center,
+                                 style: AppTextStyles.light14P(
+                                 color: AppColors.white,
+                                 ),
+                                 ),
+                                 Text(
+                                 AppLocal.whatWeServeDesc2.getString(
+                                 context),
+                                 textAlign: TextAlign.center,
+                                 style: AppTextStyles.light14P(
+                                 color: AppColors.white,
+                                 ),
+                                 ),
+                                 Text(
+                                 AppLocal.whatWeServeDesc3.getString(
+                                 context),
+                                 textAlign: TextAlign.center,
+                                 style: AppTextStyles.light14P(
+                                 color: AppColors.white,
+                                 ),
+                                 )
+                                      ],
+                                    );
+                                  }else {
+                                    return Text(
+                                      AppLocal.whatWeServeDesc1.getString(
+                                          context),
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.light14P(
+                                        color: AppColors.white,
+                                      ),
+                                    );
+                                  }
+                              },
+                            ),
                               SizedBox(
                                 height: AppDimensions.size_4,
                                 child: ListView.separated(
@@ -76,15 +115,16 @@ class OneTimeUi extends StatelessWidget {
                                     return BlocConsumer<SplashBloc, SplashState>(
                                       listenWhen: (pre,curr)=> curr is SplashOneTimeUiCompleteState ,
                                       listener: (context,state){
-                                          context.read<ConfigBloc>().add(SetIsAppInstallEvent(true));
-                                           context.goNamed('login') ;
+                                         //  context.read<ConfigBloc>().add(SetIsAppInstallEvent(true));
+                                           context.goNamed(AppRoutes.login) ;
                                       },
+                                      buildWhen: (prev,curr)=> curr is SplashOneTimeUiState,
                                       builder: (context, state) {
                                         if( state is SplashOneTimeUiState){
                                           return Container(
                                             width: AppDimensions.size_20,
                                             decoration: BoxDecoration(
-                                              color:state.introPart==int ? AppColors.white : AppColors.white.withValues(
+                                              color:state.introPart==index ? AppColors.white : AppColors.white.withValues(
                                                 alpha: 0.5,
                                               ),
                                               borderRadius: BorderRadius.circular(
@@ -92,11 +132,11 @@ class OneTimeUi extends StatelessWidget {
                                               ),
                                             ),
                                           );
-                                        }else{
+                                        } else{
                                           return Container(
                                             width: AppDimensions.size_20,
                                             decoration: BoxDecoration(
-                                              color:int==0 ? AppColors.white : AppColors.white.withValues(
+                                              color:index==0 ? AppColors.white : AppColors.white.withValues(
                                                 alpha: 0.5,
                                               ),
                                               borderRadius: BorderRadius.circular(

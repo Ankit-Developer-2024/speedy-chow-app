@@ -79,12 +79,9 @@ class HomeCategoryView extends StatelessWidget {
                                     .circular(
                                     AppDimensions.radius_8),
                                 child: CachedNetworkImage (
-                                  imageUrl: context
-                                      .read<HomeBloc>()
-                                      .selectedCategory[index]
-                                      .imgUrl,
-                                  placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                                  errorWidget: (context, url, error) => Icon(Icons.error),
+                                  imageUrl: context.read<HomeBloc>().selectedCategory[index].imgUrl,
+                                  placeholder: (context, url) => Center(child: Icon(Icons.image_outlined,size: AppDimensions.size_72,color: AppColors.grey200)),
+                                  errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_40,color: AppColors.red),
                                   fit: BoxFit.cover,
                                   width: AppDimensions.size_80,
                                   height: 70,

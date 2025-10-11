@@ -8,6 +8,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/core/util/helpers/fetch_lat_log_helper.dart';
 import 'package:speedy_chow/features/auth/data/models/auth_models.dart';
@@ -77,6 +78,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try{
       emit(AuthLoginState(isLoading: true ,isSuccess: false,message: "",data: AuthModels(id: "", email: "", role: "")));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await authLoginUseCase(AuthLoginParam(email: event.email, password: event.password));
 
       if( response!=null && response.success==true){
@@ -84,9 +86,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
       else{
         emit(AuthLoginState(isLoading: false, isSuccess: false, message: response?.message ?? "Wrong credentials!", data: response?.data ?? AuthModels(id: "", email: "", role: "")));
+      }}else{
+        emit(AuthLoginState(isLoading: false ,isSuccess: false,message: "No internet!",data: AuthModels(id: "", email: "", role: "")));
       }
     }catch(err){ 
-      emit(AuthLoginState(isLoading: false, isSuccess: false, message: err.toString() ?? "Something went wrong!", data: AuthModels(id: "", email: "", role: "")));
+      emit(AuthLoginState(isLoading: false, isSuccess: false, message: err.toString() , data: AuthModels(id: "", email: "", role: "")));
     }
 
   }
@@ -104,14 +108,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try{
       emit(AuthRegisterState(isLoading: true ,isSuccess: false,message: "", isAgree: isAgree));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response = await registerUseCase(RegisterParam(data: {'email':event.email,'name':event.userName,'password':event.password}));
       if(response!=null && response.success==true){
         emit(AuthRegisterState(isLoading: false ,message: response.message ?? "User register successfully" ,isSuccess: true, isAgree: isAgree));
       }else{
         emit(AuthRegisterState(isLoading: false ,message: response?.message ?? "Something went wrong!" ,isSuccess: false, isAgree: isAgree));
+      }}else{
+        emit(AuthRegisterState(isLoading: false ,isSuccess: false,message: "No internet!", isAgree: isAgree));
       }
     }catch(e,stack){
-      emit(AuthRegisterState(isLoading: false ,message: e.toString() ?? "Something went wrong!" ,isSuccess: false, isAgree: isAgree));
+      emit(AuthRegisterState(isLoading: false ,message: e.toString()  ,isSuccess: false, isAgree: isAgree));
     }
 
 
@@ -141,11 +148,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     if(event.email.isNotEmpty){
       try{
         email=event.email;
+        if(await CheckConnectivity.checkConnectivity()){
         ApiResponse? response=await resetPasswordReqUseCase(ResetPasswordReqUseCaseParams(email: event.email));
         if(response?.success==true){
           emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: true,msg: response!.message.toString()));
         }else{
           emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false,msg: response?.message.toString() ?? "User not found!"));
+        }}else{
+          emit(AuthEmailForgotPasswordState(isLoading: false ,isSuccess: false,msg: "No internet!"));
         }
       }catch(err){
         emit(AuthEmailForgotPasswordState(isLoading: false,isSuccess: false,msg: err.toString()));
@@ -161,11 +171,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthIsOtpValidState(isLoading: true, isSuccess: false,msg: ""));
     if(event.otp.length==4){
      try{
+       if(await CheckConnectivity.checkConnectivity()){
        ApiResponse? response= await verifyOtpUseCase(VerifyOtpUseCaseParams(otp: event.otp,email: email));
        if(response?.success==true){
          emit(AuthIsOtpValidState(isLoading: false, isSuccess: true,msg: response?.message ?? "Otp Verified!" ));
        }else{
          emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: response?.message ?? "Wrong Otp!" ));
+       }}else{
+         emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: "No internet!"));
        }
      }catch(err){
        emit(AuthIsOtpValidState(isLoading: false, isSuccess: false,msg: err.toString()));
@@ -208,11 +221,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthResetPasswordMatchState(isMatch: true));
       try{
         emit(AuthResetPasswordState(isLoading: true, isSuccess: false,msg: ""));
+        if(await CheckConnectivity.checkConnectivity()){
         ApiResponse? response=await resetPasswordUseCase(ResetPasswordUseCaseParams(email: email, password: event.newConfirmPassword));
         if(response?.success==true){
           emit(AuthResetPasswordState(isLoading: false, isSuccess: true,msg: response?.message ?? "Password Changed!"));
         }else{
           emit(AuthResetPasswordState(isLoading: false, isSuccess: false,msg: response?.message ?? "Something went wrong"));
+        }}else{
+          emit(AuthResetPasswordState(isLoading: false, isSuccess: false,msg: "No internet!"));
         }
       }catch(err){
         emit(AuthResetPasswordState(isLoading: false, isSuccess: false,msg: err.toString()));
@@ -226,6 +242,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   void _fetchUser(AuthUserEvent event,Emitter<AuthState> emit)async{
       emit(AuthUserState(isLoading: true,isSuccess: false,message: ""));
+      if(await CheckConnectivity.checkConnectivity()){
       try{
         ApiResponse? response= await fetchUserUseCase(NoParams());
         if(response?.success==true){
@@ -240,6 +257,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       }catch(e){
         emit(AuthUserState(isLoading: false, isSuccess: false, message: e.toString()));
+      }}else{
+        emit(AuthUserState(isLoading: false, isSuccess: false, message: "No internet!"));
       }
 
   }
@@ -247,6 +266,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _selectDefaultAddress(SelectDefaultAddressAuthEvent event , Emitter<AuthState> emit)async{
     try{
       emit(SelectDefaultAddressAuthState(isLoading: true, isSuccess: false, message: "",showAnimationIndex:event.showAnimationIndex));
+      if(await CheckConnectivity.checkConnectivity()){
       event.data['isDefault']=true;
       ApiResponse? response=await updateAddressAuthUseCase(UpdateAddressAuthParams(id:event.id,data: {'addresses':event.data}));
       if(response?.success==true){
@@ -256,6 +276,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(SelectDefaultAddressAuthState(message: response?.message.toString() ?? "Address Updated successfully", isLoading: false,showAnimationIndex: -1, isSuccess: true));
       }else{
         emit(SelectDefaultAddressAuthState(message: response?.message.toString() ?? "Address not Updated successfully", isLoading: false,showAnimationIndex: -1, isSuccess: false));
+      }}else{
+        emit(SelectDefaultAddressAuthState(isLoading: false,showAnimationIndex: -1, isSuccess: false, message: "No internet!"));
       }
     }catch(e,stack){
       emit(SelectDefaultAddressAuthState(isLoading: false,showAnimationIndex: -1, isSuccess: false, message: e.toString()));
@@ -266,7 +288,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _addAddress(AddAddressAuthEvent event , Emitter<AuthState> emit)async{
     try{
       emit(AddAddressAuthState(message: "", isLoading: true, isSuccess: false));
-
+      if( await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await addressAuthUseCase(AddAddressAuthParams(data: event.data));
       if(response?.success==true){
         userModel=response?.data;
@@ -275,9 +297,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         emit(AddAddressAuthState(message: response?.message.toString() ?? "Address added successfully", isLoading: false, isSuccess: true));
       }else{
         emit(AddAddressAuthState(message: response?.message.toString() ?? "Address not added successfully", isLoading: false, isSuccess: false));
+      }}else{
+        emit(AddAddressAuthState(message: "No internet!", isLoading: false, isSuccess: false));
       }
     }catch(e){
-      emit(AddAddressAuthState(message: e.toString(), isLoading: true, isSuccess: false)); }
+      emit(AddAddressAuthState(message: e.toString(), isLoading: false, isSuccess: false));
+    }
   }
 
 
@@ -289,6 +314,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     try{
       emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: false, message: "", loading: true));
+      if( await CheckConnectivity.checkConnectivity()){
+
       Position? data=await FetchLatLogHelper.getCurrentLatLog(context: event.context);
       if(data!=null){
         List<Placemark> placemarks = await placemarkFromCoordinates(data.latitude, data.longitude);
@@ -308,6 +335,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
       }else{
         emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));
+      }}else{
+        emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "No internet!", loading: false));
+
       }
     } on PlatformException catch(e){
       emit(UserFetchAddressAuthState(street: "", zipcode: "", country: "", state: "", city: "", error: true, message: "Not able to fetch, Please enter address manually.", loading: false));

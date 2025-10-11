@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/services/preferences/app_secure_storage.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/features/profile/domain/use_cases/update_image_usecase.dart';
@@ -26,8 +27,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
      'Other': false,
    };
 
-   UserModel? userModel;
-
+  UserModel? userModel;
   String? selectedAccountDeletionReason;
   final UpdateUserUseCase updateUserUseCase;
   final UpdateUserImageUseCase updateUserImageUseCase;
@@ -48,12 +48,15 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
     if(image!=null){
       try{
         emit(PersonalDataPickImageState(loading:true,msg: "",success: false));
+        if(await CheckConnectivity.checkConnectivity()){
         ApiResponse? response = await updateUserImageUseCase(UpdateUserImageParams(image: image));
         if(response?.success==true){
           userModel=response?.data;
           emit(PersonalDataPickImageState(loading:false,msg:response!.message.toString(),success: true));
         }else{
           emit(PersonalDataPickImageState(loading:false,msg:response?.message.toString() ?? "Something went wrong",success: false));
+        }}else{
+          emit(PersonalDataPickImageState(loading:false,msg: "No internet!",success: false));
         }
       }catch(err){
         emit(PersonalDataPickImageState(loading:false,msg:err.toString() ?? "Something went wrong",success: false));
@@ -66,6 +69,7 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
   void _personalDataUpdate(PersonalDataUpdateProfileEvent event,Emitter<ProfileState> emit)async{
     try{
       emit(PersonalDataUpdateProfileState(loading: true, success: false, msg: "", user: event.user));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response= await updateUserUseCase(UpdateUserParam(data: event.data));
       if(response?.success==true){
         if(response!=null && response.data!=null){
@@ -74,6 +78,8 @@ class ProfileBloc extends Bloc<ProfileEvent, ProfileState> {
         }
       }else{
         emit(PersonalDataUpdateProfileState(loading: false, success: false, msg: response?.message ?? "User not updated successfully", user: event.user));
+      }}else{
+        emit(PersonalDataUpdateProfileState(loading: false, success: false, msg: "No internet!", user: event.user));
       }
 
     }catch(e,stack){

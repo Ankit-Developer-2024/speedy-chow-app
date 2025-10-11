@@ -417,6 +417,6 @@ void initFlutterLocalization() {
          ),
           const MapLocale('hi',AppLocal.HI ,countryCode: 'IN',),
         ],
-        initLanguageCode: 'hi');
+        initLanguageCode: 'en');
 
 }

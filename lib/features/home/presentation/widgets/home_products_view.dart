@@ -80,8 +80,8 @@ class HomeProductsView extends StatelessWidget {
                                      AppDimensions.radius_8),
                                  child: CachedNetworkImage(
                                    imageUrl: state.data[index].img!,
-                                   placeholder: (context, url) => Center(child: CircularProgressIndicator()),
-                                   errorWidget: (context, url, error) => Icon(Icons.error),
+                                   placeholder: (context, url) => Center(child: Icon(Icons.image_outlined,size: 115,color: AppColors.grey200)),
+                                   errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_40,color: AppColors.red),
                                    width: MediaQuery.sizeOf(context).width/2-45,
                                    height: MediaQuery.sizeOf(context).width/2-94,
                                  ),) : ClipRRect(

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/features/home/domain/entities/category.dart';
 import 'package:speedy_chow/features/home/domain/entities/product.dart';
@@ -38,8 +39,8 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       HomeFetchAllProductEvent event, Emitter<HomeState> emit) async {
     try {
       emit(HomeFetchAllProductState(
-          msg: "Loading", loading: true, success: false, data: []));
-
+          msg: "loading", loading: true, success: false, data: []));
+      if(await CheckConnectivity.checkConnectivity()) {
       ApiResponse? response = await fetchAllProduct(ProductParams(productName: selectedCategoryName));
       if (response?.success == true) {
         product=response?.data ?? [];
@@ -54,6 +55,9 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
             loading: false,
             data: response?.data ?? [],
             msg: response?.message ?? 'Something went wrong'));
+      }}else{
+        emit(HomeFetchAllProductState(
+            msg: "No internet!", loading: false, success: false, data: []));
       }
     } catch (e) {
       emit(HomeFetchAllProductState(
@@ -62,29 +66,31 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   void _fetchAllCategory(HomeFetchAllCategoryEvent event, Emitter<HomeState> emit) async {
-    try {
-      emit(HomeFetchAllCategoryState(
-          msg: "", loading: true, success: false, data: []));
+    if(await CheckConnectivity.checkConnectivity()) {
+      try {
+        emit(HomeFetchAllCategoryState(
+            msg: "", loading: true, success: false, data: []));
 
-      ApiResponse? response = await fetchAllCategory(NoParams());
-      if (response?.success == true) {
-        selectedCategory=response?.data ?? [];
-        emit(HomeSelectAndUnselectCategoryState());
-        // emit(HomeFetchAllProductState(
-        //     msg: response?.message ?? "",
-        //     loading: false,
-        //     success: true,
-        //     data: response?.data ?? []));
-      } else {
+        ApiResponse? response = await fetchAllCategory(NoParams());
+        if (response?.success == true) {
+          selectedCategory = response?.data ?? [];
+          emit(HomeSelectAndUnselectCategoryState());
+          // emit(HomeFetchAllProductState(
+          //     msg: response?.message ?? "",
+          //     loading: false,
+          //     success: true,
+          //     data: response?.data ?? []));
+        } else {
+          emit(HomeFetchAllProductState(
+              msg: response?.message ?? 'Something went wrong',
+              loading: false,
+              success: true,
+              data: response?.data ?? []));
+        }
+      } catch (e) {
         emit(HomeFetchAllProductState(
-            msg: response?.message ?? 'Something went wrong',
-            loading: false,
-            success: true,
-            data: response?.data ?? []));
+            msg: e.toString(), loading: false, success: true, data: []));
       }
-    } catch (e) {
-      emit(HomeFetchAllProductState(
-          msg: e.toString(), loading: false, success: true, data: []));
     }
   }
 
@@ -111,11 +117,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   void _searchProduct(HomeSearchProductByNameEvent event,Emitter<HomeState> emit)async{
     try{
       emit(HomeSearchProductByNameState(loading: true, success: false, msg: "", searchProduct: []));
+      if(await CheckConnectivity.checkConnectivity()) {
       ApiResponse? response = await searchProductUseCase(SearchProductUseCaseParam(name: event.name));
       if(response?.success==true){
         emit(HomeSearchProductByNameState(loading: false, success: true, msg: response?.message ?? "Product Searched!", searchProduct: response?.data));
       }else{
         emit(HomeSearchProductByNameState(loading: false, success: false, msg: response?.message ?? "No product found!", searchProduct: []));
+      }}else{
+        emit(HomeSearchProductByNameState(loading: false, success: false, msg: "No internet!", searchProduct: []));
       }
     }catch(err){
       emit(HomeSearchProductByNameState(loading: false, success: false, msg: err.toString(), searchProduct: []));

@@ -4,6 +4,7 @@ import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:speedy_chow/core/components/models/address_model.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
@@ -60,7 +61,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   void _addAddress(AddAddressPaymentMethodEvent event , Emitter<PaymentMethodState> emit)async{
     try{
       emit(AddressPaymentMethodState(msg: "", loading: true, success: false, user: event.user));
-
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await addAddressUseCase(AddAddressParams(data: event.data));
       if(response?.success==true){
         userModel=response?.data;
@@ -69,6 +70,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address added successfully", loading: false, success: true,user: response?.data));
       }else{
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address not added successfully", loading: false, success: false,user: event.user));
+      }}else{
+        emit(AddressPaymentMethodState(msg:"No internet!", loading: false, success: false,user: event.user));
       }
     }catch(e){
       emit(AddressPaymentMethodState(msg: e.toString(), loading: false, success: false,user: event.user));
@@ -79,6 +82,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   void _updateAddress(UpdateAddressPaymentMethodEvent event , Emitter<PaymentMethodState> emit)async{
     try{
       emit(AddressPaymentMethodState(msg: "", loading: true, success: false, user: event.user));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await updateAddressUseCase(UpdateAddressParams(id:event.id,data: event.data));
       if(response?.success==true){
         userModel=response?.data;
@@ -87,6 +91,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address Updated successfully", loading: false, success: true,user: response?.data));
       }else{
         emit(AddressPaymentMethodState(msg: response?.message.toString() ?? "Address not Updated successfully", loading: false, success: false,user: event.user));
+      }}else{
+        emit(AddressPaymentMethodState(msg: "No internet!", loading: false, success: false,user: event.user));
       }
     }catch(e){
       emit(AddressPaymentMethodState(msg: e.toString(), loading: false, success: false,user: event.user));
@@ -120,6 +126,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
           success: false,
           totalPrice: 0,
           data: []));
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response=await fetchCartItemsUseCase(NoParams());
 
       if(response?.success==true){
@@ -139,6 +146,13 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
             success: false,
             totalPrice: 0,
             data: response?.data ?? [] ));
+      }}else{
+        emit(FetchCartState(
+            msg: "No internet!",
+            loading: false,
+            success: false,
+            totalPrice: 0,
+            data: [] ));
       }
     } catch (e) {
       emit(FetchCartState(
@@ -153,7 +167,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   void _createOrder(CreateOrderEvent event,Emitter<PaymentMethodState> emit)async{
     try{
       emit(CreateOrderState(msg: "", loading: true, success: false, createOrder: CreateOrder(isOrderCreated: false)));
-
+      if( await CheckConnectivity.checkConnectivity()){
       ApiResponse? response = await createOrderUseCase(
           CreateOrderUseCaseParams(
           items: event.items,
@@ -168,7 +182,9 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
         emit(CreateOrderState(msg: response?.message.toString() ?? "Order created successfully.", loading: false, success: true, createOrder: response?.data));
       }else{
         emit(CreateOrderState(msg: response?.message.toString() ?? "Order not created.", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
-     }
+     }}else{
+        emit(CreateOrderState(msg: "No internet!", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
+      }
     }catch(e){
       emit(CreateOrderState(msg: "", loading: false, success: false, createOrder: CreateOrder(isOrderCreated: false)));
     }
@@ -176,7 +192,7 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
 
   void _razorpayPayment(RazorpayPaymentEvent event,Emitter<PaymentMethodState> emit)async{
       try{
-
+        if(await CheckConnectivity.checkConnectivity()){
         ApiResponse? response = await razorpayOrderIdUseCase(RazorpayOrderIdParams(amount: totalPrice*100, otherDetails: {"totalItems":items.length}));
         if(response?.success==true){
           var options = {
@@ -192,6 +208,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
             razorpay.open(options);
         }else{
           emit(RazorpayPaymentNotifyErrorState(msg: response?.message ?? "Payment failed!"));
+        }}else{
+          emit(RazorpayPaymentNotifyErrorState(msg:"No internet!"));
         }
 
       }catch (err){
@@ -208,8 +226,8 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
       //call api save data and verify in single api
      try{
        if(response.paymentId!=null && response.orderId!=null && response.signature!=null){
-         ApiResponse? resp=await razorpaySaveVerifyUseCase(RazorpaySaveVerifyParams(paymentId: response.paymentId!, orderId: response.orderId!, paymentSignature: response.signature!));
 
+         ApiResponse? resp=await razorpaySaveVerifyUseCase(RazorpaySaveVerifyParams(paymentId: response.paymentId!, orderId: response.orderId!, paymentSignature: response.signature!));
          if(resp?.success==true && resp?.data.verify==true){
            add(CreateOrderEvent(
                items: items
@@ -234,7 +252,6 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
   }
 
   void _handlePaymentError(PaymentFailureResponse response) {
-    print("4444444444444${response.message}");
     add(RazorpayPaymentNotifyErrorEvent(msg: "Payment failed"));
   }
 

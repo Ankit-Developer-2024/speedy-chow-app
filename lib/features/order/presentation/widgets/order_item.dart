@@ -44,8 +44,8 @@ class OrderItem extends StatelessWidget {
                             AppDimensions.radius_8),
                         child: CachedNetworkImage(
                           imageUrl:order.items![0].product!.img!,
-                          placeholder: (context, url) => CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => Icon(Icons.error),
+                          placeholder: (context, url) => Center(child: Icon(Icons.image_outlined,size: AppDimensions.size_100,color: AppColors.grey200)),
+                          errorWidget: (context, url, error) => Icon(Icons.error,size: AppDimensions.size_55,color: AppColors.red),
                           width: MediaQuery .sizeOf(context) .width / 2 - 45,
                           fit: BoxFit.cover,
                         ))

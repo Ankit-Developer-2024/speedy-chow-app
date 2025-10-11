@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:speedy_chow/core/components/models/api_response.dart';
+import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/product_details.dart';
 import 'package:speedy_chow/features/product_details/domain/entities/user_cart_product_quantity.dart';
 import 'package:speedy_chow/features/product_details/domain/use_case/add_product_to_cart_use_case.dart';
@@ -52,6 +53,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             quantity: null)));
 
     try {
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response = await productDetailFetchProductUseCase(
           ProductDetailParam(productId: event.productId));
       if (response?.success == true) {
@@ -66,6 +68,22 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             loading: false,
             success: response?.success ?? false,
             data: response?.data ?? ProductDetails(
+                id: null,
+                name: null,
+                description: null,
+                img: null,
+                category: null,
+                price: null,
+                discountPercentage: null,
+                discountedPrice: null,
+                rating: null,
+                quantity: null)));
+      }}else{
+        emit(ProductDetailFetchProductState(
+            msg: "No internet!",
+            loading: false,
+            success: false,
+            data: ProductDetails(
                 id: null,
                 name: null,
                 description: null,
@@ -102,9 +120,11 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
         loading: true,
         success: false,
         data: UserCartProductQuantity(
-            quantity: null, cartId: null)));
+            quantity: null, cartId: null))
+    );
 
     try {
+      if(await CheckConnectivity.checkConnectivity()){
       ApiResponse? response = await userCartProductQuantityUseCase(
           UserCartProductQuantityParam(productId: event.productId));
       if (response?.success == true) {
@@ -126,6 +146,13 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
             success: response?.success ?? false,
             data: response?.data ?? UserCartProductQuantity(
                 quantity: null, cartId: null)));
+      }}else{
+        emit(ProductQuantityUserCartFetchState(
+            msg: "No internet!",
+            loading: false,
+            success: false,
+            data: UserCartProductQuantity(
+                quantity: null, cartId: null)));
       }
     } catch (e) {
       emit(ProductQuantityUserCartFetchState(
@@ -143,6 +170,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       Emitter<ProductDetailState> emit) async{
       try{
         emit(ProductDetailIncAndDecProductQuantityState(quantity: totalQuantity,message: "",success: false,loading: true));
+        if(await CheckConnectivity.checkConnectivity()){
         totalQuantity=event.quantity;
         if(cartId!=null && cartId!.isNotEmpty){
           //when item already in cart
@@ -156,6 +184,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
         }else{
           //when item already not in cart
           emit(ProductDetailIncAndDecProductQuantityState(quantity: totalQuantity,message: "",success: true,loading: false));
+        }}else{
+          emit(ProductDetailIncAndDecProductQuantityState(quantity: totalQuantity,message: "No internet!",success: false,loading: false));
         }
       }catch(err){
         totalQuantity--;
@@ -165,6 +195,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
 
   void _addToCart(ProductDetailAddProductInCartEvent event,Emitter<ProductDetailState> emit)async{
     emit(ProductDetailAddProductInCartState(loading: true, success: false, msg: ""));
+    if(await CheckConnectivity.checkConnectivity()){
     try{
       ApiResponse? response=await addProductToCartUseCase(AddProductToCartParam(data: {"quantity":totalQuantity,"productId":event.product.id}));
       if(response?.success==true){
@@ -176,6 +207,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       }
     }catch(err){
       emit(ProductDetailAddProductInCartState(loading: false, success: false, msg: err.toString()));
+    }}else{
+      emit(ProductDetailAddProductInCartState(loading: false, success: false, msg: "No internet!"));
     }
 
    
