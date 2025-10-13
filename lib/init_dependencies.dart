@@ -60,6 +60,8 @@ import 'package:speedy_chow/features/order/domain/repositories/update_order_repo
 import 'package:speedy_chow/features/order/domain/use_case/create_order_buy_again_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_details_usecase.dart';
 import 'package:speedy_chow/features/order/domain/use_case/fetch_order_usecase.dart';
+import 'package:speedy_chow/features/order/domain/use_case/order_razorpay_order_id_use_case.dart';
+import 'package:speedy_chow/features/order/domain/use_case/order_razorpay_save_verify_use_case.dart';
 import 'package:speedy_chow/features/order/domain/use_case/update_order_usecase.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/auth/data/data_source/add_address_remote_source.dart';
@@ -353,12 +355,17 @@ void _initOrderBloc(){
   ..registerFactory<FetchOrderDetailsUseCase>(()=>FetchOrderDetailsUseCase(fetchOrderDetailsRepo: getIt<FetchOrderDetailsRepo>()))
   ..registerFactory<UpdateOrderUseCase>(()=>UpdateOrderUseCase(updateOrderRepo: getIt<UpdateOrderRepo>()))
   ..registerFactory<CreateOrderBuyAgainUseCase>(()=>CreateOrderBuyAgainUseCase(createOrderRepo: getIt<CreateOrderRepo>()))
+  ..registerFactory<OrderRazorpayOrderIdUseCase>(()=>OrderRazorpayOrderIdUseCase(razorpayOrderIdRepo: getIt<RazorpayOrderIdRepo>()))
+  ..registerFactory<OrderRazorpaySaveVerifyUseCase>(()=>OrderRazorpaySaveVerifyUseCase(razorpaySaveVerifyRepo: getIt<RazorpaySaveVerifyRepo>()))
 
   ..registerFactory<OrderBloc>(()=>OrderBloc(
       fetchOrderUseCase: getIt<FetchOrderUseCase>(),
       fetchOrderDetailsUseCase: getIt<FetchOrderDetailsUseCase>(),
       updateOrderUseCase: getIt<UpdateOrderUseCase>(),
       createOrderBuyAgainUseCase: getIt<CreateOrderBuyAgainUseCase>(),
+      razorpay: Razorpay(),
+    orderRazorpayOrderIdUseCase: getIt<OrderRazorpayOrderIdUseCase>(),
+    orderRazorpaySaveVerifyUseCase: getIt<OrderRazorpaySaveVerifyUseCase>(),
   ));
 }
 

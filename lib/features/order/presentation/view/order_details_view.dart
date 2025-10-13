@@ -10,6 +10,8 @@ import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
 import 'package:speedy_chow/core/styles/app_dimensions.dart';
 import 'package:speedy_chow/core/styles/app_text_styles.dart';
+import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 import 'package:speedy_chow/features/order/presentation/widgets/error_msg_widget.dart';
 import 'package:speedy_chow/features/order/presentation/widgets/order_detail_info.dart';
@@ -34,6 +36,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
       if(orderId['id'] != null){
         context.read<OrderBloc>().add(FetchOrderDetailsEvent(id: orderId['id']!));
       }
+      context.read<OrderBloc>().userModel=context.read<AuthBloc>().userModel;
     }
 
   }
@@ -87,6 +90,8 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                   return SizedBox.shrink();
                 }
                 else if(state.success==true && state.order!=null){
+                  context.read<OrderBloc>().items=state.order?.items as List<CartModel>;
+                  context.read<OrderBloc>().totalPrice=state.order!.totalAmount!;
                    return SingleChildScrollView(
                      child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -115,7 +120,7 @@ class _OrderDetailsViewState extends State<OrderDetailsView> {
                        OrderDetailItem(items: state.order!.items!),
                        HAxisLine(),
                        OrderDetailInfo(order: state.order!),
-                        OrderDetailsButton(order: state.order!),
+                       OrderDetailsButton(order: state.order!),
                       ],
                      ),
                    );

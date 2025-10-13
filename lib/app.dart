@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
       builder: (context, state) {
         if(state is ChangeLanguageState){
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             title: 'Speedy Chow',
             locale: state.locale,
             supportedLocales: const [
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
           );
         }else {
           return MaterialApp.router(
+            debugShowCheckedModeBanner: false,
             title: 'Speedy Chow',
             locale: Locale('en'),
             supportedLocales: const [

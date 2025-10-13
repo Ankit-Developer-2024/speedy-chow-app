@@ -6,7 +6,7 @@ import 'package:speedy_chow/core/util/constant/app_url.dart';
 import 'package:speedy_chow/core/util/helpers/refresh_token_helper.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 
-class TokenInterceptor implements Interceptor{
+class TokenInterceptor extends  Interceptor{
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async{
    try{
@@ -15,6 +15,7 @@ class TokenInterceptor implements Interceptor{
      //   handler.next(err);
      //   return ;
      // }
+
      if(err.requestOptions.path==AppUrl.verify || err.requestOptions.path==AppUrl.refresh){
        handler.next(err);
        return ;
@@ -49,6 +50,7 @@ class TokenInterceptor implements Interceptor{
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) async{
       try{
+
         if(options.path==AppUrl.verify || options.path==AppUrl.refresh){
           String? refreshToken=  await AppSecureStorage.instance.getRefreshToken();
           if(refreshToken!=null && refreshToken.isNotEmpty){
@@ -76,13 +78,14 @@ class TokenInterceptor implements Interceptor{
   @override
   void onResponse(Response response, ResponseInterceptorHandler handler) {
    try{
+
     if(response.data['data']==null) {
       handler.next(response);
       return ;
     }
-
      String? accessToken=  response.data["accessToken"];
      String? refreshToken=  response.data["refreshToken"];
+
      if(accessToken!=null){
        AppSecureStorage.instance.saveAccessToken(accessToken: accessToken);
        appLog("<-accessToken-> Save");

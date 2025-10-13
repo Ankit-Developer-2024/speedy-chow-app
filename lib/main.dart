@@ -19,10 +19,11 @@ Future<void> main() async {
   await initDependencies();
 
   AppSecretConfig(
-    flavor: Flavor.dev,
+    flavor: Flavor.production,
     values: AppSecretValues(
-      baseUrl: "http://192.168.43.81:3000/",
+      baseUrl: "https://speedy-chow-backend.onrender.com/",
       timeOut: const Duration(seconds: 30),
+      rzPublicId: "rzp_test_ROzfZsP410mNpn"
     ),
   );
 

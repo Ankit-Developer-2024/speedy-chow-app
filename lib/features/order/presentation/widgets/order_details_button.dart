@@ -26,8 +26,7 @@ class OrderDetailsButton extends StatelessWidget {
         children: [
           Button(
               onTap: () {
-                context.read<OrderBloc>().selectedAddress= order.address! as AddressModel;
-                buyAgainBottomSheet(context,data:(order as OrderModel).toJson(),previousAddress:order.address! as AddressModel );
+                buyAgainBottomSheet(context);
               },
               width: 110,
               color: AppColors.primaryGreen,

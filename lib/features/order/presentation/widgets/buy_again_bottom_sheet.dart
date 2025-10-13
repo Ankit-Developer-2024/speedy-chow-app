@@ -14,9 +14,8 @@ import 'package:speedy_chow/core/styles/app_text_styles.dart';
 import 'package:speedy_chow/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:speedy_chow/features/order/presentation/bloc/order_bloc.dart';
 
-Future buyAgainBottomSheet(BuildContext context,
-    {required AddressModel previousAddress,
-    required Map<String, dynamic> data}) {
+Future buyAgainBottomSheet(BuildContext context)
+{
   return showModalBottomSheet(
       backgroundColor: AppColors.transparent,
       enableDrag: false,
@@ -71,6 +70,7 @@ Future buyAgainBottomSheet(BuildContext context,
                       style: AppTextStyles.semiBold18P(),
                     ),
                     BlocBuilder<OrderBloc, OrderState>(
+                      buildWhen: (prev,curr)=> curr is SelectedAddressState,
                       builder: (context, state) {
                         return ListView.builder(
                             shrinkWrap: true,
@@ -207,12 +207,12 @@ Future buyAgainBottomSheet(BuildContext context,
                               ),
                             ),
                             CheckboxMenuButton(
-                              value: context.read<OrderBloc>().paymentMethod=="UPI" ? true :false,
+                              value: context.read<OrderBloc>().paymentMethod=="Razorpay" ? true :false,
                               onChanged: (val) {
-                                context.read<OrderBloc>().paymentMethod="UPI";
+                                context.read<OrderBloc>().paymentMethod="Razorpay";
                                 context.read<OrderBloc>()..add(SelectPaymentMethodEvent())..add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
                               },
-                              child: Text("UPI", style: AppTextStyles.medium14P()),
+                              child: Text(AppLocal.razorpayPayment.getString(context), style: AppTextStyles.medium14P()),
                             ),
                           ],
                         );
@@ -222,23 +222,38 @@ Future buyAgainBottomSheet(BuildContext context,
                         buildWhen: (prev,curr)=>curr is IsPaymentMethodErrorVisibleState,
                         builder: (context,state){
                           if(state is IsPaymentMethodErrorVisibleState){
-                            return state.isErrorVisible ? Row(
+                            return state.isErrorVisible ? Column(
                               mainAxisSize: MainAxisSize.min,
-                              spacing: AppDimensions.spacing_10,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Icon(Icons.error_rounded,color: AppColors.red1000,),
-                                Expanded(child: Text("Please enter your payment information to continue.",style: AppTextStyles.medium14P(color: AppColors.red1000),))
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: AppDimensions.spacing_10,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.error_rounded,color: AppColors.red1000,),
+                                    Expanded(child: Text("Please select your payment information to continue.",style: AppTextStyles.medium14P(color: AppColors.red1000),)),
+                                   ],
+                                ),
+                                Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: AppDimensions.spacing_10,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Icon(Icons.error_rounded,color: AppColors.red1000,),
+                                    Expanded(child: Text("Please select your address to continue.",style: AppTextStyles.medium14P(color: AppColors.red1000),)),
+                                  ],
+                                ),
                               ],
-                            )
-                                :SizedBox.shrink();
+                            ) :SizedBox.shrink();
                           }else{
                             return SizedBox.shrink();
                           }
                         }),
 
                     BlocListener<OrderBloc, OrderState>(
-                      listenWhen: (prev,curr)=> curr is CreateOrderState,
+                      listenWhen: (prev,curr)=> curr is CreateOrderState || curr is RazorpayPaymentNotifyErrorOrderState,
                     listener: (context, state) {
                           if(state is CreateOrderState){
                             if(state.loading==true){
@@ -254,24 +269,29 @@ Future buyAgainBottomSheet(BuildContext context,
                               customSnackBar(context, state.msg);
                             }
                           }
+                          if(state is RazorpayPaymentNotifyErrorOrderState){
+                            context.pop();
+                            customSnackBar(context, state.msg,bgColor: AppColors.red800);
+                          }
                         },
                       child: Button(
                       onTap: (){
-                        if(context.read<OrderBloc>().paymentMethod.trim().isEmpty ){
+                        if(context.read<OrderBloc>().paymentMethod.trim().isEmpty || context.read<OrderBloc>().selectedAddress==null ){
                           context.read<OrderBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: true));
                         }else{
                           context.read<OrderBloc>().add(IsPaymentMethodErrorVisibleEvent(isErrorVisible: false));
                           if(context.read<OrderBloc>().paymentMethod=='COD'){
-                            context.read<OrderBloc>().add(CreateOrderEvent(
-                              items: data['items'],
-                              paymentMethod: data['paymentMethod'],
-                              totalAmount: data['totalAmount'],
-                              totalItems: data['totalItems'],
+                            context.read<OrderBloc>().add(CreateOrderOrderEvent(
+                              items: context.read<OrderBloc>().items.map((item) => item.toJson()).toList(),
+                              paymentMethod: context.read<OrderBloc>().paymentMethod,
+                              totalAmount: context.read<OrderBloc>().totalPrice,
+                              totalItems: context.read<OrderBloc>().items.length,
+                              paymentId: "",
                               selectedAddress: context.read<OrderBloc>().selectedAddress!.toJson()
                             ));
                            }else{
-                             customSnackBar(context, "UPI payment method not active we are currently working on this.",bgColor: AppColors.yellow800);
-                          }
+                             context.read<OrderBloc>().add(RazorpayPaymentOrderEvent());
+                           }
 
                         }
 

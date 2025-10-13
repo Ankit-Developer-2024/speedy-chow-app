@@ -1,7 +1,7 @@
 import 'package:speedy_chow/features/auth/domain/enitites/address.dart';
 
 class AddressModel extends Address{
-  AddressModel({
+  const AddressModel({
     required super.id,
     required super.street,
     required super.city,

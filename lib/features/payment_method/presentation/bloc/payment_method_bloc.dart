@@ -6,6 +6,8 @@ import 'package:speedy_chow/core/components/models/api_response.dart';
 import 'package:speedy_chow/core/components/models/user_model.dart';
 import 'package:speedy_chow/core/services/connectivity/connectivity.dart';
 import 'package:speedy_chow/core/usecase/use_case.dart';
+import 'package:speedy_chow/core/util/config/app_secret_config.dart';
+import 'package:speedy_chow/core/util/helpers/razorpay_input_helper.dart';
 import 'package:speedy_chow/core/util/utility/utils.dart';
 import 'package:speedy_chow/features/cart/data/models/cart_model.dart';
 import 'package:speedy_chow/features/payment_method/domain/enitites/create_order.dart';
@@ -195,17 +197,13 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
         if(await CheckConnectivity.checkConnectivity()){
         ApiResponse? response = await razorpayOrderIdUseCase(RazorpayOrderIdParams(amount: totalPrice*100, otherDetails: {"totalItems":items.length}));
         if(response?.success==true){
-          var options = {
-            'key': 'rzp_test_ROzfZsP410mNpn',
-            'amount': response?.data.amount,
-            'name': 'Speedy Chow',
-            'description': 'Buy fast food from Speedy Chow',
-            "order_id": response?.data.orderId,
-            'retry': {'enabled': true, 'max_count': 4},
-            'send_sms_hash': true,
-            'prefill': {'contact': '+918059600000', 'email': 'test@razorpay.com'},
-          };
-            razorpay.open(options);
+          Map<String,dynamic> rzInput=RazorPayInputHelper.razorPayInput(
+              amount: response?.data.amount,
+              orderId: response?.data.orderId,
+              phoneNumber: userModel?.phone,
+              email: userModel?.email
+          );
+            razorpay.open(rzInput);
         }else{
           emit(RazorpayPaymentNotifyErrorState(msg: response?.message ?? "Payment failed!"));
         }}else{
@@ -241,12 +239,10 @@ class PaymentMethodBloc extends Bloc<PaymentMethodEvent, PaymentMethodState> {
              paymentId: response.paymentId!
            ));
          }else{
-           print("222222222222");
             add(RazorpayPaymentNotifyErrorEvent(msg: "Payment not verified"));
          }
        }
      }catch(err){
-       print("3333333333333333333${err.toString()}");
        add(RazorpayPaymentNotifyErrorEvent(msg: err.toString()));
      }
   }

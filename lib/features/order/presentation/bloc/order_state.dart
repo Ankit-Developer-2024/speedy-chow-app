@@ -57,7 +57,7 @@ final class UpdateOrderState extends OrderState{
 
 final class SelectedAddressState extends OrderState{
   final DateTime date=DateTime.now();
-  List<Object?> get props => [];
+  List<Object?> get props => [date];
 }
 
 final class SelectPaymentMethodState extends OrderState{
@@ -81,5 +81,15 @@ final class CreateOrderState extends OrderState{
   CreateOrderState({required this.msg, required this.loading, required this.success, required this.createOrder});
 
   List<Object?> get props => [msg,loading,success,createOrder];
+
+}
+
+
+final class RazorpayPaymentNotifyErrorOrderState extends OrderState{
+  final String msg;
+
+  RazorpayPaymentNotifyErrorOrderState({required this.msg});
+
+  List<Object?> get props => [msg];
 
 }

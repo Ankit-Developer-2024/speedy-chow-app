@@ -22,7 +22,8 @@ class AppSecretConfig{
 class AppSecretValues{
   final String baseUrl;
   final Duration timeOut;
+  final String rzPublicId;
 
-  AppSecretValues({required this.baseUrl, required this.timeOut});
+  AppSecretValues({required this.baseUrl, required this.timeOut,required this.rzPublicId});
 
 }

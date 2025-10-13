@@ -20,9 +20,10 @@ class CreateOrderBuyAgainUseCaseParams{
   final int totalAmount;
   final int totalItems;
   final String paymentMethod;
+  final String paymentId;
   final Map<String,dynamic> selectedAddress;
 
-  CreateOrderBuyAgainUseCaseParams({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
+  CreateOrderBuyAgainUseCaseParams({required this.paymentId,required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
 
   Map<String,dynamic> toJson(){
     return {
@@ -31,8 +32,7 @@ class CreateOrderBuyAgainUseCaseParams{
       "totalItems":totalItems,
       "paymentMethod":paymentMethod,
       "selectedAddress":selectedAddress,
+      "paymentId":paymentId
     };
   }
 }
-
-

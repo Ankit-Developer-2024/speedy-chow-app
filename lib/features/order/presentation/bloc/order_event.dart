@@ -46,15 +46,34 @@ final class IsPaymentMethodErrorVisibleEvent extends OrderEvent{
   List<Object?> get props => [isErrorVisible];
 }
 
-final class CreateOrderEvent extends OrderEvent{
+final class CreateOrderOrderEvent extends OrderEvent{
   final List<Map<String,dynamic>> items;
   final int totalAmount;
   final int totalItems;
   final String paymentMethod;
+  final String paymentId;
   final Map<String,dynamic> selectedAddress;
 
-  CreateOrderEvent({required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
+  CreateOrderOrderEvent({required this.paymentId, required this.items, required this.totalAmount, required this.totalItems, required this.paymentMethod, required this.selectedAddress});
   @override
-  List<Object?> get props => [items,totalAmount,totalItems,paymentMethod,selectedAddress];
+  List<Object?> get props => [items,totalAmount,totalItems,paymentMethod,selectedAddress,paymentId];
+
+}
+
+final class RazorpayPaymentOrderEvent extends OrderEvent{
+  final DateTime dateTime=DateTime.now();
+
+  @override
+  List<Object?> get props =>[dateTime];
+
+}
+
+
+final class RazorpayPaymentNotifyErrorOrderEvent extends OrderEvent{
+  final String msg;
+
+  RazorpayPaymentNotifyErrorOrderEvent({required this.msg});
+  @override
+  List<Object?> get props => [msg];
 
 }

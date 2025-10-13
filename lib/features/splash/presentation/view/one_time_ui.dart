@@ -115,7 +115,7 @@ class OneTimeUi extends StatelessWidget {
                                     return BlocConsumer<SplashBloc, SplashState>(
                                       listenWhen: (pre,curr)=> curr is SplashOneTimeUiCompleteState ,
                                       listener: (context,state){
-                                         //  context.read<ConfigBloc>().add(SetIsAppInstallEvent(true));
+                                           context.read<ConfigBloc>().add(SetIsAppInstallEvent(true));
                                            context.goNamed(AppRoutes.login) ;
                                       },
                                       buildWhen: (prev,curr)=> curr is SplashOneTimeUiState,

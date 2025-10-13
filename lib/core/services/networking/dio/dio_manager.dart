@@ -37,19 +37,19 @@ class DioManager{
     if(_instance==null){
       _instance=Dio(_options);
       _instance!.interceptors.add(_loggingInterceptor);
+      _instance!.interceptors.add(_tokenInterceptor);
       if(AppSecretConfig.instance!.flavor !=Flavor.production){
          _instance!.interceptors.add(_prettyDioLogger);
          _instance!.interceptors.add(_curlInterceptor);
-         _instance!.interceptors.add(_tokenInterceptor);
       }
       return _instance!;
     }else{
       _instance!.interceptors.clear();
       _instance!.interceptors.add(_loggingInterceptor);
+      _instance!.interceptors.add(_tokenInterceptor);
       if(AppSecretConfig.instance!.flavor != Flavor.production){
         _instance!.interceptors.add(_prettyDioLogger);
         _instance!.interceptors.add(_curlInterceptor);
-        _instance!.interceptors.add(_tokenInterceptor);
       }
       return _instance!;
     }
