@@ -14,6 +14,17 @@ The project is powered by a **Node.js + Express + MongoDB** backend and features
 
 ---
 
+# 📱 Speedy Chow - Flutter App
+
+This repository contains the **mobile application** of **Speedy Chow**, a fast food ordering app built with **Flutter**.  
+Users can browse food items, add them to the cart, make payments through **Razorpay**, and track their orders.  
+It also includes features like **profile management**, **location-based address detection**, and **secure permissions handling**.
+
+🔗 **Related Projects**
+- [Admin Panel (React)](https://github.com/Ankit-Developer-2024/speedy-chow-admin)
+- [Backend (Node.js)](https://github.com/Ankit-Developer-2024/speedy-chow-backend)
+
+
 ## 🚀 Project Overview
 
 | Section | Description |
