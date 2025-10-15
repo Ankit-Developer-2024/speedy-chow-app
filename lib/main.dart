@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:hive/hive.dart';
@@ -17,6 +18,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterLocalization.instance.ensureInitialized();
   await initDependencies();
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,     // Allow portrait mode with the device held upright
+    DeviceOrientation.portraitDown,   // Allow portrait mode with the device held upside down
+  ]);
 
   AppSecretConfig(
     flavor: Flavor.production,

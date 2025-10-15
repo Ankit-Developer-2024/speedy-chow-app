@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localization/flutter_localization.dart';
 import 'package:go_router/go_router.dart';
+import 'package:speedy_chow/core/components/global_bloc/navigation_bloc.dart';
 import 'package:speedy_chow/core/components/widgets/customLoaderDialog.dart';
 import 'package:speedy_chow/core/localization/app_local.dart';
 import 'package:speedy_chow/core/styles/app_colors.dart';
@@ -92,13 +93,25 @@ class _HomeProductDetailViewState extends State<HomeProductDetailView> {
                         top: AppDimensions.spacing_38,
                         left: AppDimensions.spacing_10,
                         right: AppDimensions.spacing_10),
-                    child: IconButton.outlined(
-                        onPressed: () {
-                          context.pop();
-                        },
-                        icon: Icon(
-                          Icons.arrow_back_ios_outlined,
-                        )),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton.outlined(
+                            onPressed: () {
+                              context.pop();
+                            },
+                            icon: Icon(
+                              Icons.arrow_back_ios_outlined,
+                            )),
+                        IconButton.outlined(
+                            onPressed: () {
+                              context.read<NavigationBloc>().add(NavigationTabChangedEvent(index: 1));
+                            },
+                            icon: Icon(
+                              Icons.shopping_cart,
+                            )),
+                      ],
+                    ),
                   ),
                   Align(
                     alignment: Alignment(0, 1),

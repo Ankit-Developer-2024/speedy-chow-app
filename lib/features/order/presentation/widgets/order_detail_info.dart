@@ -21,15 +21,20 @@ class OrderDetailInfo extends StatelessWidget {
       spacing: AppDimensions.spacing_4,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             Text(
               AppLocal.orderedStatus.getString(context),
               style: AppTextStyles.semiBold20P(),
             ),
-            Text(
-              context.read<OrderBloc>().getOrderStatus(order.status),
-              style: AppTextStyles.semiBold20P(
-                  color:context.read<OrderBloc>().getOrderStatusColor(order.status)
+            Expanded(
+              child: Text(
+                context.read<OrderBloc>().getOrderStatus(order.status),
+                style: AppTextStyles.semiBold20P(
+                    color:context.read<OrderBloc>().getOrderStatusColor(order.status)
+                ),
               ),
             ),
           ],
